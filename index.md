@@ -6,11 +6,12 @@ Design document:
 
 for UNC Chapel Hill COMP 585: Serious Games
 
-by Sayan Dutta, Luke Wheeler, Matthew Wheeler, Michael Chen
+by Diane Pozefsky, Sayan Dutta, Luke Wheeler, Matthew Wheeler, Michael Chen
 
 roles:
-- Sayan: 
-- Luke: 
+- Pozefsky: Client
+- Sayan: Contact, Website
+- Luke: Documentation
 - Matthew: 
 - Michael: 
 
