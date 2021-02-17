@@ -1,3 +1,4 @@
+// test comment for a commit
 export default class MainGame extends Phaser.Scene
 {
     constructor ()
