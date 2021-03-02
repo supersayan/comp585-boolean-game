@@ -10,6 +10,8 @@ export default class MainGame extends Phaser.Scene
 
         this.circle1;
         this.circle2;
+        this.circles = new Array(16);
+        this.selected = [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false];
 
         this.child1;
         this.child2;
@@ -29,11 +31,17 @@ export default class MainGame extends Phaser.Scene
     {
         this.add.image(400, 300, 'background');
 
-        this.circle1 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
+        // generates selection circles
+        for(let i = 0; i < 16; i++){
+            this.circles[i] = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
+            this.circles[i].setVisible(false);
+        }
+        
+        /*this.circle1 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
         this.circle2 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0x00ff00);
 
         this.circle1.setVisible(false);
-        this.circle2.setVisible(false);
+        this.circle2.setVisible(false);*/
 
         //  Create a 4x4 grid aligned group to hold our sprites
 
@@ -114,47 +122,17 @@ export default class MainGame extends Phaser.Scene
         {
             return;
         }
-
-        //  Is this the first or second selection?
-        if (!this.selectedEmoji)
-        {
-            //  Our first emoji
-            this.circle1.setPosition(emoji.x, emoji.y);
-            this.circle1.setVisible(true);
-
-            this.selectedEmoji = emoji;
-        }
-        else if (emoji !== this.selectedEmoji)
-        {
-            //  Our second emoji
-
-            //  Is it a match?
-            if (emoji.frame.name === this.selectedEmoji.frame.name)
-            {
-                this.circle1.setStrokeStyle(3, 0x00ff00);
-                this.circle2.setPosition(emoji.x, emoji.y);
-                this.circle2.setVisible(true);
-
-                this.tweens.add({
-                    targets: [ this.child1, this.child2 ],
-                    scale: 1.4,
-                    angle: '-=30',
-                    yoyo: true,
-                    ease: 'sine.inout',
-                    duration: 200,
-                    completeDelay: 200,
-                    onComplete: () => this.newRound()
-                });
         
-                this.sound.play('match');
-            }
-            else
-            {
-                this.circle1.setPosition(emoji.x, emoji.y);
-                this.circle1.setVisible(true);
-
-                this.selectedEmoji = emoji;
-            }
+        let index = xyConvertToIndex(x,y);
+        //  Checks if selected object is in selection pool
+        if (!this.circles[index].visible)
+        {
+            this.circles[index].setPosition(x,y);
+            this.selected[index] = true;
+            this.circles[index].setVisible(true);
+        } else {
+            this.selected[index] = false;
+            this.circles[index].setVisible(false);
         }
     }
 
