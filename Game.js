@@ -44,8 +44,8 @@ export default class MainGame extends Phaser.Scene
             gridAlign: {
                 width: 4,
                 height: 4,
-                cellWidth: 90,
-                cellHeight: 90,
+                cellWidth: 120,
+                cellHeight: 120,
                 x: 280,
                 y: 200
             }
@@ -97,6 +97,19 @@ export default class MainGame extends Phaser.Scene
 
     selectEmoji (pointer, emoji)
     {
+        console.log('emoji positions are: ', emoji.x, emoji.y)
+        let x = emoji.x
+        let y = emoji.y
+        console.log('index is: ', xyConvertToIndex(x,y))
+        //checks if this index is in solution set 
+        let correct = false
+        for (let i = 0; i < this.correctset.length; i++) {
+            if (xyConvertToIndex(x,y) == this.correctset[i]) {
+                correct = true
+                break;
+            }
+        }
+        console.log('This is inside the solution set: ', correct)
         if (this.matched)
         {
             return;
@@ -269,4 +282,10 @@ export default class MainGame extends Phaser.Scene
             }
         });
     }
+}
+
+function xyConvertToIndex(x,y) {
+    x = (x-275)/120
+    y = (y-152.5)/120
+    return x+4*y
 }
