@@ -25,150 +25,7 @@ export default class Level1a extends MainGame {
         this.timerText;
     }
 
-    create ()
-    {
-        this.add.image(400, 300, 'background');
-
-        this.circle1 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
-        this.circle2 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0x00ff00);
-
-        this.circle1.setVisible(false);
-        this.circle2.setVisible(false);
-
-        //  Create a 4x4 grid aligned group to hold our sprites
-
-        this.emojis = this.add.group({
-            key: 'emojis',
-            frameQuantity: 1,
-            repeat: 15,
-            gridAlign: {
-                width: 4,
-                height: 4,
-                cellWidth: 110,
-                cellHeight: 125,
-                x: 280,
-                y: 200
-            }
-        });
-
-        const fontStyle = {
-            fontFamily: 'Arial',
-            fontSize: 48,
-            color: '#ffffff',
-            fontStyle: 'bold',
-            padding: 16,
-            shadow: {
-                color: '#000000',
-                fill: true,
-                offsetX: 2,
-                offsetY: 2,
-                blur: 4
-            }
-        };
-
-        this.timerText = this.add.text(20, 20, '30:00', fontStyle);
-        this.scoreText = this.add.text(530, 20, 'Found: 0', fontStyle);
-
-        let children = this.emojis.getChildren();
-
-        children.forEach((child) => {
-
-            child.setInteractive();
-
-        });
-
-        this.input.on('gameobjectdown', this.selectEmoji, this);
-        this.input.once('pointerdown', this.start, this);
-
-        this.highscore = this.registry.get('highscore');
-
-        this.arrangeGrid();
-    }
-
-    start ()
-    {
-        this.score = 0;
-        this.matched = false;
-
-        this.timer = this.time.addEvent({ delay: 30000, callback: this.gameOver, callbackScope: this });
-
-        this.sound.play('countdown', { delay: 27 });
-    }
-
-    selectEmoji (pointer, emoji)
-    {
-        if (this.matched)
-        {
-            return;
-        }
-
-        //  Is this the first or second selection?
-        if (!this.selectedEmoji)
-        {
-            //  Our first emoji
-            this.circle1.setPosition(emoji.x, emoji.y);
-            this.circle1.setVisible(true);
-
-            this.selectedEmoji = emoji;
-        }
-        else if (emoji !== this.selectedEmoji)
-        {
-            //  Our second emoji
-
-            //  Is it a match?
-            if (emoji.frame.name === this.selectedEmoji.frame.name)
-            {
-                this.circle1.setStrokeStyle(3, 0x00ff00);
-                this.circle2.setPosition(emoji.x, emoji.y);
-                this.circle2.setVisible(true);
-
-                this.tweens.add({
-                    targets: [ this.child1, this.child2 ],
-                    scale: 1.4,
-                    angle: '-=30',
-                    yoyo: true,
-                    ease: 'sine.inout',
-                    duration: 200,
-                    completeDelay: 200,
-                    onComplete: () => this.newRound()
-                });
-        
-                this.sound.play('match');
-            }
-            else
-            {
-                this.circle1.setPosition(emoji.x, emoji.y);
-                this.circle1.setVisible(true);
-
-                this.selectedEmoji = emoji;
-            }
-        }
-    }
-
-    newRound ()
-    {
-        this.matched = false;
-
-        this.score++;
-
-        this.scoreText.setText('Found: ' + this.score);
-
-        this.circle1.setStrokeStyle(3, 0xf8960e);
-
-        this.circle1.setVisible(false);
-        this.circle2.setVisible(false);
-
-        //  Stagger tween them all out
-        this.tweens.add({
-            targets: this.emojis.getChildren(),
-            scale: 0,
-            ease: 'power2',
-            duration: 600,
-            delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
-            onComplete: () => this.arrangeGrid()
-        });
-    }
-
+    
     arrangeGrid ()
     {
         //  We need to make sure there is only one pair in the grid
@@ -186,18 +43,24 @@ export default class Level1a extends MainGame {
         while (b == a) {
             b = Math.floor(Math.random()*15)
         }
-        console.log(this.textures.get('emojis').frames)
-        a = 0
-        b = 1
-        children[a].setFrame('redapple.png')
-        children[b].setFrame('redbanana.png')
+        // boolean expression is pick blue and gray
+        children[a].setFrame('blueorange.png')
+        children[b].setFrame('graystrawberry.png')
+        this.correctset.push(a)
+        this.correctset.push(b)
         console.log(a,b)
         for (let i = 0; i < 16; i++)
         {
             if (i != a && i != b) {
-                children[i].setFrame(this.game.config.colors[Math.floor((3*Math.random())+1)] + this.game.config.fruits[Math.floor((3*Math.random()))] +'.png')
+                children[i].setFrame(this.game.config.colors[Math.floor((3*Math.random()))] + this.game.config.fruits[Math.floor((4*Math.random()))] +'.png')
+                if (children[i].frame.customData.color == 'blue' || children[i].frame.customData.color == 'gray') {
+                    this.correctset.push(i)
+                }
             }
         }
+
+        this.correctset.sort(((a,b)=> a-b))
+        console.log(this.correctset)
 
         //  Finally, pick two random children and make them a pair:
         let index1 = Phaser.Utils.Array.RemoveRandomElement(selected);
@@ -224,60 +87,4 @@ export default class Level1a extends MainGame {
         });
     }
 
-    update ()
-    {
-        if (this.timer)
-        {
-            if (this.timer.getProgress() === 1)
-            {
-                this.timerText.setText('00:00');
-            }
-            else
-            {
-                const remaining = (30 - this.timer.getElapsedSeconds()).toPrecision(4);
-                const pos = remaining.indexOf('.');
-
-                let seconds = remaining.substring(0, pos);
-                let ms = remaining.substr(pos + 1, 2);
-
-                seconds = Phaser.Utils.String.Pad(seconds, 2, '0', 1);
-
-                this.timerText.setText(seconds + ':' + ms);
-            }
-        }
-    }
-
-    gameOver ()
-    {
-        //  Show them where the match actually was
-        this.circle1.setStrokeStyle(4, 0xfc29a6).setPosition(this.child1.x, this.child1.y).setVisible(true);
-        this.circle2.setStrokeStyle(4, 0xfc29a6).setPosition(this.child2.x, this.child2.y).setVisible(true);
-
-        this.input.off('gameobjectdown', this.selectEmoji, this);
-
-        console.log(this.score, this.highscore);
-
-        if (this.score > this.highscore)
-        {
-            console.log('high set');
-
-            this.registry.set('highscore', this.score);
-        }
-
-        this.tweens.add({
-            targets: [ this.circle1, this.circle2 ],
-            alpha: 0,
-            yoyo: true,
-            repeat: 2,
-            duration: 250,
-            ease: 'sine.inout',
-            onComplete: () => {
-
-                this.input.once('pointerdown', () => {
-                    this.scene.start('MainMenu');
-                }, this);
-
-            }
-        });
-    }
 }
