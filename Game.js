@@ -13,6 +13,7 @@ export default class MainGame extends Phaser.Scene
         this.circles = new Array(16);
         this.selected = [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false];
 
+        this.win = false;
         this.child1;
         this.child2;
 
@@ -75,18 +76,20 @@ export default class MainGame extends Phaser.Scene
         };
 
         this.timerText = this.add.text(20, 20, '30:00', fontStyle);
-        this.scoreText = this.add.text(530, 20, 'Found: 0', fontStyle);
+        this.scoreText = this.add.text(530, 20, 'Hover here to End game', fontStyle);
+        this.scoreText.setInteractive({ useHandCursor: true});    
+        this.scoreText.on('pointerover', () => this.gameOver(), this)
 
         let children = this.emojis.getChildren();
 
         children.forEach((child) => {
 
             child.setInteractive();
-
+            child.on('gameobjectdown', this.selectEmoji, this)
         });
 
         this.input.on('gameobjectdown', this.selectEmoji, this);
-        this.input.once('pointerdown', this.start, this);
+        //this.input.once('pointerdown', this.start, this);
 
         this.highscore = this.registry.get('highscore');
 
@@ -98,14 +101,14 @@ export default class MainGame extends Phaser.Scene
         this.score = 0;
         this.matched = false;
 
-        this.timer = this.time.addEvent({ delay: 30000, callback: this.gameOver, callbackScope: this });
+        //this.timer = this.time.addEvent({ delay: 30000, callback: this.gameOver, callbackScope: this });
 
         this.sound.play('countdown', { delay: 27 });
     }
 
     selectEmoji (pointer, emoji)
     {
-        console.log('emoji positions are: ', emoji.x, emoji.y)
+        //console.log('emoji positions are: ', emoji.x, emoji.y)
         let x = emoji.x
         let y = emoji.y
         console.log('index is: ', xyConvertToIndex(x,y))
@@ -142,8 +145,8 @@ export default class MainGame extends Phaser.Scene
 
         this.score++;
 
-        this.scoreText.setText('Found: ' + this.score);
-
+        this.scoreText.setText('Submit');
+        
         this.circle1.setStrokeStyle(3, 0xf8960e);
 
         this.circle1.setVisible(false);
@@ -231,12 +234,21 @@ export default class MainGame extends Phaser.Scene
     {
         let win = checkSolution(this.selected,this.correctset);
         //  Show them where the match actually was
-        this.circle1.setStrokeStyle(4, 0xfc29a6).setPosition(this.child1.x, this.child1.y).setVisible(true);
-        this.circle2.setStrokeStyle(4, 0xfc29a6).setPosition(this.child2.x, this.child2.y).setVisible(true);
-
+        if (win) {
+            this.win = true;
+            alert('you won')
+        }
+        else {
+            this.win = false;
+            alert('you lost')
+        }
+        
+        //this.circle1.setStrokeStyle(4, 0xfc29a6).setPosition(this.child1.x, this.child1.y).setVisible(true);
+        //this.circle2.setStrokeStyle(4, 0xfc29a6).setPosition(this.child2.x, this.child2.y).setVisible(true);
+        this.correctset = [];
         this.input.off('gameobjectdown', this.selectEmoji, this);
 
-        console.log(this.score, this.highscore);
+        //console.log(this.score, this.highscore);
 
         if (this.score > this.highscore)
         {
@@ -253,7 +265,6 @@ export default class MainGame extends Phaser.Scene
             duration: 250,
             ease: 'sine.inout',
             onComplete: () => {
-
                 this.input.once('pointerdown', () => {
                     this.scene.start('MainMenu');
                 }, this);

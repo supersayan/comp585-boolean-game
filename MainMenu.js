@@ -32,9 +32,9 @@ export default class MainMenu extends Phaser.Scene
             }
         };
 
-        this.add.text(20, 20, 'High Score: ' + this.registry.get('highscore'), fontStyle);
+        this.add.text(220, 20, 'Fruit Stand', fontStyle);
 
-        let logo = this.add.image(400, -200, 'logo');
+        let logo = undefined//this.add.image(400, -200, 'logo');
 
         if (!this.music)
         {

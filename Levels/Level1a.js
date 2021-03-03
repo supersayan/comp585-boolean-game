@@ -26,6 +26,73 @@ export default class Level1a extends MainGame {
         this.timerText;
     }
 
+    create ()
+    {
+        this.add.image(400, 300, 'background');
+
+        // generates selection circles
+        for(let i = 0; i < 16; i++){
+            this.circles[i] = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
+            this.circles[i].setVisible(false);
+        }
+        
+        /*this.circle1 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
+        this.circle2 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0x00ff00);
+
+        this.circle1.setVisible(false);
+        this.circle2.setVisible(false);*/
+
+        //  Create a 4x4 grid aligned group to hold our sprites
+
+        this.emojis = this.add.group({
+            key: 'emojis',
+            frameQuantity: 1,
+            repeat: 15,
+            gridAlign: {
+                width: 4,
+                height: 4,
+                cellWidth: 120,
+                cellHeight: 120,
+                x: 280,
+                y: 200
+            }
+        });
+
+        const fontStyle = {
+            fontFamily: 'Arial',
+            fontSize: 30,
+            color: '#ffffff',
+            fontStyle: 'bold',
+            padding: 16,
+            shadow: {
+                color: '#000000',
+                fill: true,
+                offsetX: 2,
+                offsetY: 2,
+                blur: 4
+            }
+        };
+
+        this.timerText = this.add.text(20, 20, 'Red AND Blue', fontStyle);
+        this.scoreText = this.add.text(300, 20, 'Hover here to End game', fontStyle);
+        this.scoreText.setInteractive({ useHandCursor: true});    
+        this.scoreText.on('pointerover', () => this.gameOver(), this)
+
+        let children = this.emojis.getChildren();
+
+        children.forEach((child) => {
+
+            child.setInteractive();
+            child.on('gameobjectdown', this.selectEmoji, this)
+        });
+
+        this.input.on('gameobjectdown', this.selectEmoji, this);
+        //this.input.once('pointerdown', this.start, this);
+
+        this.highscore = this.registry.get('highscore');
+
+        this.arrangeGrid();
+    }
 
     arrangeGrid ()
     {
@@ -49,7 +116,7 @@ export default class Level1a extends MainGame {
         children[b].setFrame('bluebanana.png')
         this.correctset.push(a)
         this.correctset.push(b)
-        console.log(a,b)
+        //console.log(a,b)
         for (let i = 0; i < 16; i++)
         {
             if (i != a && i != b) {
@@ -73,7 +140,7 @@ export default class Level1a extends MainGame {
         //  Set the frame to match
         this.child2.setFrame(this.child1.frame.name);
 
-        console.log('Pair: ', index1, index2);
+        //console.log('Pair: ', index1, index2);
 
         //  Clear the currently selected emojis (if any)
         this.selectedEmoji = null;
