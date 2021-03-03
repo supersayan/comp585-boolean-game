@@ -229,6 +229,7 @@ export default class MainGame extends Phaser.Scene
 
     gameOver ()
     {
+        let win = checkSolution(this.selected,this.correctset);
         //  Show them where the match actually was
         this.circle1.setStrokeStyle(4, 0xfc29a6).setPosition(this.child1.x, this.child1.y).setVisible(true);
         this.circle2.setStrokeStyle(4, 0xfc29a6).setPosition(this.child2.x, this.child2.y).setVisible(true);
@@ -266,4 +267,22 @@ function xyConvertToIndex(x,y) {
     x = (x-275)/120
     y = (y-152.5)/120
     return x+4*y
+}
+
+function checkSolution(select,sol) {
+    //assume solution is true until a case is found where it isn't
+    let correctSelect = true;
+    //create the answer set based on which ones are correct
+    let answer = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+    for (let i = 0; i < sol.length; i++) {
+        answer[sol[i]] = true;
+    }
+    //compare answer to selection
+    for (let i = 0; i < select.length; i++) {
+        if (select[i] != answer[i]) {
+            correctSelect = false;
+        }
+    }
+
+    return correctSelect;
 }
