@@ -5,6 +5,7 @@ import Preloader from './Preloader.js';
 import MainMenu from './MainMenu.js';
 import MainGame from './Game.js';
 import Level1a from './Levels/Level1a.js';
+import Level1b from './Levels/Level1b.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -12,7 +13,7 @@ const config = {
     height: 600,
     backgroundColor: '#008eb0',
     parent: 'phaser-example',
-    scene: [ Boot, Preloader, MainMenu, Level1a ],
+    scene: [ Boot, Preloader, MainMenu, Level1a, Level1b],
     colors: ['red', 'green', 'blue', 'gray', 'purple'],
     fruits: ['apple', 'banana', 'orange', 'strawberry']
 };
