@@ -13,7 +13,7 @@ const config = {
     height: 600,
     backgroundColor: '#008eb0',
     parent: 'phaser-example',
-    scene: [ Boot, Preloader, MainMenu, Level1a, Level1b],
+    scene: [ Boot, Preloader, MainMenu, Level1a],
     colors: ['red', 'green', 'blue', 'gray', 'purple'],
     fruits: ['apple', 'banana', 'orange', 'strawberry']
 };

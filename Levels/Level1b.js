@@ -4,7 +4,7 @@ export default class Level1b extends MainGame {
 
     constructor ()
     {
-        super('MainGame');
+        super('Level1b');
 
         this.fruits;
 

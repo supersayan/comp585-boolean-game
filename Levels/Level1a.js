@@ -4,7 +4,7 @@ export default class Level1a extends MainGame {
 
     constructor ()
     {
-        super('MainGame');
+        super('Level1a');
 
         this.fruits;
 
@@ -27,9 +27,9 @@ export default class Level1a extends MainGame {
 
     start ()
     {
-        console.log("X")
         this.score = 0;
         this.set = []
+        this.required =[]
         this.win = false
 
         //this.timer = this.time.addEvent({ delay: 30000, callback: this.gameOver, callbackScope: this });
@@ -173,6 +173,11 @@ export default class Level1a extends MainGame {
                 circledance.push(this.circles[this.set[i]])
             }
 
+            this.score = 0;
+            this.set = []
+            this.required =[]
+            this.win = false
+
             this.tweens.add({
                 targets: circledance,
                 alpha: 0,
@@ -182,14 +187,19 @@ export default class Level1a extends MainGame {
                 ease: 'sine.inout',
                 onComplete: () => {
                     this.input.once('pointerdown', () => {
-                        this.scene.start('Level1b');   
+                        //this.scene.start('Level1b'); 
+                        this.scene.start('MainMenu');   
+                            //placeholder scene  
                     }, this);
 
                 }
             });
         }
         else {
-            this.win = false;
+            this.score = 0;
+            this.set = []
+            this.required =[]
+            this.win = false
             alert('you lost')
             this.input.once('pointerdown', () => {
                 this.scene.start('MainMenu');   
