@@ -17,7 +17,7 @@ export default class Preloader extends Phaser.Scene
 
         this.load.setPath('assets/');
         this.load.image([ 'background', 'logo' ]);
-        this.load.atlas('emojis', 'fruits2.png', 'fruits2.json');
+        this.load.atlas('fruits', 'fruits2.png', 'fruits2.json');
 
         //  Audio ...
         this.load.setPath('assets/sounds/');

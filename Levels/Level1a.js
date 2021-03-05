@@ -6,24 +6,35 @@ export default class Level1a extends MainGame {
     {
         super('MainGame');
 
-        this.emojis;
+        this.fruits;
 
-        this.circle1;
-        this.circle2;
+        this.circles = new Array(16);
+        this.set = []; //just holds the selected fruits
+        this.required = []; //holds the required for AND operations
 
-        this.child1;
-        this.child2;
-        this.correctset = []
+        this.win = false;
 
-        this.selectedEmoji = null;
-        this.matched = false;
-
+        this.selectedFruit = null;
+        
+        //solution var
         this.score = 0;
         this.highscore = 0;
         this.scoreText;
 
-        this.timer;
+        this.timer; 
         this.timerText;
+    }
+
+    start ()
+    {
+        console.log("X")
+        this.score = 0;
+        this.set = []
+        this.win = false
+
+        //this.timer = this.time.addEvent({ delay: 30000, callback: this.gameOver, callbackScope: this });
+
+        this.sound.play('countdown', { delay: 27 });
     }
 
     create ()
@@ -35,17 +46,11 @@ export default class Level1a extends MainGame {
             this.circles[i] = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
             this.circles[i].setVisible(false);
         }
-        
-        /*this.circle1 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
-        this.circle2 = this.add.circle(0, 0, 42).setStrokeStyle(3, 0x00ff00);
-
-        this.circle1.setVisible(false);
-        this.circle2.setVisible(false);*/
 
         //  Create a 4x4 grid aligned group to hold our sprites
 
-        this.emojis = this.add.group({
-            key: 'emojis',
+        this.fruits = this.add.group({
+            key: 'fruits',
             frameQuantity: 1,
             repeat: 15,
             gridAlign: {
@@ -73,20 +78,20 @@ export default class Level1a extends MainGame {
             }
         };
 
-        this.timerText = this.add.text(20, 20, 'Red AND Blue', fontStyle);
+        this.timerText = this.add.text(20, 20, 'Red AND Apple', fontStyle);
         this.scoreText = this.add.text(300, 20, 'Hover here to End game', fontStyle);
         this.scoreText.setInteractive({ useHandCursor: true});    
         this.scoreText.on('pointerover', () => this.gameOver(), this)
 
-        let children = this.emojis.getChildren();
+        let children = this.fruits.getChildren();
 
         children.forEach((child) => {
 
             child.setInteractive();
-            child.on('gameobjectdown', this.selectEmoji, this)
+            child.on('gameobjectdown', this.selectFruit, this)
         });
 
-        this.input.on('gameobjectdown', this.selectEmoji, this);
+        this.input.on('gameobjectdown', this.selectFruit, this);
         //this.input.once('pointerdown', this.start, this);
 
         this.highscore = this.registry.get('highscore');
@@ -97,53 +102,28 @@ export default class Level1a extends MainGame {
     arrangeGrid ()
     {
         //  We need to make sure there is only one pair in the grid
-        //  Let's create an array with all possible frames in it:
 
-        let frames = Phaser.Utils.Array.NumberArray(1, 40);
-        let selected = Phaser.Utils.Array.NumberArray(0, 15);
-        let children = this.emojis.getChildren();
-        
-        //  Now we pick 16 random values, removing each one from the array so we can't pick it again
-        //  and set those into the sprites
+        let children = this.fruits.getChildren();
 
         let a = Math.floor(Math.random()*15)
         let b = a
         while (b == a) {
             b = Math.floor(Math.random()*15)
         }
-        // boolean expression is pick red and blue
+        // boolean expression is pick red and apple
         children[a].setFrame('redapple.png')
-        children[b].setFrame('bluebanana.png')
-        this.correctset.push(a)
-        this.correctset.push(b)
-        //console.log(a,b)
+        children[b].setFrame('redapple.png')
+        this.required.push(a)
+        this.required.push(b)
+
         for (let i = 0; i < 16; i++)
         {
             if (i != a && i != b) {
                 children[i].setFrame(this.game.config.colors[Math.floor((5*Math.random()))] + this.game.config.fruits[Math.floor((4*Math.random()))] +'.png')
-                if (children[i].frame.customData.color == 'red' || children[i].frame.customData.color == 'blue') {
-                    this.correctset.push(i)
-                }
+                    if (children[i].frame.customData.color == 'red' && children[i].frame.customData.fruit == 'apple')
+                        this.required.push(i)
             }
         }
-
-        this.correctset.sort(((a,b)=> a-b))
-        console.log(this.correctset)
-
-        //  Finally, pick two random children and make them a pair:
-        let index1 = Phaser.Utils.Array.RemoveRandomElement(selected);
-        let index2 = Phaser.Utils.Array.RemoveRandomElement(selected);
-
-        this.child1 = children[index1];
-        this.child2 = children[index2];
-
-        //  Set the frame to match
-        this.child2.setFrame(this.child1.frame.name);
-
-        //console.log('Pair: ', index1, index2);
-
-        //  Clear the currently selected emojis (if any)
-        this.selectedEmoji = null;
 
         //  Stagger tween them all in
         this.tweens.add({
@@ -153,5 +133,73 @@ export default class Level1a extends MainGame {
             duration: 600,
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' })
         });
+    }
+
+    checkSolution() {
+        let children = this.fruits.getChildren()
+        for (let i = 0; i < this.set.length; i++) {
+            let e = this.set[i]
+            if (!(children[e].frame.customData.color == 'red' && children[e].frame.customData.fruit == 'apple')) {
+                console.log("x")
+                return false
+            }
+        }
+        return true
+    }
+
+    checkSolutionAND() {
+        console.log(this.required)
+        for (let i = 0; i < this.required.length; i++) {
+            let e = this.required[i]
+            if (!(this.set.includes(e))) {
+                console.log(this.set, e)
+                return false
+            }
+        }
+        return true
+    }
+
+    gameOver ()
+    {
+        let win = (this.checkSolution() && this.checkSolutionAND())
+        //  Show them where the match actually was
+        this.input.off('gameobjectdown', this.selectFruit, this);
+        if (win) {
+            this.win = true;
+            alert('you won')
+
+            let circledance = []
+            for (let i = 0; i < this.set.length; i++){
+                circledance.push(this.circles[this.set[i]])
+            }
+
+            this.tweens.add({
+                targets: circledance,
+                alpha: 0,
+                yoyo: true,
+                repeat: 2,
+                duration: 250,
+                ease: 'sine.inout',
+                onComplete: () => {
+                    this.input.once('pointerdown', () => {
+                        this.scene.start('Level1b');   
+                    }, this);
+
+                }
+            });
+        }
+        else {
+            this.win = false;
+            alert('you lost')
+            this.input.once('pointerdown', () => {
+                this.scene.start('MainMenu');   
+            }, this);
+        }
+        
+        
+
+        //console.log(this.score, this.highscore);
+
+        
     }
 }
