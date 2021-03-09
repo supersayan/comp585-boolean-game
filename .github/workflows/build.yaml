@@ -14,7 +14,7 @@ jobs:
         run: |
           npm install
           mkdir game
-          mv ./* ./game/
+          mv !(game) game
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.0
