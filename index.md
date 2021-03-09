@@ -1,5 +1,7 @@
 ## A Boolean Logic Game
 
+[Play Game](./game/)
+
 A game designed to teach boolean logic to middle schoolers.
 
 Design document: 
