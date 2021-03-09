@@ -1,0 +1,24 @@
+{
+  "name": "comp585-boolean-game",
+  "version": "1.0.0",
+  "description": "group project for comp 585 serious games",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supersayan/comp585-boolean-game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/supersayan/comp585-boolean-game/issues"
+  },
+  "homepage": "https://github.com/supersayan/comp585-boolean-game#readme",
+  "dependencies": {
+    "browser-sync": "^2.26.14",
+    "phaser": "^3.52.0"
+  },
+  "devDependencies": {}
+}
