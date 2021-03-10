@@ -68,8 +68,8 @@ export default class MainGame extends Phaser.Scene
 
         this.timerText = this.add.text(20, 20, '30:00', fontStyle);
         this.scoreText = this.add.text(530, 20, 'Hover here to End game', fontStyle);
-        this.scoreText.setInteractive({ useHandCursor: true});    
-        this.scoreText.on('pointerover', () => this.gameOver(), this)
+        //this.scoreText.setInteractive({ useHandCursor: true});    
+        this.scoreText.on('pointerdown', () => this.gameOver(), this)
 
         let children = this.fruits.getChildren();
 

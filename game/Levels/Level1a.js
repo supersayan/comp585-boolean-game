@@ -79,9 +79,10 @@ export default class Level1a extends MainGame {
         };
 
         this.timerText = this.add.text(20, 20, 'Red AND Apple', fontStyle);
-        this.scoreText = this.add.text(300, 20, 'Hover here to End game', fontStyle);
+        this.rect = this.add.rectangle(490, 55, 380, 50,0xffffff);
+        this.scoreText = this.add.text(300, 20, 'Click here to End game', fontStyle);
         this.scoreText.setInteractive({ useHandCursor: false});    
-        this.scoreText.on('pointerdown', () => this.gameOver(), this)
+        this.scoreText.once('pointerdown', () => this.gameOver(), this)
 
         let children = this.fruits.getChildren();
 
