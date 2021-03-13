@@ -79,10 +79,15 @@ export default class Level1a extends MainGame {
         };
 
         this.timerText = this.add.text(20, 20, 'Red AND Apple', fontStyle);
-        this.rect = this.add.rectangle(490, 55, 380, 50,0xffffff);
-        this.scoreText = this.add.text(300, 20, 'Click here to End game', fontStyle);
+        this.rect = this.add.rectangle(478, 55, 125, 50,0x55ffff);
+        this.rect.setStrokeStyle(2,0x000000);
+        this.scoreText = this.add.text(410, 20, 'Submit', fontStyle);
         this.scoreText.setInteractive({ useHandCursor: false});    
         this.scoreText.once('pointerdown', () => this.gameOver(), this)
+        this.winText = this.add.text(550, 20, 'You Won!', fontStyle);
+        this.winText.setVisible(false);
+        this.loseText = this.add.text(550, 20, 'You Lost...', fontStyle);
+        this.loseText.setVisible(false);
 
         let children = this.fruits.getChildren();
 
@@ -167,8 +172,8 @@ export default class Level1a extends MainGame {
         this.input.off('gameobjectdown', this.selectFruit, this);
         if (win) {
             this.win = true;
-            alert('you won')
-
+            //alert('you won')
+            this.winText.setVisible(true);
             let circledance = []
             for (let i = 0; i < this.set.length; i++){
                 circledance.push(this.circles[this.set[i]])
@@ -201,10 +206,13 @@ export default class Level1a extends MainGame {
             this.set = []
             this.required =[]
             this.win = false
-            alert('you lost')
-            this.input.once('pointerdown', () => {
+            this.loseText.setVisible(true);
+            //alert('you lost')
+            //Timeout is needed so that the click to submit doesn't count for going to the main menu
+            setTimeout(() => {this.input.once('pointerdown', () => {
                 this.scene.start('MainMenu');   
-            }, this);
+            }, this);}, 100);
+            
         }
         
         
