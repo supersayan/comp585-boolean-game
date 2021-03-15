@@ -121,7 +121,6 @@ export default class Level1a extends MainGame {
         this.rect.setStrokeStyle(2,0x000000);
         this.scoreText = this.add.text(410, 20, 'Submit', fontStyle);
         this.scoreText.setInteractive({ useHandCursor: false});    
-        console.log(this.scoreText);
         this.scoreText.once('pointerdown', () => {
             this.tweens.add({
                 targets: [this.scoreText, this.rect],
@@ -203,7 +202,6 @@ export default class Level1a extends MainGame {
         for (let i = 0; i < this.set.length; i++) {
             let e = this.set[i]
             if (!(children[e].frame.customData.color == 'red' && children[e].frame.customData.fruit == 'apple')) {
-                console.log("x")
                 return false
             }
         }

@@ -33,7 +33,6 @@ export default class MainMenu extends Phaser.Scene
         };
 
         this.text1 = this.add.text(220, -20, 'Fruit Stand', fontStyle);
-        console.log(this)
         this.tweens.add({
             targets: this.text1,
             duration: 2000,
