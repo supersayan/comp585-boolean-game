@@ -32,8 +32,15 @@ export default class MainMenu extends Phaser.Scene
             }
         };
 
-        this.add.text(220, 20, 'Fruit Stand', fontStyle);
-
+        this.text1 = this.add.text(220, -20, 'Fruit Stand', fontStyle);
+        console.log(this)
+        this.tweens.add({
+            targets: this.text1,
+            duration: 2000,
+            y: {start: 0, to: this.game.canvas.height/2 - this.text1.height},
+            ease: 'bounce.out',
+            
+        });
         let logo = undefined//this.add.image(400, -200, 'logo');
 
         if (!this.music)
@@ -55,3 +62,4 @@ export default class MainMenu extends Phaser.Scene
         });
     }
 }
+
