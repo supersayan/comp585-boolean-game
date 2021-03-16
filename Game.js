@@ -32,7 +32,6 @@ export default class MainGame extends Phaser.Scene
 
     create ()
     {
-        console.log('x');
         this.add.image(400, 300, 'background');
 
         // generates selection circles
@@ -82,7 +81,12 @@ export default class MainGame extends Phaser.Scene
         children.forEach((child) => {
 
             child.setInteractive();
-            child.on('gameobjectdown', this.selectFruit, this)
+            child.on('gameobjectdown',  () => {
+                this.selectFruit;
+                console.log(pointer);
+                console.log('x');
+            }
+            , this)
         });
 
         this.input.on('gameobjectdown', this.selectFruit, this);
@@ -106,19 +110,53 @@ export default class MainGame extends Phaser.Scene
 
     selectFruit(pointer, fruit)
     {
-        //console.log('emoji positions are: ', emoji.x, emoji.y)
         let x = fruit.x
         let y = fruit.y
         console.log('index is: ', xyConvertToIndex(x,y))
         let index = xyConvertToIndex(x,y);
-        //  Checks if selected object is in selection pool
-        if (!this.circles[index].visible)
-        {
-            this.circles[index].setPosition(x,y);
-            this.set.push(xyConvertToIndex(x,y)) //pushes selection
-            this.circles[index].setVisible(true);
-        } else {
-            this.circles[index].setVisible(false);
+        if (pointer.leftButtonDown()) {
+            //console.log('emoji positions are: ', emoji.x, emoji.y)
+            
+            //  Checks if selected object is in selection pool
+            if (!this.circles[index].visible)
+            {
+                this.circles[index].setPosition(x,y);
+                this.set.push(xyConvertToIndex(x,y)) //pushes selection
+                this.circles[index].setVisible(true);
+            } else {
+                this.circles[index].setVisible(false);
+            }
+        } else if (pointer.rightButtonDown()) { //displays properties
+            
+            this.game.canvas.oncontextmenu = (e) => {
+                e.preventDefault()
+            }
+            //this.add.rectangle(20, 250, 150, 100, 0xFF0000);
+            if (this.proptext != undefined) {
+                this.proptext.destroy();
+                this.proptext2.destroy();
+                this.proptext3.destroy();
+            }
+            const fontStyle = {
+                fontFamily: 'Arial',
+                fontSize: 20,
+                color: '#ffffff',
+                fontStyle: 'bold',
+                padding: 4,
+                shadow: {
+                    color: '#000000',
+                    fill: true,
+                    offsetX: 2,
+                    offsetY: 2,
+                    blur: 4
+                }
+            };      
+            let children = this.fruits.getChildren();
+            let a = children[index].frame.customData.fruit;
+            let b = children[index].frame.customData.color;
+            this.proptext = this.add.text(20, 200, 'Properties: ', fontStyle);
+            this.proptext2 = this.add.text(20, 230, `Fruit = ${a}`, fontStyle);
+            this.proptext3 = this.add.text(20, 260, `Color = ${b}`, fontStyle);
         }
     }
 
