@@ -1,10 +1,10 @@
 import MainGame from "../Game.js";
 
-export default class Level1a extends MainGame {
+export default class Level2a extends MainGame {
 
     constructor ()
     {
-        super('Level1a');
+        super('Level2a');
 
         this.fruits;
 
@@ -29,12 +29,29 @@ export default class Level1a extends MainGame {
     {
         this.score = 0;
         this.set = []
-        this.required =[]
         this.win = false
 
         //this.timer = this.time.addEvent({ delay: 30000, callback: this.gameOver, callbackScope: this });
 
         this.sound.play('countdown', { delay: 27 });
+    }
+
+    newRound ()
+    {
+        this.set = []
+        this.win = false
+
+        this.scoreText.setText('Submit');
+
+        //  Stagger tween them all out
+        this.tweens.add({
+            targets: this.fruits.getChildren(),
+            scale: 0,
+            ease: 'power2',
+            duration: 600,
+            delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
+            onComplete: () => this.arrangeGrid()
+        });
     }
 
     create ()
@@ -112,10 +129,10 @@ export default class Level1a extends MainGame {
         //sprite.tint = 0x000000;
         this.fruittext = this.add.text(110, 85, 'apple', fontStyle3);
         this.timerText = this.add.text(20, 0, `Color   =`, fontStyle2);     
-        this.colorrect = this.add.rectangle(150, 20, 30, 30, 0xFF0000)
+        this.colorrect = this.add.rectangle(150, 20, 30, 30, 0x800080)
         this.colorrect.setStrokeStyle(2,0x000000);
-        this.timerText2 = this.add.text(70, 45, 'AND', fontStyle3);
-        this.timerText2.setColor('#32CD32');
+        this.timerText2 = this.add.text(70, 45, 'OR', fontStyle3);
+        this.timerText2.setColor('#FFFF00');
         this.timerText = this.add.text(20, 90, 'Fruit   =', fontStyle2);
         this.rect = this.add.rectangle(478, 55, 125, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
@@ -173,8 +190,8 @@ export default class Level1a extends MainGame {
             b = Math.floor(Math.random()*15)
         }
         // boolean expression is pick red and apple
-        children[a].setFrame('redapple.png')
-        children[b].setFrame('redapple.png')
+        children[a].setFrame('purpleapple.png')
+        children[b].setFrame('purpleapple.png')
         this.required.push(a)
         this.required.push(b)
 
@@ -182,7 +199,7 @@ export default class Level1a extends MainGame {
         {
             if (i != a && i != b) {
                 children[i].setFrame(this.game.config.colors[Math.floor((5*Math.random()))] + this.game.config.fruits[Math.floor((4*Math.random()))] +'.png')
-                    if (children[i].frame.customData.color == 'red' && children[i].frame.customData.fruit == 'apple')
+                    if (children[i].frame.customData.color == 'purple' || children[i].frame.customData.fruit == 'apple')
                         this.required.push(i)
             }
         }
@@ -201,7 +218,8 @@ export default class Level1a extends MainGame {
         let children = this.fruits.getChildren()
         for (let i = 0; i < this.set.length; i++) {
             let e = this.set[i]
-            if (!(children[e].frame.customData.color == 'red' && children[e].frame.customData.fruit == 'apple')) {
+            if (!(children[e].frame.customData.color == 'purple' && children[e].frame.customData.fruit == 'apple')) {
+                console.log("x")
                 return false
             }
         }
@@ -213,7 +231,7 @@ export default class Level1a extends MainGame {
         for (let i = 0; i < this.required.length; i++) {
             let e = this.required[i]
             if (!(this.set.includes(e))) {
-                console.log(this.set, e)
+                console.log(this.set, this.set.includes(e))
                 return false
             }
         }
@@ -250,7 +268,7 @@ export default class Level1a extends MainGame {
                 onComplete: () => {
                     this.input.once('pointerdown', () => {
                         //this.scene.start('Level1b'); 
-                        this.scene.start('Level1b');   
+                        this.scene.start('Level3a');   
                             //placeholder scene  
                     }, this);
 

@@ -2,10 +2,15 @@
 // another test comment for a commit
 export default class MainGame extends Phaser.Scene
 {
-    constructor ()
+    constructor (str)
     {
-        super('MainGame')
 
+        if (str == undefined ) {
+            super('MainGame');
+        } else {
+            super(str)
+
+        }  
         this.fruits;
 
         this.circles = new Array(16);
@@ -27,6 +32,7 @@ export default class MainGame extends Phaser.Scene
 
     create ()
     {
+        console.log('x');
         this.add.image(400, 300, 'background');
 
         // generates selection circles
