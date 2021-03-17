@@ -218,8 +218,7 @@ export default class Level2a extends MainGame {
         let children = this.fruits.getChildren()
         for (let i = 0; i < this.set.length; i++) {
             let e = this.set[i]
-            if (!(children[e].frame.customData.color == 'purple' && children[e].frame.customData.fruit == 'apple')) {
-                console.log("x")
+            if (!(children[e].frame.customData.color == 'purple' || children[e].frame.customData.fruit == 'apple')) {
                 return false
             }
         }
@@ -240,7 +239,7 @@ export default class Level2a extends MainGame {
 
     gameOver ()
     {
-        let win = (this.checkSolutionAND())
+        let win = (this.checkSolutionAND() && this.checkSolution())
         //  Show them where the match actually was
         this.input.off('gameobjectdown', this.selectFruit, this);
         if (win) {

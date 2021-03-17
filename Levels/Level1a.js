@@ -222,7 +222,7 @@ export default class Level1a extends MainGame {
 
     gameOver ()
     {
-        let win = (this.checkSolutionAND())
+        let win = (this.checkSolutionAND() && this.checkSolution())
         //  Show them where the match actually was
         this.input.off('gameobjectdown', this.selectFruit, this);
         if (win) {
