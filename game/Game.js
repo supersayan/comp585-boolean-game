@@ -89,7 +89,7 @@ export default class MainGame extends Phaser.Scene
             , this)
         });
 
-        this.input.on('gameobjectdown', this.selectFruit, this);
+                this.input.on('gameobjectdown', this.selectFruit, this);
         //this.input.once('pointerdown', this.start, this);
 
         this.highscore = this.registry.get('highscore');
