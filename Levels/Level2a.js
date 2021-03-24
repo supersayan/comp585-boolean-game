@@ -150,6 +150,7 @@ export default class Level2a extends MainGame {
                         targets:this.winText,
                         alpha: {start: 0, to:1}
                     })
+                    this.scoreText.disableInteractive();
                 }
             })
             this.gameOver()
@@ -265,10 +266,13 @@ export default class Level2a extends MainGame {
                 duration: 250,
                 ease: 'sine.inout',
                 onComplete: () => {
-                    this.input.once('pointerdown', () => {
-                        //this.scene.start('Level1b'); 
-                        this.scene.start('Level3a');   
-                            //placeholder scene  
+                    this.input.on('pointerdown', (pointer) => {     
+                        if (pointer.leftButtonDown()) { 
+                            this.input.off('gameobjectdown', this.selectFruit, this);
+                            this.scene.start('Level3a');   
+                        } else if (pointer.rightButtonDown()) {
+                            this.input.once('gameobjectdown', this.selectFruit, this);
+                        }
                     }, this);
 
                 }
@@ -284,9 +288,14 @@ export default class Level2a extends MainGame {
             //this.loseText.setVisible(true);
             //alert('you lost')
             //Timeout is needed so that the click to submit doesn't count for going to the main menu
-            setTimeout(() => {this.input.once('pointerdown', () => {
-                this.scene.start('MainMenu');   
-            }, this);}, 100);
+            setTimeout(() => {this.input.on('pointerdown', (pointer) => {
+                if (pointer.leftButtonDown()) { 
+                    this.input.off('gameobjectdown', this.selectFruit, this);
+                    this.scene.start('MainMenu');   
+                } else if (pointer.rightButtonDown()) {
+                    this.input.once('gameobjectdown', this.selectFruit, this);
+                } 
+            }, this)}, 100);
             
         }
         
