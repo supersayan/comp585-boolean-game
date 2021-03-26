@@ -7,6 +7,7 @@ export default class Level1a extends MainGame {
         super('Level1a');
 
         this.fruits;
+        this.shapes;
 
         this.circles = new Array(16);
         this.set = []; //just holds the selected fruits

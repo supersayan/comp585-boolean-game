@@ -10,9 +10,12 @@
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "shapes_sprited-0.png",
+					"filename": "redplainsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "plain",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -31,9 +34,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-1.png",
+					"filename": "orangeplainsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "plain",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -52,9 +58,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-2.png",
+					"filename": "greenplainsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "plain",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -73,9 +82,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-3.png",
+					"filename": "blueplainsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "plain",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -94,9 +106,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-4.png",
+					"filename": "purpleplainsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "plain",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -115,9 +130,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-5.png",
+					"filename": "redplaintriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "plain",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -136,9 +154,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-6.png",
+					"filename": "orangeplaintriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "plain",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -157,9 +178,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-7.png",
+					"filename": "greenplaintriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "plain",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -178,9 +202,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-8.png",
+					"filename": "blueplaintriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "plain",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -199,9 +226,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-9.png",
+					"filename": "purpleplaintriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "plain",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -220,9 +250,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-10.png",
+					"filename": "redplaincircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "plain",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -241,9 +274,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-11.png",
+					"filename": "orangeplaincircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "plain",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -262,9 +298,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-12.png",
+					"filename": "greenplaincircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "plain",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -283,9 +322,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-13.png",
+					"filename": "blueplaincircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "plain",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -304,9 +346,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-14.png",
+					"filename": "purpleplaincircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "plain",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -325,9 +370,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-15.png",
+					"filename": "redplainpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "plain",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -346,9 +394,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-16.png",
+					"filename": "orangeplainpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "plain",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -367,9 +418,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-17.png",
+					"filename": "greenplainpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "plain",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -388,9 +442,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-18.png",
+					"filename": "blueplainpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "plain",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -409,9 +466,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-19.png",
+					"filename": "purpleplainpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "plain",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -430,9 +490,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-20.png",
+					"filename": "redplaintrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "plain",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -451,9 +514,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-21.png",
+					"filename": "orangeplaintrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "plain",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -472,9 +538,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-22.png",
+					"filename": "greenplaintrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "plain",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -493,9 +562,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-23.png",
+					"filename": "blueplaintrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "plain",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -514,9 +586,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-24.png",
+					"filename": "purpleplaintrapzeoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "plain",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -535,9 +610,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-25.png",
+					"filename": "redstripedquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "striped",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -556,9 +634,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-26.png",
+					"filename": "orangestripedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "striped",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -577,9 +658,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-27.png",
+					"filename": "greenstripedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "striped",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -598,9 +682,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-28.png",
+					"filename": "bluestripedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "striped",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -619,9 +706,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-29.png",
+					"filename": "purplestripedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "striped",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -640,9 +730,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-30.png",
+					"filename": "redstripedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "striped",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -661,9 +754,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-31.png",
+					"filename": "orangestripedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "striped",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -682,9 +778,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-32.png",
+					"filename": "greenstripedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "striped",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -703,9 +802,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-33.png",
+					"filename": "bluestripedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "striped",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -724,9 +826,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-34.png",
+					"filename": "purplestripedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "striped",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -745,9 +850,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-35.png",
+					"filename": "redstripedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "striped",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -766,9 +874,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-36.png",
+					"filename": "orangestripedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "striped",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -787,9 +898,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-37.png",
+					"filename": "greenstripedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "striped",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -808,9 +922,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-38.png",
+					"filename": "bluestripedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "striped",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -829,9 +946,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-39.png",
+					"filename": "purplestripedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "striped",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -850,9 +970,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-40.png",
+					"filename": "redstripedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "striped",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -871,9 +994,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-41.png",
+					"filename": "orangestripedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "striped",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -892,9 +1018,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-42.png",
+					"filename": "greenstripedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "striped",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -913,9 +1042,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-43.png",
+					"filename": "bluestripedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "striped",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -934,9 +1066,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-44.png",
+					"filename": "purplestripedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "striped",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -955,9 +1090,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-45.png",
+					"filename": "redstripedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "striped",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -976,9 +1114,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-46.png",
+					"filename": "orangestripedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "striped",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -997,9 +1138,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-47.png",
+					"filename": "greenstripedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "striped",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1018,9 +1162,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-48.png",
+					"filename": "bluestripedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "striped",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1039,9 +1186,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-49.png",
+					"filename": "purplestripedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "striped",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1060,9 +1210,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-50.png",
+					"filename": "redspottedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spotted",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1081,9 +1234,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-51.png",
+					"filename": "orangespottedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spotted",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1102,9 +1258,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-52.png",
+					"filename": "greenspottedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spotted",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1123,9 +1282,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-53.png",
+					"filename": "bluespottedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spotted",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1144,9 +1306,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-54.png",
+					"filename": "purplespottedsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spotted",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1165,9 +1330,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-55.png",
+					"filename": "redspottedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spotted",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1186,9 +1354,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-56.png",
+					"filename": "orangespottedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spotted",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1207,9 +1378,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-57.png",
+					"filename": "greenspottedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spotted",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1228,9 +1402,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-58.png",
+					"filename": "bluespottedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spotted",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1249,9 +1426,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-59.png",
+					"filename": "purplespottedtriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spotted",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1270,9 +1450,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-60.png",
+					"filename": "redspottedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spotted",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1291,9 +1474,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-61.png",
+					"filename": "orangespottedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spotted",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1312,9 +1498,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-62.png",
+					"filename": "greenspottedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spotted",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1333,9 +1522,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-63.png",
+					"filename": "bluespottedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spotted",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1354,9 +1546,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-64.png",
+					"filename": "purplespottedcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spotted",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1375,9 +1570,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-65.png",
+					"filename": "redspottedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spotted",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1396,9 +1594,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-66.png",
+					"filename": "orangespottedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spotted",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1417,9 +1618,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-67.png",
+					"filename": "greenspottedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spotted",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1438,9 +1642,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-68.png",
+					"filename": "bluespottedpentagon",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spotted",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1459,9 +1666,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-69.png",
+					"filename": "purplespottedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spotted",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1480,9 +1690,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-70.png",
+					"filename": "redspottedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spotted",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1501,9 +1714,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-71.png",
+					"filename": "orangespottedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spotted",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1522,9 +1738,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-72.png",
+					"filename": "greenspottedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spotted",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1543,9 +1762,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-73.png",
+					"filename": "bluespottedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spotted",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1564,9 +1786,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-74.png",
+					"filename": "purplespottedtrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spotted",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1585,9 +1810,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-75.png",
+					"filename": "rednetsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "net",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1606,9 +1834,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-76.png",
+					"filename": "orangenetsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "net",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1627,9 +1858,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-77.png",
+					"filename": "greennetsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "net",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1648,9 +1882,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-78.png",
+					"filename": "bluenetsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "net",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1669,9 +1906,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-79.png",
+					"filename": "purplenetsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "net",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1690,9 +1930,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-80.png",
+					"filename": "rednettriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "net",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1711,9 +1954,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-81.png",
+					"filename": "orangenettriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "net",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1732,9 +1978,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-82.png",
+					"filename": "greennettriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "net",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1753,9 +2002,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-83.png",
+					"filename": "bluenettriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "net",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1774,9 +2026,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-84.png",
+					"filename": "purplenettriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "net",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1795,9 +2050,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-85.png",
+					"filename": "rednetcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "net",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1816,9 +2074,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-86.png",
+					"filename": "orangenetcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "net",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1837,9 +2098,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-87.png",
+					"filename": "greennetcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "net",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1858,9 +2122,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-88.png",
+					"filename": "bluenetcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "net",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1879,9 +2146,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-89.png",
+					"filename": "purplenetcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "net",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1900,9 +2170,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-90.png",
+					"filename": "rednetpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "net",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1921,9 +2194,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-91.png",
+					"filename": "orangenetpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "net",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1942,9 +2218,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-92.png",
+					"filename": "greennetpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "net",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -1963,7 +2242,10 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-93.png",
+					"filename": "bluenetpentagon.png",
+					"color": "blue",
+					"pattern": "net",
+					"shape": "pentagon",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1984,9 +2266,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-94.png",
+					"filename": "purplenetpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "net",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2005,9 +2290,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-95.png",
+					"filename": "rednettrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "net",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2026,9 +2314,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-96.png",
+					"filename": "orangenettrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "net",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2047,9 +2338,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-97.png",
+					"filename": "greennettrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "net",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2068,9 +2362,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-98.png",
+					"filename": "bluenettrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "net",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2089,9 +2386,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-99.png",
+					"filename": "purplenettrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "net",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2110,9 +2410,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-100.png",
+					"filename": "redspiralsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spiral",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2131,9 +2434,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-101.png",
+					"filename": "orangespiralsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spiral",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2152,9 +2458,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-102.png",
+					"filename": "greenspiralsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spiral",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2173,9 +2482,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-103.png",
+					"filename": "bluespiralsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spiral",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2194,9 +2506,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-104.png",
+					"filename": "purplespiralsquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spiral",
+					"shape": "square",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2215,9 +2530,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-105.png",
+					"filename": "redspiraltriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spiral",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2236,9 +2554,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-106.png",
+					"filename": "orangespiraltriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spiral",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2257,9 +2578,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-107.png",
+					"filename": "greenspiraltriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spiral",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2278,9 +2602,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-108.png",
+					"filename": "bluespiraltriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spiral",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2299,9 +2626,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-109.png",
+					"filename": "purplespiraltriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spiral",
+					"shape": "triangle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2320,9 +2650,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-110.png",
+					"filename": "redspiralcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spiral",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2341,9 +2674,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-111.png",
+					"filename": "orangespiralcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spiral",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2362,9 +2698,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-112.png",
+					"filename": "greenspiralcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spiral",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2383,9 +2722,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-113.png",
+					"filename": "bluespiralcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spiral",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2404,9 +2746,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-114.png",
+					"filename": "purplespiralcircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spiral",
+					"shape": "circle",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2425,9 +2770,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-115.png",
+					"filename": "redspiralpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spiral",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2446,9 +2794,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-116.png",
+					"filename": "orangespiralpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spiral",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2467,9 +2818,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-117.png",
+					"filename": "greenspiralpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spiral",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2488,9 +2842,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-118.png",
+					"filename": "bluespiralpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spiral",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2509,9 +2866,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-119.png",
+					"filename": "purplespiralpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spiral",
+					"shape": "pentagon",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2530,9 +2890,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-120.png",
+					"filename": "redspiraltrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "red",
+					"pattern": "spiral",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2551,9 +2914,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-121.png",
+					"filename": "orangespiraltrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "orange",
+					"pattern": "spiral",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2572,9 +2938,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-122.png",
+					"filename": "greenspiraltrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "green",
+					"pattern": "spiral",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2593,9 +2962,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-123.png",
+					"filename": "bluespiraltrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "blue",
+					"pattern": "spiral",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -2614,9 +2986,12 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-124.png",
+					"filename": "purplespiraltrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"color": "purple",
+					"pattern": "spiral",
+					"shape": "trapezoid",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
