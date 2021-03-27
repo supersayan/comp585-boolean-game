@@ -54,14 +54,10 @@ class OperatorNode extends TreeNode {
     }
 
     getString() {
-        if (!this.isBinary()) {
-            s = this.getValue();
-            for (c of this.getChildren()) { // loop not needed since it's just NOT (unary)
-                s += " " + c.getString();
-            }
-            return s;
+        if (this.isBinary()) {
+            return "(" + this.getChildren()[0].getString() + " " + this.getValue() + " " + this.getChildren()[1].getString() + ")";
         } else {
-            return "(" + this.getChildren()[0].getString() + " " + this.getValue() + " " + this.getChildren() + ")";
+            return "(" + this.getValue() + " " + this.getChildren()[0].getString() + ")";
         }
     }
 
@@ -140,16 +136,15 @@ class FeatureNode extends TreeNode {
  * utility function
  * @param {integer} min 
  * @param {integer} max 
- * @returns integer from min inclusive to max exclusive
+ * @returns integer from 0 inclusive to max exclusive
  */
-function randomInt(min, max) {
-    if (min > max)
-        throw new Error("randomInt: max must be >= min");
-    return Math.floor(min) + Math.floor(Math.random() * Math.floor(max - min));
+function randomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
 }
 
 /**
- * create and return 10 unique expression trees
+ * create and returns unique expression trees
+ * @param {integer} numExpressions
  * @param {integer} numFeatures 
  * the number of features in each expression. should be >= 2
  * @param {object} availableAttributes 
@@ -157,53 +152,107 @@ function randomInt(min, max) {
  * @param {string array} availableOperations 
  * @param {boolean} repeat 
  * if true, include exactly two expressions with the same evalutaion
- * @returns {json}
+ * @returns {object}
  * expressions: array of root nodes
  * evaluations: array of evaluation objects
  * repeat: two indices with the same evalutaion
  */
-function createUniqueExpressions(numFeatures, availableAttributes, availableOperations, repeat = false) {
+function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, repeat = false) {
     expressionRootNodes = [];
+    expressionEvaluations = [];
     expressionStrings = [];
 
     let useNot = false;
     if (aviailableOperations.includes("NOT")) {
         useNot = true;
-    }
-    let binaryOperators = [];
-    if (aviailableOperations.includes("AND")) {
-        binaryOperators.push("AND");
-    }
-    if (aviailableOperations.includes("OR")) {
-        useOr = true;
+        availableOperations = availableOperations.filter(o => o != "NOT"); //remove "NOT" from array
     }
 
-    for (let e = 0; e < 10; e++) {
+    // if (repeat)
+    //     numExpressions--;
+    for (let e = 0; e < numExpressions; e++) {
         // create random feature nodes
         let randFeatures = [];
         let randFeatureNodes = [];
         for (let f=0; f<numFeatures; f++) {
             do {
                 // select random attribute from availableAttributes.keys()
-                var rand_at = availableAttributes[randomInt(0, availableAttributes.keys().length)];
+                var rand_at = availableAttributes[randomInt(availableAttributes.keys().length)];
                 // select random feature from availableAttributes[rand_at]
-                var rand_ft = availableAttributes[rand_at][randomInt(0, availableAttributes[rand_at].length)];
+                var rand_ft = availableAttributes[rand_at][randomInt(availableAttributes[rand_at].length)];
             } while (!randFeatures.includes(rand_ft))
             randFeatures.push(rand_ft);
             randFeatureNodes.push(new FeatureNode(rand_at, rand_ft));
         }
 
         // generate random trees with numFeatures leaves
-        let rootNode = treeGenerator(numFeatures)
+        let rootNode = treeGenerator(randFeatureNodes, useNot, availableAttributes, availableOperations);
+        let evaluation = rootNode.evaluate();
+        if(repeat === true) {
+            while(expressionEvaluations.some(ee => objectEqual(ee, evaluation))) {
+                rootNode = treeGenerator(numFeatures, useNot, availableAttributes, availableOperations);
+                evaluation = rootNode.evaluate();
+            }
+        }
+
+        expressionRootNodes.push(rootNode);
+        expressionEvaluations.push(evaluation);
+        expressionStrings.push(rootNode.getString());
     }
+
+    let res;
+    res["expressions"] = expressionRootNodes;
+    res["evaluations"] = expressionEvaluations;
+    res["strings"] = expressionStrings;
+    return res;
 }
 
 /**
  * recursive function
- * @param {*} numLeaves 
- * @param {*} availableAttributes 
- * @param {*} availableOperations 
+ * @param {object array} leafNodes
+ * @param {boolean} useNot
+ * if true, add 50% chance to make root node NOT operator
+ * @param {object} availableAttributes 
+ * @param {object} availableOperations
+ * @returns {object} root node of sub tree
  */
-function treeGenerator(numLeaves, availableAttributes, availableOperations) {
+function treeGenerator(leafNodes, useNot, availableAttributes, availableOperations) {
+    let rootNode;
+    if (leafNodes.length === 0) {
+        throw new Error("no leaf nodes specified");
+    } else if (leafNodes.length === 1) {
+        rootNode = leafNodes[0];
+    } else {
+        let op = availableOperations[randomInt(availableOperations.length)];
+        let cut = 1 + randomInt(leafNodes.length - 1);
+        let leftLeaves = leafNodes.slice(0, cut);
+        let rightLeaves = leafNodes.slice(cut);
+        let leftRoot = treeGenerator(leftLeaves, useNot, availableAttributes, availableOperations);
+        let rightRoot = treeGenerator(rightLeaves, useNot, availableAttributes, availableOperations);
+        rootNode = new OperatorNode(op, [leftRoot, rightRoot]);
+    }
+    if (useNot && randomInt(2) === 0) { // 50% chance
+        rootNode = new OperatorNode("NOT", [rootNode])
+    }
+    return rootNode;
+}
 
+/**
+ * utility function; checks shallow equality
+ * @param {object} object1 
+ * @param {object} object2 
+ * @returns {boolean}
+ */
+function objectEqual(object1, object2) {
+    let keys1 = Object.keys(object1);
+    let keys2 = Object.keys(object2);
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+    for (let key of keys1) {
+        if (object1[key] !== object2[key]) {
+            return false;
+        }
+    }
+    return true;
 }
