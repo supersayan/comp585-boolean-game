@@ -40,13 +40,14 @@ class OperatorNode extends TreeNode {
     constructor(operator, children) {
         if(!OPER.includes(operator))
             throw new Error("invalid operator");
-        this._isBinary = (operator !== "NOT");
-        if(this.isBinary() && children.length != 2) {
+        let isBinary = (operator !== "NOT");
+        if(isBinary && children.length != 2) {
             throw new Error("binary operator node must have two chldren");
-        } else if (!this.isBinary() && children.length != 1) {
+        } else if (!isBinary && children.length != 1) {
             throw new Error("unary operator node must have one child")
         }
         super(operator, children, "operator");
+        this._isBinary = isBinary;
     }
 
     isBinary() {
@@ -61,40 +62,25 @@ class OperatorNode extends TreeNode {
         }
     }
 
-    evaulate(availableAttributes) {
+    evaluate(availableAttributes) {
         let evaluatedChildren = [];
-        for(let c=0; c<children.length; c++) {
-            evaluatedChildren.push(children[c].evaluate(availableAttributes));
+        for(let c=0; c<this.getChildren().length; c++) {
+            evaluatedChildren.push(this.getChildren()[c].evaluate(availableAttributes));
         }
-        res = evaluatedChildren[0];
+        let res = evaluatedChildren[0];
         
         if (this.getValue() === "NOT") {
-            for(let a in availableAttributes) {
-                // get features in availableAttributes and not in res
-                res[a] = availableAttributes[a].filter(f1 => !res[a].some(f2 => f1 === f2))
+            for(let i=0; i<res.length; i++) {
+                // flip all booleans
+                res[i] = !res[i];
             }
         } else if (this.getValue() === "AND") {
-            for (let a in availableAttributes) {
-                if(evaluatedChildren[1][a] !== undefined) { // if the feature list of the second is undefined, do nothing
-                    if(res[a] == undefined) { // if the feature list of the first is undefined, make it the second
-                        res[a] = evaluatedChildren[1][a];
-                    } else {
-                        // get intersection of res[a] and evaluatedChildren[1][a]
-                        res[a] = res[a].filter(f1 => evaluatedChildren[1][a].some(f2 => f1 === f2))
-                    }
-                }
+            for(let i=0; i<res.length; i++) {
+                res[i] = res[i] && evaluatedChildren[1][i];
             }
         } else if (this.getValue() === "OR") {
-            for (let a in availableAttributes) {
-                if(evaluatedChildren[1][a] !== undefined) {
-                    if(res[a] == undefined) {
-                        res[a] = evaluatedChildren[1][a];
-                    } else {
-                        // get union of res[a] and evaluatedChildren[1][a]
-                        // first concatenates arrays, then turns into Set, then back to array
-                        res[a] = [...new Set([...res[a], ...evaluatedChildren[1][a]])];
-                    }
-                }
+            for(let i=0; i<res.length; i++) {
+                res[i] = res[i] || evaluatedChildren[1][i];
             }
         }
 
@@ -115,21 +101,58 @@ class FeatureNode extends TreeNode {
     /**
      * returns an object { Attribute: Feature }
      * @param {object array} availableAttributes
-     *  an object of available attributes as keys and arrays of available features as values
+     * @returns an array of objects of available attributes as keys and available features as values
      */
     evaluate(availableAttributes) {
-        if(availableAttributes.hasOwnProperty(this.attribute))
-            throw new Error("tried to evaluate feature node with unavailable attribute");
-        if(!avilableAttributes[this.attribute].includes(this.getValue()))
-            throw new Error("tried to evaluate feature node with unavailable feature");
-        let ft;
-        ft[this.attribute] = [this.getValue()];
-        return ft;
+        let booleanArray = [];
+        let length = 1;
+        for (let i=0; i<availableAttributes.length; i++) {
+            length *= Object.values(availableAttributes[i])[0].length;
+        }
+        for (let i=0; i<length; i++) {
+            booleanArray.push(false);
+        }
+        function recursiveSetTrueBooleanArray(index, remainingAttributes, feature) {
+            if (remainingAttributes.length === 0) {
+                booleanArray[index] = true; // recursive end
+            } else {
+                let d = Object.values(remainingAttributes[0])[0].length;
+                if (Object.values(remainingAttributes[0])[0].includes(feature)) {
+                    let f = Object.values(remainingAttributes[0])[0].indexOf(feature);
+                    recursiveSetTrueBooleanArray(index * d + f, remainingAttributes.slice(1), feature);
+                } else {
+                    for(let i=0; i<d; i++) {
+                        recursiveSetTrueBooleanArray(index * d + i, remainingAttributes.slice(1), feature);
+                    }
+                }
+            }
+        }
+        recursiveSetTrueBooleanArray(0, availableAttributes, this.getValue());
+        return booleanArray;
     }
 
     getString() {
         return this.getValue();
     }
+}
+
+/**
+ * 
+ * @param {object} item 
+ * @param {object array} availableAttributes 
+ * @returns index of the feature combination in the expected generated boolean array
+ */
+function getBooleanArrayIndexOfItem(item, availableAttributes) {
+    function recursiveBooleanArray(index, item, remainingAttributes) {
+        if (remainingAttributes.length === 0) {
+            return index; // recursive end
+        } else {
+            let d = Object.values(remainingAttributes[0]).length;
+            let f = Object.values(remainingAttributes[0])[0].indexOf(Object.values(item[0])[0]);
+            recursiveSetTrueBooleanArray(index * d + f, item.slice(1), remainingAttributes.slice(1));
+        }
+    }
+    return recursiveBooleanArray(0, availableAttributes)
 }
 
 /**
@@ -148,7 +171,6 @@ function randomInt(max) {
  * @param {integer} numFeatures 
  * the number of features in each expression. should be >= 2
  * @param {object} availableAttributes 
- * json object. keys are attribute strings, values are feature string arrays
  * @param {string array} availableOperations 
  * @param {boolean} repeat 
  * if true, include exactly two expressions with the same evalutaion
@@ -158,12 +180,20 @@ function randomInt(max) {
  * repeat: two indices with the same evalutaion
  */
 function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, repeat = false) {
-    expressionRootNodes = [];
-    expressionEvaluations = [];
-    expressionStrings = [];
+    let sum = 0;
+    for (let a of availableAttributes) {
+        sum += Object.values(a)[0].length;
+    }
+    if (numFeatures > sum) {
+        throw new Error("numFeatures cannot be larger than number of available features");
+    }
+
+    let expressionRootNodes = [];
+    let expressionEvaluations = [];
+    let expressionStrings = [];
 
     let useNot = false;
-    if (aviailableOperations.includes("NOT")) {
+    if (availableOperations.includes("NOT")) {
         useNot = true;
         availableOperations = availableOperations.filter(o => o != "NOT"); //remove "NOT" from array
     }
@@ -177,30 +207,31 @@ function createUniqueExpressions(numExpressions, numFeatures, availableAttribute
         for (let f=0; f<numFeatures; f++) {
             do {
                 // select random attribute from availableAttributes.keys()
-                var rand_at = availableAttributes[randomInt(availableAttributes.keys().length)];
+                let r = randomInt(availableAttributes.length);
+                var rand_at = Object.keys(availableAttributes[r])[0];
                 // select random feature from availableAttributes[rand_at]
-                var rand_ft = availableAttributes[rand_at][randomInt(availableAttributes[rand_at].length)];
-            } while (!randFeatures.includes(rand_ft))
+                var rand_ft = Object.values(availableAttributes[r])[0][randomInt(Object.values(availableAttributes[r])[0].length)];
+            } while (randFeatures.includes(rand_ft)) // if numFeatures > number of features in availableAttributes, this is infinite loop
             randFeatures.push(rand_ft);
             randFeatureNodes.push(new FeatureNode(rand_at, rand_ft));
         }
 
         // generate random trees with numFeatures leaves
         let rootNode = treeGenerator(randFeatureNodes, useNot, availableAttributes, availableOperations);
-        let evaluation = rootNode.evaluate();
-        if(repeat === true) {
-            while(expressionEvaluations.some(ee => objectEqual(ee, evaluation))) {
-                rootNode = treeGenerator(numFeatures, useNot, availableAttributes, availableOperations);
-                evaluation = rootNode.evaluate();
-            }
-        }
+        let evaluation = rootNode.evaluate(availableAttributes);
+        // if(repeat === true) {
+        //     while(expressionEvaluations.some(ee => objectEqual(ee, evaluation))) { // possible infinite loop
+        //         rootNode = treeGenerator(numFeatures, useNot, availableAttributes, availableOperations);
+        //         evaluation = rootNode.evaluate(availableAttributes);
+        //     }
+        // }
 
         expressionRootNodes.push(rootNode);
         expressionEvaluations.push(evaluation);
         expressionStrings.push(rootNode.getString());
     }
 
-    let res;
+    let res = {};
     res["expressions"] = expressionRootNodes;
     res["evaluations"] = expressionEvaluations;
     res["strings"] = expressionStrings;
@@ -255,4 +286,17 @@ function objectEqual(object1, object2) {
         }
     }
     return true;
+}
+
+// testing
+let aa = [
+    {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE"]},
+    {"COLOR": ["RED", "ORANGE", "GREEN"]},
+]
+// let f = new FeatureNode("COLOR", "GREEN");
+// console.log(f.evaluate(aa));
+let e = createUniqueExpressions(10, 3, aa, ["AND", "OR"]);
+for (let i=0; i<10; i++) {
+    console.log(e.strings[i]);
+    console.log(e.evaluations[i]);
 }
