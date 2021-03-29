@@ -142,17 +142,17 @@ class FeatureNode extends TreeNode {
  * @param {object array} availableAttributes 
  * @returns index of the feature combination in the expected generated boolean array
  */
-function getBooleanArrayIndexOfItem(item, availableAttributes) {
+export function getBooleanArrayIndexOfItem(item, availableAttributes) {
     function recursiveBooleanArray(index, item, remainingAttributes) {
         if (remainingAttributes.length === 0) {
             return index; // recursive end
         } else {
             let d = Object.values(remainingAttributes[0]).length;
             let f = Object.values(remainingAttributes[0])[0].indexOf(Object.values(item[0])[0]);
-            recursiveSetTrueBooleanArray(index * d + f, item.slice(1), remainingAttributes.slice(1));
+            return recursiveBooleanArray(index * d + f, item.slice(1), remainingAttributes.slice(1));
         }
     }
-    return recursiveBooleanArray(0, availableAttributes)
+    return recursiveBooleanArray(0, item, availableAttributes);
 }
 
 /**
@@ -179,7 +179,7 @@ function randomInt(max) {
  * evaluations: array of evaluation objects
  * repeat: two indices with the same evalutaion
  */
-function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, repeat = false) {
+export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, repeat = false) {
     let sum = 0;
     for (let a of availableAttributes) {
         sum += Object.values(a)[0].length;
@@ -210,7 +210,7 @@ function createUniqueExpressions(numExpressions, numFeatures, availableAttribute
                 let r = randomInt(availableAttributes.length);
                 var rand_at = Object.keys(availableAttributes[r])[0];
                 // select random feature from availableAttributes[rand_at]
-                var rand_ft = Object.values(availableAttributes[r])[0][randomInt(Object.values(availableAttributes[r])[0].length)];
+                var rand_ft = availableAttributes[r][rand_at][randomInt(availableAttributes[r][rand_at].length)];
             } while (randFeatures.includes(rand_ft)) // if numFeatures > number of features in availableAttributes, this is infinite loop
             randFeatures.push(rand_ft);
             randFeatureNodes.push(new FeatureNode(rand_at, rand_ft));
@@ -289,20 +289,19 @@ function objectEqual(object1, object2) {
 }
 
 // testing
-let aa = [
-    {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE"]},
-    {"COLOR": ["RED", "ORANGE", "GREEN"]},
-]
-// let f = new FeatureNode("COLOR", "GREEN");
-// console.log(f.evaluate(aa));
-let e = createUniqueExpressions(10, 3, aa, ["AND", "OR"]);
-let item = {
-    SHAPE: "SQUARE",
-    COLOR: "RED",
-}
-for (let i=0; i<10; i++) {
-    console.log(e.strings[i]);
-    console.log(e.evaluations[i]);
-    console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
-}
-
+// let aa = [
+//     {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+//     {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+// ]
+// // let f = new FeatureNode("COLOR", "GREEN");
+// // console.log(f.evaluate(aa));
+// let e = createUniqueExpressions(10, 3, aa, ["AND", "OR", "NOT"]);
+// let item = [
+//     {SHAPE: "SQUARE"},
+//     {COLOR: "RED"}
+// ]
+// for (let i=0; i<10; i++) {
+//     console.log(e.strings[i]);
+//     console.log(e.evaluations[i]);
+//     // console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
+// }
