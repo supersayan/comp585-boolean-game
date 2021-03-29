@@ -296,7 +296,13 @@ let aa = [
 // let f = new FeatureNode("COLOR", "GREEN");
 // console.log(f.evaluate(aa));
 let e = createUniqueExpressions(10, 3, aa, ["AND", "OR"]);
+let item = {
+    SHAPE: "SQUARE",
+    COLOR: "RED",
+}
 for (let i=0; i<10; i++) {
     console.log(e.strings[i]);
     console.log(e.evaluations[i]);
+    console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
 }
+
