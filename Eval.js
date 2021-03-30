@@ -9,7 +9,7 @@ const OPER = ["AND", "OR", "NOT"]
 const ATTR = {
     "SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"],
     "COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"],
-    "PATTERN": ["PLAIN", "STRIPED", "SPOTS", "LATTICE", "SWIRL"],
+    "PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"],
     "BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"],
 }
 
