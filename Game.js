@@ -1,9 +1,8 @@
 import { OPER, ATTR, createUniqueExpressions, getBooleanArrayIndexOfItem } from './Eval.js';
 
-export default class MainGame extends Phaser.Scene
-{
-    constructor (str)
-    {
+export default class MainGame extends Phaser.Scene {
+
+    constructor (str) {
 
         if (str == undefined ) {
             super('MainGame');
@@ -41,8 +40,7 @@ export default class MainGame extends Phaser.Scene
         this.timerText;
     }
 
-    create ()
-    {
+    create () {
         this.add.image(400, 300, 'background');
 
         // generates selection circles
@@ -168,8 +166,7 @@ export default class MainGame extends Phaser.Scene
     }
 
 
-    selectItem(pointer, item)
-    {
+    selectItem(pointer, item) {
         let x = item.x
         let y = item.y
         console.log('index is: ', xyConvertToIndex(x,y))
@@ -227,12 +224,17 @@ export default class MainGame extends Phaser.Scene
         for (let i = 0; i < 16; i++) {
             let item = [];
             let itemJSON = {};
+            // for each attribute generate a random feature from those available and add it to item
             for (let a = 0; a < this.attributes.length; a++) {
                 let attr = Object.keys(this.attributes[a]);
                 let itemattr = {};
                 itemattr[attr] = this.attributes[a][attr][Math.floor(this.attributes[a][attr].length * Math.random())];
                 item.push(itemattr);
                 itemJSON[attr] = itemattr[attr];
+            }
+            // if the generated item is part of solution, add its index to this.solution
+            if (this.evaluations[expressionCounter][getBooleanArrayIndexOfItem(item, this.attributes)]) {
+                this.solution.push(i);
             }
             
             let shape = 0;
@@ -269,10 +271,14 @@ export default class MainGame extends Phaser.Scene
         });
     }
 
-    newRound ()
-    {
+    newRound () {
         this.selection = []
         this.win = false
+        if (this.expressionCounter < this.numExpressions - 1) {
+            this.expressionCounter++;
+        } else {
+            // end level
+        }
 
         this.submitText.setText('Submit');
 
@@ -288,16 +294,20 @@ export default class MainGame extends Phaser.Scene
     }
 
     checkSolution() {
-        let children = this.items.getChildren()
+        let selection = this.selection[i];
 
         // if index arrays solution and selection are equal, return true
-
         for (let i = 0; i < this.selection.length; i++) {
-            let e = this.selection[i];
-            if (!(children[e].frame.customData.color == 'red' && children[e].frame.customData.item == 'apple')) {
+            if (!solution.includes(selection[i])) {
                 return false;
             }
         }
+        for (let i = 0; i < this.solution.length; i++) {
+            if (!selection.includes(solution[i])) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -399,23 +409,3 @@ const pickLevelParameters = {
         numExpressions: 10,
     },
 }
-
-/** 
-function checkSolution(select,sol) {
-    //assume solution is true until a case is found where it isn't
-    let correctSelect = true;
-    //create the answer set based on which ones are correct
-    let answer = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
-    for (let i = 0; i < sol.length; i++) {
-        answer[sol[i]] = true;
-    }
-    //compare answer to selection
-    for (let i = 0; i < select.length; i++) {
-        if (select[i] != answer[i]) {
-            correctSelect = false;
-        }
-    }
-
-    return correctSelect;
-}
-*/
