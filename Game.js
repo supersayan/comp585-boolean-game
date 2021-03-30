@@ -139,7 +139,7 @@ export default class MainGame extends Phaser.Scene {
                     this.submitText.disableInteractive();
                 }
             })
-            this.gameOver()
+            this.submitSelection()
         }, this)
         this.winText = this.add.text(550, 20, 'You Won!', fontStyle);
 
@@ -257,6 +257,8 @@ export default class MainGame extends Phaser.Scene {
             // sprite y = 100 * (5 * pattern + shape)
             // border x = 100 * border
             // border y = 2500 + 100 * shape
+
+            // or use lowercase itemJSON["SHAPE"] etc.
             
             // children[i].setFrame('.png')
         }
@@ -272,8 +274,9 @@ export default class MainGame extends Phaser.Scene {
     }
 
     newRound () {
-        this.selection = []
-        this.win = false
+        this.selection = [];
+        this.solution = [];
+        this.win = false;
         if (this.expressionCounter < this.numExpressions - 1) {
             this.expressionCounter++;
         } else {
@@ -291,6 +294,8 @@ export default class MainGame extends Phaser.Scene {
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
             onComplete: () => this.arrangeGrid()
         });
+
+        // TODO: display new expression
     }
 
     checkSolution() {
@@ -311,14 +316,14 @@ export default class MainGame extends Phaser.Scene {
         return true;
     }
 
-    gameOver () {
+    submitSelection () {
         let win = (this.checkSolution())
         
         this.input.off('gameobjectdown', this.selectItem, this);
         if (win) {
             this.win = true;
             //alert('you won')
-            //this.winText.setVisible(true);
+            this.winText.setVisible(true);
             this.winText.setColor('#FFD700')
             let circledance = []
             for (let i = 0; i < this.selection.length; i++){
@@ -326,8 +331,6 @@ export default class MainGame extends Phaser.Scene {
             }
 
             this.score = 0;
-            this.selection = []
-            this.solution =[]
             this.win = false
 
             this.tweens.add({
@@ -341,7 +344,8 @@ export default class MainGame extends Phaser.Scene {
                     this.input.on('pointerdown', (pointer) => {     
                         if (pointer.leftButtonDown()) { 
                             this.input.off('gameobjectdown', this.selectItem, this);
-                            this.scene.start('MainGame');   
+                            //this.scene.start('MainGame');
+                            this.newRound();
                         } else if (pointer.rightButtonDown()) {
                             this.input.once('gameobjectdown', this.selectItem, this);
                         }
@@ -349,16 +353,14 @@ export default class MainGame extends Phaser.Scene {
 
                 }
             });
-        }
-        else {
+        } else {
+            // if incorrect submission, should not do anything, allow to keep trying until correct
             this.score = 0;
-            this.selection = [];
-            this.solution = [];
             this.win = false;
-            this.winText = this.loseText;
-            this.winText.setColor('#FF0000')
-            //this.loseText.setVisible(true);
-            //alert('you lost')
+            // this.loseText.setColor('#FF0000');
+            // this.loseText.setVisible(true);
+
+
             //Timeout is needed so that the click to submit doesn't count for going to the main menu
             setTimeout(() => {this.input.on('pointerdown', (pointer) => {
                 if (pointer.leftButtonDown()) { 
