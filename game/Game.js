@@ -14,10 +14,12 @@ export default class MainGame extends Phaser.Scene
         this.fruits;
 
         //added variables so we don't need to do multiple level .js
-        this.goal11 = 'Fruit';
-        this.goal12 = 'apple';
-        this.goal21 = 'Color';
-        this.goal22 = 'red';
+        this.goal11 = 'Color';
+        this.goal12 = 'red';
+        this.goal21 = 'Pattern';
+        this.goal22 = 'plain';
+        this.goal31 = 'Shape';
+        this.goal32 = 'square';
 
         this.circles = new Array(16);
         this.set = []; //just holds the selected fruits
@@ -61,7 +63,7 @@ export default class MainGame extends Phaser.Scene
         //  Create a 4x4 grid aligned group to hold our sprites
 
         this.fruits = this.add.group({
-            key: 'fruits',
+            key: 'shapes',
             frameQuantity: 1,
             repeat: 15,
             gridAlign: {
@@ -122,7 +124,7 @@ export default class MainGame extends Phaser.Scene
         //let sprite = this.add.sprite(200,20,"fruits","redapple.png")
         //sprite.tint = 0x000000;
         this.fruittext = this.add.text(110, 85, this.goal12, fontStyle3);
-        this.timerText = this.add.text(20, 0, this.goal21 + `   =`, fontStyle2);     
+        this.timerText = this.add.text(20, 0, this.goal31 + `   =`, fontStyle2);     
         this.colorrect = this.add.rectangle(150, 20, 30, 30, 0xFF0000)
         this.colorrect.setStrokeStyle(2,0x000000);
         this.timerText2 = this.add.text(70, 45, 'AND', fontStyle3);
@@ -203,6 +205,7 @@ export default class MainGame extends Phaser.Scene
                 this.proptext.destroy();
                 this.proptext2.destroy();
                 this.proptext3.destroy();
+                this.proptext4.destroy();
             }
             const fontStyle = {
                 fontFamily: 'Arial',
@@ -219,11 +222,13 @@ export default class MainGame extends Phaser.Scene
                 }
             };      
             let children = this.fruits.getChildren();
-            let a = children[index].frame.customData.fruit;
+            let a = children[index].frame.customData.shape;
             let b = children[index].frame.customData.color;
+            let c = children[index].frame.customData.pattern;
             this.proptext = this.add.text(20, 200, 'Properties: ', fontStyle);
-            this.proptext2 = this.add.text(20, 230, `Fruit = ${a}`, fontStyle);
+            this.proptext2 = this.add.text(20, 230, `Shape = ${a}`, fontStyle);
             this.proptext3 = this.add.text(20, 260, `Color = ${b}`, fontStyle);
+            this.proptext4 = this.add.text(20, 290, `Pattern = ${c}`, fontStyle);
         }
     }
 
@@ -240,16 +245,16 @@ export default class MainGame extends Phaser.Scene
         }
         // boolean expression is pick red and apple
         // rework this to make it more general
-        children[a].setFrame(this.goal22 + this.goal12 + '.png')
-        children[b].setFrame(this.goal22 + this.goal12 + '.png')
+        children[a].setFrame(this.goal12 + this.goal22 + this.goal32 + '.png')
+        children[b].setFrame(this.goal12 + this.goal22 + this.goal32 + '.png')
         this.required.push(a)
         this.required.push(b)
 
         for (let i = 0; i < 16; i++)
         {
             if (i != a && i != b) {
-                children[i].setFrame(this.game.config.colors[Math.floor((5*Math.random()))] + this.game.config.fruits[Math.floor((4*Math.random()))] +'.png')
-                    if (children[i].frame.customData.color == 'red' && children[i].frame.customData.fruit == 'apple')
+                children[i].setFrame(this.game.config.colors[Math.floor((5*Math.random()))] + this.game.config.patterns[Math.floor((5*Math.random()))] + this.game.config.shapes[Math.floor((5*Math.random()))] +'.png')
+                    if (children[i].frame.customData.color == 'red' && children[i].frame.customData.shape == 'square')
                         this.required.push(i)
             }
         }
@@ -286,7 +291,7 @@ export default class MainGame extends Phaser.Scene
         let children = this.fruits.getChildren()
         for (let i = 0; i < this.set.length; i++) {
             let e = this.set[i]
-            if (!(children[e].frame.customData.color == 'red' && children[e].frame.customData.fruit == 'apple')) {
+            if (!(children[e].frame.customData.color == 'red' && children[e].frame.customData.shape == 'square')) {
                 return false
             }
         }
@@ -369,8 +374,8 @@ export default class MainGame extends Phaser.Scene
 }
 
 function xyConvertToIndex(x,y) {
-    x = (x-275)/120
-    y = (y-152.5)/120
+    x = (x-270)/120
+    y = (y-190)/120
     return x+4*y
 }
 
