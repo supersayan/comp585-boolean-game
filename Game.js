@@ -55,8 +55,10 @@ export default class MainGame extends Phaser.Scene {
         this.win = false;
 
         // generates selection circles
+        
         for(let i = 0; i < 16; i++){
-            this.circles[i] = this.add.circle(0, 0, 42).setStrokeStyle(3, 0xf8960e);
+            this.circles[i] = this.add.circle(0, 0, 60).setStrokeStyle(3, 0xf8960e);
+            this.circles[i].depth = 1;
             this.circles[i].setVisible(false);
         }
 
