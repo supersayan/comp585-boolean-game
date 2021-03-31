@@ -1,12 +1,12 @@
 /**
  * every operation
  */
-const OPER = ["AND", "OR", "NOT"]
+export const OPER = ["AND", "OR", "NOT"]
 
 /**
  * every possible attribute and feature; used to check valid parameters
  */
-const ATTR = {
+export const ATTR = {
     "SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"],
     "COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"],
     "PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"],

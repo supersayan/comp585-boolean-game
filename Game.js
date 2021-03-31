@@ -1,17 +1,28 @@
-// test comment for a commit
-// another test comment for a commit
-export default class MainGame extends Phaser.Scene
-{
-    constructor (str)
-    {
+import { OPER, ATTR, createUniqueExpressions, getBooleanArrayIndexOfItem } from './Eval.js';
+
+export default class MainGame extends Phaser.Scene {
+
+    constructor (str) {
 
         if (str == undefined ) {
             super('MainGame');
         } else {
             super(str)
+        }
+        
+        // with the level number, create the expressions, evaluations, strings
+        this.level = 1;
+        this.expressionCounter = 0; // iterates every new round
+        let levelParams = pickLevelParameters[this.level];
+        this.attributes = levelParams.attributes;
+        this.numExpressions = levelParams.numExpressions;
+        let evalOutput = createUniqueExpressions(levelParams.numFeatures, levelParams.numExpressions, levelParams.attributes, levelParams.operators);
+        this.expressions = evalOutput.expressions;
+        this.evaluations = evalOutput.evaluations;
+        this.strings = evalOutput.strings;
 
-        }  
-        this.fruits;
+        this.items; // phaser group
+        this.itemAttributes; // store array of attribute:feature objects for each item
 
         //added variables so we don't need to do multiple level .js
         this.goal11 = 'Color';
@@ -22,36 +33,23 @@ export default class MainGame extends Phaser.Scene
         this.goal32 = 'square';
 
         this.circles = new Array(16);
-        this.set = []; //just holds the selected fruits
-        this.required = []; //holds the required for AND operations
+        this.selection = []; //just holds the selected items
+        this.solution = []; //holds the required for AND operations
 
         this.win = false;
 
-        this.selectedFruit = null;
+        this.selectedItem = null;
         
         //solution var
         this.score = 0;
         this.highscore = 0;
-        this.scoreText;
+        this.submitText;
 
         this.timer; 
         this.timerText;
     }
 
-    start ()
-    {
-        this.score = 0;
-        this.set = []
-        this.required =[]
-        this.win = false
-
-        //this.timer = this.time.addEvent({ delay: 30000, callback: this.gameOver, callbackScope: this });
-
-        this.sound.play('countdown', { delay: 27 });
-    }
-
-    create ()
-    {
+    create () {
         this.add.image(400, 300, 'background');
 
         // generates selection circles
@@ -62,8 +60,8 @@ export default class MainGame extends Phaser.Scene
 
         //  Create a 4x4 grid aligned group to hold our sprites
 
-        this.fruits = this.add.group({
-            key: 'shapes',
+        this.items = this.add.group({
+            key: 'items',
             frameQuantity: 1,
             repeat: 15,
             gridAlign: {
@@ -121,10 +119,10 @@ export default class MainGame extends Phaser.Scene
         };
 
         this.rect3 = this.add.rectangle(0,0, 1600, 250, 0x0000FF, 0.4);
-        //let sprite = this.add.sprite(200,20,"fruits","redapple.png")
+        //let sprite = this.add.sprite(200,20,"items","redapple.png")
         //sprite.tint = 0x000000;
-        this.fruittext = this.add.text(110, 85, this.goal12, fontStyle3);
-        this.timerText = this.add.text(20, 0, this.goal31 + `   =`, fontStyle2);     
+        this.itemtext = this.add.text(110, 85, this.goal12, fontStyle3);
+        this.timerText = this.add.text(20, 0, this.goal21 + `   =`, fontStyle2);
         this.colorrect = this.add.rectangle(150, 20, 30, 30, 0xFF0000)
         this.colorrect.setStrokeStyle(2,0x000000);
         this.timerText2 = this.add.text(70, 45, 'AND', fontStyle3);
@@ -132,11 +130,11 @@ export default class MainGame extends Phaser.Scene
         this.timerText = this.add.text(20, 90, this.goal11 + '   =', fontStyle2);
         this.rect = this.add.rectangle(478, 55, 125, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
-        this.scoreText = this.add.text(410, 20, 'Submit', fontStyle);
-        this.scoreText.setInteractive({ useHandCursor: false});    
-        this.scoreText.once('pointerdown', () => {
+        this.submitText = this.add.text(410, 20, 'Submit', fontStyle);
+        this.submitText.setInteractive({ useHandCursor: false});    
+        this.submitText.once('pointerdown', () => {
             this.tweens.add({
-                targets: [this.scoreText, this.rect],
+                targets: [this.submitText, this.rect],
                 alpha: {start: 1, to: 0.75},
                 y: '+=5',
                 ease: 'Elastic.out',
@@ -147,10 +145,10 @@ export default class MainGame extends Phaser.Scene
                         alpha: {start: 0, to:1}
                     
                     })
-                    this.scoreText.disableInteractive();
+                    this.submitText.disableInteractive();
                 }
             })
-            this.gameOver()
+            this.submitSelection()
         }, this)
         this.winText = this.add.text(550, 20, 'You Won!', fontStyle);
 
@@ -160,15 +158,15 @@ export default class MainGame extends Phaser.Scene
         //this.loseText.setVisible(false);
         this.loseText.setAlpha(0);
 
-        let children = this.fruits.getChildren();
+        let children = this.items.getChildren();
 
         children.forEach((child) => {
 
             child.setInteractive();
-            child.on('gameobjectdown', this.selectFruit, this)
+            child.on('gameobjectdown', this.selectItem, this)
         });
 
-        this.input.on('gameobjectdown', this.selectFruit, this);
+        this.input.on('gameobjectdown', this.selectItem, this);
         //this.input.once('pointerdown', this.start, this);
 
         this.highscore = this.registry.get('highscore');
@@ -177,10 +175,9 @@ export default class MainGame extends Phaser.Scene
     }
 
 
-    selectFruit(pointer, fruit)
-    {
-        let x = fruit.x
-        let y = fruit.y
+    selectItem(pointer, item) {
+        let x = item.x
+        let y = item.y
         console.log('index is: ', xyConvertToIndex(x,y))
         let index = xyConvertToIndex(x,y);
         if (pointer.leftButtonDown()) {
@@ -190,7 +187,7 @@ export default class MainGame extends Phaser.Scene
             if (!this.circles[index].visible)
             {
                 this.circles[index].setPosition(x,y);
-                this.set.push(xyConvertToIndex(x,y)) //pushes selection
+                this.selection.push(xyConvertToIndex(x,y)) //pushes selection
                 this.circles[index].setVisible(true);
             } else {
                 this.circles[index].setVisible(false);
@@ -221,42 +218,63 @@ export default class MainGame extends Phaser.Scene
                     blur: 4
                 }
             };      
-            let children = this.fruits.getChildren();
-            let a = children[index].frame.customData.shape;
+
+            let children = this.items.getChildren();
+            let a = children[index].frame.customData.item;
             let b = children[index].frame.customData.color;
             let c = children[index].frame.customData.pattern;
             this.proptext = this.add.text(20, 200, 'Properties: ', fontStyle);
+            this.proptext2 = this.add.text(20, 230, `Item = ${a}`, fontStyle);
             this.proptext2 = this.add.text(20, 230, `Shape = ${a}`, fontStyle);
             this.proptext3 = this.add.text(20, 260, `Color = ${b}`, fontStyle);
             this.proptext4 = this.add.text(20, 290, `Pattern = ${c}`, fontStyle);
         }
     }
 
-    arrangeGrid ()
-    {
-        //  We need to make sure there is only one pair in the grid
 
-        let children = this.fruits.getChildren();
+    arrangeGrid () {
+        let children = this.items.getChildren();
 
-        let a = Math.floor(Math.random()*15)
-        let b = a
-        while (b == a) {
-            b = Math.floor(Math.random()*15)
-        }
-        // boolean expression is pick red and apple
-        // rework this to make it more general
-        children[a].setFrame(this.goal12 + this.goal22 + this.goal32 + '.png')
-        children[b].setFrame(this.goal12 + this.goal22 + this.goal32 + '.png')
-        this.required.push(a)
-        this.required.push(b)
-
-        for (let i = 0; i < 16; i++)
-        {
-            if (i != a && i != b) {
-                children[i].setFrame(this.game.config.colors[Math.floor((5*Math.random()))] + this.game.config.patterns[Math.floor((5*Math.random()))] + this.game.config.shapes[Math.floor((5*Math.random()))] +'.png')
-                    if (children[i].frame.customData.color == 'red' && children[i].frame.customData.shape == 'square')
-                        this.required.push(i)
+        // randomly generate items
+        for (let i = 0; i < 16; i++) {
+            let item = [];
+            let itemJSON = {};
+            // for each attribute generate a random feature from those available and add it to item
+            for (let a = 0; a < this.attributes.length; a++) {
+                let attr = Object.keys(this.attributes[a]);
+                let itemattr = {};
+                itemattr[attr] = this.attributes[a][attr][Math.floor(this.attributes[a][attr].length * Math.random())];
+                item.push(itemattr);
+                itemJSON[attr] = itemattr[attr];
             }
+            // if the generated item is part of solution, add its index to this.solution
+            if (this.evaluations[expressionCounter][getBooleanArrayIndexOfItem(item, this.attributes)]) {
+                this.solution.push(i);
+            
+            let shape = 0;
+            if ("SHAPE" in itemJSON) {
+                shape = ATTR["SHAPE"].indexOf(itemJSON["SHAPE"]);
+            }
+            let color = 0;
+            if ("COLOR" in itemJSON) {
+                color = ATTR["COLOR"].indexOf(itemJSON["COLOR"]);
+            }
+            let pattern = 0;
+            if ("PATTERN" in itemJSON) {
+                pattern = ATTR["PATTERN"].indexOf(itemJSON["PATTERN"]);
+            }
+            let border = 0;
+            if ("BORDER" in itemJSON) {
+                border = ATTR["BORDER"].indexOf(itemJSON["BORDER"]);
+            }
+            // sprite x = 100 * color
+            // sprite y = 100 * (5 * pattern + shape)
+            // border x = 100 * border
+            // border y = 2500 + 100 * shape
+
+            // or use lowercase itemJSON["SHAPE"] etc.
+            
+            // children[i].setFrame('.png')
         }
 
         //  Stagger tween them all in
@@ -269,65 +287,64 @@ export default class MainGame extends Phaser.Scene
         });
     }
 
-    newRound ()
-    {
-        this.set = []
-        this.win = false
+    newRound () {
+        this.selection = [];
+        this.solution = [];
+        this.win = false;
+        if (this.expressionCounter < this.numExpressions - 1) {
+            this.expressionCounter++;
+        } else {
+            // end level
+        }
 
-        this.scoreText.setText('Submit');
+        this.submitText.setText('Submit');
 
         //  Stagger tween them all out
         this.tweens.add({
-            targets: this.fruits.getChildren(),
+            targets: this.items.getChildren(),
             scale: 0,
             ease: 'power2',
             duration: 600,
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
             onComplete: () => this.arrangeGrid()
         });
+
+        // TODO: display new expression
     }
 
     checkSolution() {
-        let children = this.fruits.getChildren()
-        for (let i = 0; i < this.set.length; i++) {
-            let e = this.set[i]
-            if (!(children[e].frame.customData.color == 'red' && children[e].frame.customData.shape == 'square')) {
-                return false
+        let selection = this.selection[i];
+
+        // if index arrays solution and selection are equal, return true
+        for (let i = 0; i < this.selection.length; i++) {
+            if (!solution.includes(selection[i])) {
+                return false;
             }
         }
-        return true
-    }
-
-    checkSolutionAND() {
-        console.log(this.required)
-        for (let i = 0; i < this.required.length; i++) {
-            let e = this.required[i]
-            if (!(this.set.includes(e))) {
-                console.log(this.set, e)
-                return false
+        for (let i = 0; i < this.solution.length; i++) {
+            if (!selection.includes(solution[i])) {
+                return false;
             }
         }
-        return true
+
+        return true;
     }
 
-    gameOver ()
-    {
-        let win = (this.checkSolutionAND() && this.checkSolution())
-        //  Show them where the match actually was
-        this.input.off('gameobjectdown', this.selectFruit, this);
+    submitSelection () {
+        let win = (this.checkSolution())
+        
+        this.input.off('gameobjectdown', this.selectItem, this);
         if (win) {
             this.win = true;
             //alert('you won')
-            //this.winText.setVisible(true);
+            this.winText.setVisible(true);
             this.winText.setColor('#FFD700')
             let circledance = []
-            for (let i = 0; i < this.set.length; i++){
-                circledance.push(this.circles[this.set[i]])
+            for (let i = 0; i < this.selection.length; i++){
+                circledance.push(this.circles[this.selection[i]])
             }
 
             this.score = 0;
-            this.set = []
-            this.required =[]
             this.win = false
 
             this.tweens.add({
@@ -340,32 +357,31 @@ export default class MainGame extends Phaser.Scene
                 onComplete: () => {
                     this.input.on('pointerdown', (pointer) => {     
                         if (pointer.leftButtonDown()) { 
-                            this.input.off('gameobjectdown', this.selectFruit, this);
-                            this.scene.start('MainGame');   
+                            this.input.off('gameobjectdown', this.selectItem, this);
+                            //this.scene.start('MainGame');
+                            this.newRound();
                         } else if (pointer.rightButtonDown()) {
-                            this.input.once('gameobjectdown', this.selectFruit, this);
+                            this.input.once('gameobjectdown', this.selectItem, this);
                         }
                     }, this);
 
                 }
             });
-        }
-        else {
+        } else {
+            // if incorrect submission, should not do anything, allow to keep trying until correct
             this.score = 0;
-            this.set = []
-            this.required =[]
-            this.win = false
-            this.winText = this.loseText;
-            this.winText.setColor('#FF0000')
-            //this.loseText.setVisible(true);
-            //alert('you lost')
+            this.win = false;
+            // this.loseText.setColor('#FF0000');
+            // this.loseText.setVisible(true);
+
+
             //Timeout is needed so that the click to submit doesn't count for going to the main menu
             setTimeout(() => {this.input.on('pointerdown', (pointer) => {
                 if (pointer.leftButtonDown()) { 
-                    this.input.off('gameobjectdown', this.selectFruit, this);
+                    this.input.off('gameobjectdown', this.selectItem, this);
                     this.scene.start('MainMenu');   
                 } else if (pointer.rightButtonDown()) {
-                    this.input.once('gameobjectdown', this.selectFruit, this);
+                    this.input.once('gameobjectdown', this.selectItem, this);
                 } 
             }, this)}, 100);
             
@@ -379,23 +395,33 @@ function xyConvertToIndex(x,y) {
     return x+4*y
 }
 
-
-/** 
-function checkSolution(select,sol) {
-    //assume solution is true until a case is found where it isn't
-    let correctSelect = true;
-    //create the answer set based on which ones are correct
-    let answer = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
-    for (let i = 0; i < sol.length; i++) {
-        answer[sol[i]] = true;
-    }
-    //compare answer to selection
-    for (let i = 0; i < select.length; i++) {
-        if (select[i] != answer[i]) {
-            correctSelect = false;
-        }
-    }
-
-    return correctSelect;
+const pickLevelParameters = {
+    1: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+        ],
+        operators: ["AND"],
+        numFeatures: 2,
+        numExpressions: 10,
+    },
+    2: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+        ],
+        operators: ["OR"],
+        numFeatures: 2,
+        numExpressions: 10,
+    },
+    3: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTS", "LATTICE", "SWIRL"]},
+        ],
+        operators: ["AND", "OR"],
+        numFeatures: 3,
+        numExpressions: 10,
+    },
 }
-*/
