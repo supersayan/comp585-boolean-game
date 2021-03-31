@@ -32,10 +32,10 @@ export default class MainGame extends Phaser.Scene {
         this.goal32 = 'square';
 
         this.circles = new Array(16);
-        this.selection = []; //just holds the selected items
-        this.solution = []; //holds the required for AND operations
 
-        this.win = false;
+        // this.selection = []; //just holds the selected items
+        // this.solution = []; //holds the required for AND operations
+        // this.win = false;
 
         this.selectedItem = null;
         
@@ -43,13 +43,16 @@ export default class MainGame extends Phaser.Scene {
         this.score = 0;
         this.highscore = 0;
         this.submitText;
-
-        this.timer; 
-        this.timerText;
+        this.expressionText;
     }
 
     create () {
         this.add.image(400, 300, 'background');
+
+        this.selection = [];
+        this.solution = [];
+        this.expressionText = this.add.text(20, 30, this.strings[this.expressionCounter], fontStyle2);
+        this.win = false;
 
         // generates selection circles
         for(let i = 0; i < 16; i++){
@@ -73,60 +76,19 @@ export default class MainGame extends Phaser.Scene {
             }
         });
 
-        const fontStyle = {
-            fontFamily: 'Arial',
-            fontSize: 30,
-            color: '#ffffff',
-            fontStyle: 'bold',
-            padding: 16,
-            shadow: {
-                color: '#000000',
-                fill: true,
-                offsetX: 2,
-                offsetY: 2,
-                blur: 4
-            }
-        };
         
-        const fontStyle2 = {
-            fontFamily: 'Arial',
-            fontSize: 20,
-            color: '#ffffff',
-            fontStyle: 'bold',
-            padding: 8,
-            shadow: {
-                color: '#000000',
-                fill: true,
-                offsetX: 2,
-                offsetY: 2,
-                blur: 4
-            }
-        };
-
-        const fontStyle3 = {
-            fontFamily: 'Impact',
-            fontSize: 25,
-            color: '#ffffff',
-            padding: 6,
-            shadow: {
-                color: '#000000',
-                fill: true,
-                offsetX: 1,
-                offsetY: 1,
-                blur: 1
-            }
-        };
 
         this.rect3 = this.add.rectangle(0,0, 1600, 250, 0x0000FF, 0.4);
         //let sprite = this.add.sprite(200,20,"items","redapple.png")
         //sprite.tint = 0x000000;
-        this.itemtext = this.add.text(110, 85, this.goal12, fontStyle3);
-        this.timerText = this.add.text(20, 0, this.goal21 + `   =`, fontStyle2);
-        this.colorrect = this.add.rectangle(150, 20, 30, 30, 0xFF0000)
-        this.colorrect.setStrokeStyle(2,0x000000);
-        this.timerText2 = this.add.text(70, 45, 'AND', fontStyle3);
-        this.timerText2.setColor('#32CD32');
-        this.timerText = this.add.text(20, 90, this.goal11 + '   =', fontStyle2);
+        // this.itemtext = this.add.text(110, 85, this.goal12, fontStyle3);
+        // this.timerText = this.add.text(20, 0, this.goal21 + `   =`, fontStyle2);
+        // this.colorrect = this.add.rectangle(150, 20, 30, 30, 0xFF0000)
+        // this.colorrect.setStrokeStyle(2,0x000000);
+        // this.timerText2 = this.add.text(70, 45, 'AND', fontStyle3);
+        // this.timerText2.setColor('#32CD32');
+        // this.timerText = this.add.text(20, 90, this.goal11 + '   =', fontStyle2);
+
         this.rect = this.add.rectangle(478, 55, 125, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
         this.submitText = this.add.text(410, 20, 'Submit', fontStyle);
@@ -160,7 +122,6 @@ export default class MainGame extends Phaser.Scene {
         let children = this.items.getChildren();
 
         children.forEach((child) => {
-
             child.setInteractive();
             child.on('gameobjectdown', this.selectItem, this)
         });
@@ -172,7 +133,6 @@ export default class MainGame extends Phaser.Scene {
 
         this.arrangeGrid();
     }
-
 
     selectItem(pointer, item) {
         let x = item.x
@@ -197,10 +157,13 @@ export default class MainGame extends Phaser.Scene {
             }
             //this.add.rectangle(20, 250, 150, 100, 0xFF0000);
             if (this.proptext != undefined) {
-                this.proptext.destroy();
-                this.proptext2.destroy();
-                this.proptext3.destroy();
-                this.proptext4.destroy();
+                // this.proptext.destroy();
+                // this.proptext2.destroy();
+                // this.proptext3.destroy();
+                // this.proptext4.destroy();
+                for (let i=0; i<this.proptext.length; i++) {
+                    this.proptext[i].destroy();
+                }
             }
             const fontStyle = {
                 fontFamily: 'Arial',
@@ -218,21 +181,25 @@ export default class MainGame extends Phaser.Scene {
             };      
 
             let children = this.items.getChildren();
-            let a = children[index].frame.customData.item;
-            let b = children[index].frame.customData.color;
-            let c = children[index].frame.customData.pattern;
-            this.proptext = this.add.text(20, 200, 'Properties: ', fontStyle);
-            this.proptext2 = this.add.text(20, 230, `Item = ${a}`, fontStyle);
-            this.proptext2 = this.add.text(20, 230, `Shape = ${a}`, fontStyle);
-            this.proptext3 = this.add.text(20, 260, `Color = ${b}`, fontStyle);
-            this.proptext4 = this.add.text(20, 290, `Pattern = ${c}`, fontStyle);
+            // let a = children[index].frame.customData.item;
+            // let b = children[index].frame.customData.color;
+            // let c = children[index].frame.customData.pattern;
+            this.proptext = [];
+            this.proptext[0] = this.add.text(20, 200, 'Properties: ', fontStyle);
+            // this.proptext2 = this.add.text(20, 230, `Item = ${a}`, fontStyle);
+            // this.proptext2 = this.add.text(20, 230, `Shape = ${a}`, fontStyle);
+            // this.proptext3 = this.add.text(20, 260, `Color = ${b}`, fontStyle);
+            // this.proptext4 = this.add.text(20, 290, `Pattern = ${c}`, fontStyle);
+            for (let i=0; i<this.itemAttributes[index].length; i++) {
+                this.proptext[i+1] = this.add.text(20, 230 + 30*i, Object.keys(this.itemAttributes[index][i])[0] + " = " + Object.values(this.itemAttributes[index][i])[0], fontStyle);
+            }
         }
     }
 
 
     arrangeGrid () {
         let children = this.items.getChildren();
-
+        this.itemAttributes = [];
         // randomly generate items
         for (let i = 0; i < 16; i++) {
             let item = [];
@@ -245,6 +212,7 @@ export default class MainGame extends Phaser.Scene {
                 item.push(itemattr);
                 itemJSON[attr] = itemattr[attr];
             }
+            this.itemAttributes.push(item);
             // if the generated item is part of solution, add its index to this.solution
             if (this.evaluations[this.expressionCounter][getBooleanArrayIndexOfItem(item, this.attributes)]) {
                 this.solution.push(i);
@@ -272,7 +240,7 @@ export default class MainGame extends Phaser.Scene {
 
             // or use lowercase itemJSON["SHAPE"] etc.
             
-            console.log(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
+            // console.log(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
             children[i].setFrame(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
         }
 
@@ -289,6 +257,8 @@ export default class MainGame extends Phaser.Scene {
     newRound () {
         this.selection = [];
         this.solution = [];
+        this.expressionText.destroy();
+        this.expressionText = this.add.text(20, 30, this.strings[this.expressionCounter], fontStyle2);
         this.win = false;
         if (this.expressionCounter < this.numExpressions - 1) {
             this.expressionCounter++;
@@ -296,7 +266,7 @@ export default class MainGame extends Phaser.Scene {
             // end level
         }
 
-        this.submitText.setText('Submit');
+        // this.submitText.setText('Submit');
 
         //  Stagger tween them all out
         this.tweens.add({
@@ -312,15 +282,15 @@ export default class MainGame extends Phaser.Scene {
     }
 
     checkSolution() {
-
+        console.log(this.solution, this.selection);
         // if index arrays solution and selection are equal, return true
         for (let i = 0; i < this.selection.length; i++) {
-            if (!solution.includes(selection[i])) {
+            if (!this.solution.includes(this.selection[i])) {
                 return false;
             }
         }
         for (let i = 0; i < this.solution.length; i++) {
-            if (!selection.includes(solution[i])) {
+            if (!this.selection.includes(this.solution[i])) {
                 return false;
             }
         }
@@ -330,11 +300,11 @@ export default class MainGame extends Phaser.Scene {
 
     submitSelection () {
         let win = (this.checkSolution())
+        console.log(win);
         
         this.input.off('gameobjectdown', this.selectItem, this);
         if (win) {
             this.win = true;
-            //alert('you won')
             this.winText.setVisible(true);
             this.winText.setColor('#FFD700')
             let circledance = []
@@ -392,6 +362,50 @@ function xyConvertToIndex(x,y) {
     y = (y-190)/120
     return x+4*y
 }
+
+const fontStyle = {
+    fontFamily: 'Arial',
+    fontSize: 30,
+    color: '#ffffff',
+    fontStyle: 'bold',
+    padding: 16,
+    shadow: {
+        color: '#000000',
+        fill: true,
+        offsetX: 2,
+        offsetY: 2,
+        blur: 4
+    }
+};
+
+const fontStyle2 = {
+    fontFamily: 'Arial',
+    fontSize: 20,
+    color: '#ffffff',
+    fontStyle: 'bold',
+    padding: 8,
+    shadow: {
+        color: '#000000',
+        fill: true,
+        offsetX: 2,
+        offsetY: 2,
+        blur: 4
+    }
+};
+
+const fontStyle3 = {
+    fontFamily: 'Impact',
+    fontSize: 25,
+    color: '#ffffff',
+    padding: 6,
+    shadow: {
+        color: '#000000',
+        fill: true,
+        offsetX: 1,
+        offsetY: 1,
+        blur: 1
+    }
+};
 
 const pickLevelParameters = {
     1: {
