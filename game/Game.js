@@ -16,11 +16,11 @@ export default class MainGame extends Phaser.Scene {
         let levelParams = pickLevelParameters[this.level];
         this.attributes = levelParams.attributes;
         this.numExpressions = levelParams.numExpressions;
-        let evalOutput = createUniqueExpressions(levelParams.numFeatures, levelParams.numExpressions, levelParams.attributes, levelParams.operators);
+        let evalOutput = createUniqueExpressions(levelParams.numExpressions,levelParams.numFeatures , levelParams.attributes, levelParams.operators);
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
-
+        console.log(this.strings);
         this.items; // phaser group
         this.itemAttributes; // store array of attribute:feature objects for each item
 
@@ -61,7 +61,7 @@ export default class MainGame extends Phaser.Scene {
         //  Create a 4x4 grid aligned group to hold our sprites
 
         this.items = this.add.group({
-            key: 'items',
+            key: 'shapes',
             frameQuantity: 1,
             repeat: 15,
             gridAlign: {
@@ -234,6 +234,7 @@ export default class MainGame extends Phaser.Scene {
 
     arrangeGrid () {
         let children = this.items.getChildren();
+        children[0].setFrame('blueplainsquare.png');
 
         // randomly generate items
         for (let i = 0; i < 16; i++) {
@@ -248,7 +249,7 @@ export default class MainGame extends Phaser.Scene {
                 itemJSON[attr] = itemattr[attr];
             }
             // if the generated item is part of solution, add its index to this.solution
-            if (this.evaluations[expressionCounter][getBooleanArrayIndexOfItem(item, this.attributes)]) {
+            if (this.evaluations[this.expressionCounter][getBooleanArrayIndexOfItem(item, this.attributes)]) {
                 this.solution.push(i);
             }
             let shape = 0;
@@ -418,7 +419,7 @@ const pickLevelParameters = {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
-            {"PATTERN": ["PLAIN", "STRIPED", "SPOTS", "LATTICE", "SWIRL"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTS", "LATTICE", "SWIRL"]}, 
         ],
         operators: ["AND", "OR"],
         numFeatures: 3,
