@@ -51,6 +51,7 @@ export default class MainGame extends Phaser.Scene {
 
         this.selection = [];
         this.solution = [];
+        console.log(this.expressions[this.currentRound]);
         this.expressionText = this.add.text(20, 30, this.strings[this.currentRound], fontStyle2);
         this.win = false;
 
@@ -204,6 +205,8 @@ export default class MainGame extends Phaser.Scene {
 
 
     arrangeGrid () {
+        //TODO: add items guaranteed to be part of solution
+        // console.log(this.strings[this.currentRound]); //TODO: fix expression display going under submit button
         let children = this.items.getChildren();
         this.itemAttributes = [];
         // randomly generate items
@@ -246,10 +249,12 @@ export default class MainGame extends Phaser.Scene {
 
             // or use lowercase itemJSON["SHAPE"] etc.
             
+            // console.log(pattern);
+            // console.log(ATTR["PATTERN"][pattern]);
             // console.log(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
             children[i].setFrame(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
         }
-        console.log(this.solution)
+        // console.log(this.solution);
 
         //  Stagger tween them all in
         this.tweens.add({

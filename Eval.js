@@ -86,6 +86,14 @@ class OperatorNode extends TreeNode {
 
         return res;
     }
+
+    getExpression() {
+        if (this.isBinary()) {
+            return this.getChildren()[0].getExpression().concat(this.getValue(), this.getChildren()[1].getExpression());
+        } else {
+            return [this.getValue()].concat(this.getChildren()[0].getExpression());
+        }
+    }
 }
 
 class FeatureNode extends TreeNode {
@@ -129,6 +137,12 @@ class FeatureNode extends TreeNode {
         }
         recursiveSetTrueBooleanArray(0, availableAttributes, this.getValue());
         return booleanArray;
+    }
+
+    getExpression() {
+        let res = {};
+        res[this.attribute] = this.getValue();
+        return [res];
     }
 
     getString() {
@@ -179,9 +193,12 @@ function randomInt(max) {
  * @returns {object}
  * expressions: array of root nodes
  * evaluations: array of evaluation objects
- * repeat: two indices with the same evalutaion
+ * repeat: two indices with the same evaluation
  */
 export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, makeFeaturesDifferentAttributes = false, repeat = false) {
+    //TODO: constrain number of NOTs
+    //TODO: return array of features
+    
     let sum = 0;
     for (let a of availableAttributes) {
         sum += Object.values(a)[0].length;
@@ -195,6 +212,7 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
     }
 
     let expressionRootNodes = [];
+    let expressionArrays = [];
     let expressionEvaluations = [];
     let expressionStrings = [];
 
@@ -235,12 +253,14 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
         // }
 
         expressionRootNodes.push(rootNode);
+        expressionArrays.push(rootNode.getExpression());
         expressionEvaluations.push(evaluation);
         expressionStrings.push(rootNode.getString());
     }
 
     let res = {};
-    res["expressions"] = expressionRootNodes;
+    res["rootNodes"] = expressionRootNodes;
+    res["expressions"] = expressionArrays;
     res["evaluations"] = expressionEvaluations;
     res["strings"] = expressionStrings;
     return res;
