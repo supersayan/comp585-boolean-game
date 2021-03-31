@@ -172,6 +172,8 @@ function randomInt(max) {
  * the number of features in each expression. should be >= 2
  * @param {object} availableAttributes 
  * @param {string array} availableOperations 
+ * @param {boolean} makeFeaturesDifferentAttributes
+ * if true, every attribute is referenced in an expression at most once
  * @param {boolean} repeat 
  * if true, include exactly two expressions with the same evalutaion
  * @returns {object}
@@ -179,13 +181,17 @@ function randomInt(max) {
  * evaluations: array of evaluation objects
  * repeat: two indices with the same evalutaion
  */
-export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, repeat = false) {
+export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, makeFeaturesDifferentAttributes = false, repeat = false) {
     let sum = 0;
     for (let a of availableAttributes) {
         sum += Object.values(a)[0].length;
     }
     if (numFeatures > sum) {
         throw new Error("numFeatures cannot be larger than number of available features");
+    }
+
+    if (makeFeaturesDifferentAttributes && (numFeatures > availableAttributes.length)) {
+        throw new Error("if no null solution, numFeatures must be <= number of available attributes");
     }
 
     let expressionRootNodes = [];
@@ -202,6 +208,7 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
     //     numExpressions--;
     for (let e = 0; e < numExpressions; e++) {
         // create random feature nodes
+        let randAttributes = [];
         let randFeatures = [];
         let randFeatureNodes = [];
         for (let f=0; f<numFeatures; f++) {
@@ -211,7 +218,8 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
                 var rand_at = Object.keys(availableAttributes[r])[0];
                 // select random feature from availableAttributes[rand_at]
                 var rand_ft = availableAttributes[r][rand_at][randomInt(availableAttributes[r][rand_at].length)];
-            } while (randFeatures.includes(rand_ft)) // if numFeatures > number of features in availableAttributes, this is infinite loop
+            } while (randFeatures.includes(rand_ft) || (makeFeaturesDifferentAttributes && randAttributes.includes(rand_at))) // if numFeatures > number of features in availableAttributes, this is infinite loop
+            randAttributes.push(rand_at);
             randFeatures.push(rand_ft);
             randFeatureNodes.push(new FeatureNode(rand_at, rand_ft));
         }
@@ -288,22 +296,21 @@ function objectEqual(object1, object2) {
     return true;
 }
 
-// testing
+// // testing
 // let aa = [
 //     {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
 //     {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
 // ]
 // // // let f = new FeatureNode("COLOR", "GREEN");
 // // // console.log(f.evaluate(aa));
-// let e = createUniqueExpressions(10, 2, aa, ["AND", "OR"]);
+// let e = createUniqueExpressions(10, 2, aa, ["AND", "OR"], true);
 // let item = [
 //     {SHAPE: "TRIANGLE"},
 //     {COLOR: "BLUE"}
 // ]
-// console.log(getBooleanArrayIndexOfItem(item, aa));
+// // console.log(getBooleanArrayIndexOfItem(item, aa));
 // for (let i=0; i<10; i++) {
-//     // console.log(e.strings[i]);
-//     // console.log(e.evaluations[i]);
-//     // console.log(getBooleanArrayIndexOfItem(item, aa));
-//     // console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
+//     console.log(e.strings[i]);
+//     console.log(e.evaluations[i]);
+//     console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
 // }

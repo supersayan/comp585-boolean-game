@@ -16,7 +16,7 @@ export default class MainGame extends Phaser.Scene {
         let levelParams = pickLevelParameters[this.level];
         this.attributes = levelParams.attributes;
         this.numExpressions = levelParams.numExpressions;
-        let evalOutput = createUniqueExpressions(levelParams.numExpressions,levelParams.numFeatures , levelParams.attributes, levelParams.operators);
+        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.makeFeaturesDifferentAttributes);
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
@@ -152,7 +152,7 @@ export default class MainGame extends Phaser.Scene {
             } else {
                 this.circles[index].setVisible(false);
                 this.selection = this.selection.filter((value, index, array) => {
-                    console.log(value);
+                    // console.log(value);
                     return value != xyConvertToIndex(x,y);
                 })
             }
@@ -440,6 +440,7 @@ const pickLevelParameters = {
         operators: ["AND"],
         numFeatures: 2,
         numExpressions: 10,
+        makeFeaturesDifferentAttributes: true,
     },
     2: {
         attributes: [
@@ -449,6 +450,7 @@ const pickLevelParameters = {
         operators: ["OR"],
         numFeatures: 2,
         numExpressions: 10,
+        makeFeaturesDifferentAttributes: false,
     },
     3: {
         attributes: [
@@ -459,5 +461,6 @@ const pickLevelParameters = {
         operators: ["AND", "OR"],
         numFeatures: 3,
         numExpressions: 10,
+        makeFeaturesDifferentAttributes: false,
     },
 }
