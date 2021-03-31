@@ -20,7 +20,6 @@ export default class MainGame extends Phaser.Scene {
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
-        console.log(this.strings);
         this.items; // phaser group
         this.itemAttributes; // store array of attribute:feature objects for each item
 
@@ -178,7 +177,6 @@ export default class MainGame extends Phaser.Scene {
     selectItem(pointer, item) {
         let x = item.x
         let y = item.y
-        console.log('index is: ', xyConvertToIndex(x,y))
         let index = xyConvertToIndex(x,y);
         if (pointer.leftButtonDown()) {
             //console.log('emoji positions are: ', emoji.x, emoji.y)
@@ -234,7 +232,6 @@ export default class MainGame extends Phaser.Scene {
 
     arrangeGrid () {
         let children = this.items.getChildren();
-        children[0].setFrame('blueplainsquare.png');
 
         // randomly generate items
         for (let i = 0; i < 16; i++) {
@@ -275,7 +272,8 @@ export default class MainGame extends Phaser.Scene {
 
             // or use lowercase itemJSON["SHAPE"] etc.
             
-            // children[i].setFrame('.png')
+            console.log(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
+            children[i].setFrame(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
         }
 
         //  Stagger tween them all in
@@ -314,7 +312,6 @@ export default class MainGame extends Phaser.Scene {
     }
 
     checkSolution() {
-        let selection = this.selection[i];
 
         // if index arrays solution and selection are equal, return true
         for (let i = 0; i < this.selection.length; i++) {
