@@ -12,10 +12,10 @@ export default class MainGame extends Phaser.Scene {
         
         // with the level number, create the expressions, evaluations, strings
         this.level = 1;
-        this.expressionCounter = 0; // iterates every new round
+        this.currentRound = 0; // iterates every new round
         let levelParams = pickLevelParameters[this.level];
         this.attributes = levelParams.attributes;
-        this.numExpressions = levelParams.numExpressions;
+        this.numRounds = levelParams.numExpressions;
         let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.makeFeaturesDifferentAttributes);
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
@@ -51,7 +51,7 @@ export default class MainGame extends Phaser.Scene {
 
         this.selection = [];
         this.solution = [];
-        this.expressionText = this.add.text(20, 30, this.strings[this.expressionCounter], fontStyle2);
+        this.expressionText = this.add.text(20, 30, this.strings[this.currentRound], fontStyle2);
         this.win = false;
 
         // generates selection circles
@@ -220,7 +220,7 @@ export default class MainGame extends Phaser.Scene {
             }
             this.itemAttributes.push(item);
             // if the generated item is part of solution, add its index to this.solution
-            if (this.evaluations[this.expressionCounter][getBooleanArrayIndexOfItem(item, this.attributes)]) {
+            if (this.evaluations[this.currentRound][getBooleanArrayIndexOfItem(item, this.attributes)]) {
                 this.solution.push(i);
             }
             let shape = 0;
@@ -269,10 +269,10 @@ export default class MainGame extends Phaser.Scene {
         this.solution = [];
         this.expressionText.destroy();
         console.log("x")
-        this.expressionText = this.add.text(20, 30, this.strings[this.expressionCounter], fontStyle2);
+        this.expressionText = this.add.text(20, 30, this.strings[this.currentRound], fontStyle2);
         this.win = false;
-        if (this.expressionCounter < this.numExpressions - 1) {
-            this.expressionCounter++;
+        if (this.currentRound < this.numRounds - 1) {
+            this.currentRound++;
         } else {
             // end level
         }
