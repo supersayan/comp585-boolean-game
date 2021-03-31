@@ -263,7 +263,7 @@ export default class MainGame extends Phaser.Scene {
 
     newRound () {
         this.selection.forEach((e) => {
-            this.circle[e].setVisible(false)
+            this.circles[e].setVisible(false)
         })
         this.selection = [];
         this.solution = [];
@@ -276,6 +276,15 @@ export default class MainGame extends Phaser.Scene {
         } else {
             // end level
         }
+
+        let children = this.items.getChildren();
+        children.forEach((child) => {
+            child.setInteractive();
+            child.on('gameobjectdown', this.selectItem, this)
+        });
+
+        //this.input.on('gameobjectdown', this.selectItem, this);
+        this.submitText.setInteractive({ useHandCursor: false});   
 
         // this.submitText.setText('Submit');
 
