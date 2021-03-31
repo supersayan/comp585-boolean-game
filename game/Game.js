@@ -24,12 +24,12 @@ export default class MainGame extends Phaser.Scene {
         this.itemAttributes; // store array of attribute:feature objects for each item
 
         //added variables so we don't need to do multiple level .js
-        this.goal11 = 'Color';
-        this.goal12 = 'red';
-        this.goal21 = 'Pattern';
-        this.goal22 = 'plain';
-        this.goal31 = 'Shape';
-        this.goal32 = 'square';
+        // this.goal11 = 'Color';
+        // this.goal12 = 'red';
+        // this.goal21 = 'Pattern';
+        // this.goal22 = 'plain';
+        // this.goal31 = 'Shape';
+        // this.goal32 = 'square';
 
         this.circles = new Array(16);
 
@@ -265,17 +265,17 @@ export default class MainGame extends Phaser.Scene {
         this.selection.forEach((e) => {
             this.circles[e].setVisible(false)
         })
-        this.selection = [];
-        this.solution = [];
-        this.expressionText.destroy();
-        console.log("x")
-        this.expressionText = this.add.text(20, 30, this.strings[this.currentRound], fontStyle2);
-        this.win = false;
         if (this.currentRound < this.numRounds - 1) {
             this.currentRound++;
         } else {
             // end level
         }
+        this.selection = [];
+        this.solution = [];
+        this.expressionText.destroy();
+        this.expressionText = this.add.text(20, 30, this.strings[this.currentRound], fontStyle2);
+        this.win = false;
+        
 
         let children = this.items.getChildren();
         children.forEach((child) => {
