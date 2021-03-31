@@ -250,7 +250,7 @@ export default class MainGame extends Phaser.Scene {
             // if the generated item is part of solution, add its index to this.solution
             if (this.evaluations[expressionCounter][getBooleanArrayIndexOfItem(item, this.attributes)]) {
                 this.solution.push(i);
-            
+            }
             let shape = 0;
             if ("SHAPE" in itemJSON) {
                 shape = ATTR["SHAPE"].indexOf(itemJSON["SHAPE"]);
