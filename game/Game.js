@@ -151,6 +151,10 @@ export default class MainGame extends Phaser.Scene {
                 this.circles[index].setVisible(true);
             } else {
                 this.circles[index].setVisible(false);
+                this.selection = this.selection.filter((value, index, array) => {
+                    console.log(value);
+                    return value != xyConvertToIndex(x,y);
+                })
             }
         } else if (pointer.rightButtonDown()) { //displays properties
             
@@ -245,6 +249,7 @@ export default class MainGame extends Phaser.Scene {
             // console.log(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
             children[i].setFrame(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
         }
+        console.log(this.solution)
 
         //  Stagger tween them all in
         this.tweens.add({
@@ -257,9 +262,13 @@ export default class MainGame extends Phaser.Scene {
     }
 
     newRound () {
+        this.selection.forEach((e) => {
+            this.circle[e].setVisible(false)
+        })
         this.selection = [];
         this.solution = [];
         this.expressionText.destroy();
+        console.log("x")
         this.expressionText = this.add.text(20, 30, this.strings[this.expressionCounter], fontStyle2);
         this.win = false;
         if (this.expressionCounter < this.numExpressions - 1) {
@@ -325,11 +334,14 @@ export default class MainGame extends Phaser.Scene {
                 duration: 250,
                 ease: 'sine.inout',
                 onComplete: () => {
+                    let counter = 0;
                     this.input.on('pointerdown', (pointer) => {     
                         if (pointer.leftButtonDown()) { 
                             this.input.off('gameobjectdown', this.selectItem, this);
                             //this.scene.start('MainGame');
-                            this.newRound();
+                            if (counter == 0)
+                                this.newRound();
+                            counter++;
                         } else if (pointer.rightButtonDown()) {
                             this.input.once('gameobjectdown', this.selectItem, this);
                         }
@@ -341,8 +353,9 @@ export default class MainGame extends Phaser.Scene {
             // if incorrect submission, should not do anything, allow to keep trying until correct
             this.score = 0;
             this.win = false;
-            // this.loseText.setColor('#FF0000');
-            // this.loseText.setVisible(true);
+            this.winText = this.loseText;
+            this.winText.setColor('#FF0000');
+            this.winText.setVisible(true);
 
 
             //Timeout is needed so that the click to submit doesn't count for going to the main menu
