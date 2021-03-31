@@ -586,7 +586,7 @@
 					}
 				},
 				{
-					"filename": "purpleplaintrapzeoid.png",
+					"filename": "purpleplaintrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
 					"color": "purple",
@@ -610,7 +610,7 @@
 					}
 				},
 				{
-					"filename": "redstripedquare.png",
+					"filename": "redstripedsquare.png",
 					"rotated": false,
 					"trimmed": false,
 					"color": "red",
@@ -685,7 +685,7 @@
 					"filename": "bluestripedsquare.png",
 					"rotated": false,
 					"trimmed": false,
-					"color": "red",
+					"color": "blue",
 					"pattern": "striped",
 					"shape": "square",
 					"sourceSize": {
@@ -1642,7 +1642,7 @@
 					}
 				},
 				{
-					"filename": "bluespottedpentagon",
+					"filename": "bluespottedpentagon.png",
 					"rotated": false,
 					"trimmed": false,
 					"color": "blue",

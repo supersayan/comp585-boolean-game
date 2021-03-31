@@ -23,6 +23,15 @@ export default class MainGame extends Phaser.Scene {
 
         this.items; // phaser group
         this.itemAttributes; // store array of attribute:feature objects for each item
+
+        //added variables so we don't need to do multiple level .js
+        this.goal11 = 'Color';
+        this.goal12 = 'red';
+        this.goal21 = 'Pattern';
+        this.goal22 = 'plain';
+        this.goal31 = 'Shape';
+        this.goal32 = 'square';
+
         this.circles = new Array(16);
         this.selection = []; //just holds the selected items
         this.solution = []; //holds the required for AND operations
@@ -113,7 +122,7 @@ export default class MainGame extends Phaser.Scene {
         //let sprite = this.add.sprite(200,20,"items","redapple.png")
         //sprite.tint = 0x000000;
         this.itemtext = this.add.text(110, 85, this.goal12, fontStyle3);
-        this.timerText = this.add.text(20, 0, this.goal21 + `   =`, fontStyle2);     
+        this.timerText = this.add.text(20, 0, this.goal21 + `   =`, fontStyle2);
         this.colorrect = this.add.rectangle(150, 20, 30, 30, 0xFF0000)
         this.colorrect.setStrokeStyle(2,0x000000);
         this.timerText2 = this.add.text(70, 45, 'AND', fontStyle3);
@@ -193,6 +202,7 @@ export default class MainGame extends Phaser.Scene {
                 this.proptext.destroy();
                 this.proptext2.destroy();
                 this.proptext3.destroy();
+                this.proptext4.destroy();
             }
             const fontStyle = {
                 fontFamily: 'Arial',
@@ -208,14 +218,19 @@ export default class MainGame extends Phaser.Scene {
                     blur: 4
                 }
             };      
+
             let children = this.items.getChildren();
             let a = children[index].frame.customData.item;
             let b = children[index].frame.customData.color;
+            let c = children[index].frame.customData.pattern;
             this.proptext = this.add.text(20, 200, 'Properties: ', fontStyle);
             this.proptext2 = this.add.text(20, 230, `Item = ${a}`, fontStyle);
+            this.proptext2 = this.add.text(20, 230, `Shape = ${a}`, fontStyle);
             this.proptext3 = this.add.text(20, 260, `Color = ${b}`, fontStyle);
+            this.proptext4 = this.add.text(20, 290, `Pattern = ${c}`, fontStyle);
         }
     }
+
 
     arrangeGrid () {
         let children = this.items.getChildren();
@@ -235,7 +250,6 @@ export default class MainGame extends Phaser.Scene {
             // if the generated item is part of solution, add its index to this.solution
             if (this.evaluations[expressionCounter][getBooleanArrayIndexOfItem(item, this.attributes)]) {
                 this.solution.push(i);
-            }
             
             let shape = 0;
             if ("SHAPE" in itemJSON) {
@@ -376,8 +390,8 @@ export default class MainGame extends Phaser.Scene {
 }
 
 function xyConvertToIndex(x,y) {
-    x = (x-275)/120
-    y = (y-152.5)/120
+    x = (x-270)/120
+    y = (y-190)/120
     return x+4*y
 }
 
