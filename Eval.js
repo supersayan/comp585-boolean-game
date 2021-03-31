@@ -147,7 +147,7 @@ export function getBooleanArrayIndexOfItem(item, availableAttributes) {
         if (remainingAttributes.length === 0) {
             return index; // recursive end
         } else {
-            let d = Object.values(remainingAttributes[0]).length;
+            let d = Object.values(remainingAttributes[0])[0].length;
             let f = Object.values(remainingAttributes[0])[0].indexOf(Object.values(item[0])[0]);
             return recursiveBooleanArray(index * d + f, item.slice(1), remainingAttributes.slice(1));
         }
@@ -293,15 +293,17 @@ function objectEqual(object1, object2) {
 //     {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
 //     {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
 // ]
-// // let f = new FeatureNode("COLOR", "GREEN");
-// // console.log(f.evaluate(aa));
-// let e = createUniqueExpressions(10, 3, aa, ["AND", "OR", "NOT"]);
+// // // let f = new FeatureNode("COLOR", "GREEN");
+// // // console.log(f.evaluate(aa));
+// let e = createUniqueExpressions(10, 2, aa, ["AND", "OR"]);
 // let item = [
-//     {SHAPE: "SQUARE"},
-//     {COLOR: "RED"}
+//     {SHAPE: "TRIANGLE"},
+//     {COLOR: "BLUE"}
 // ]
+// console.log(getBooleanArrayIndexOfItem(item, aa));
 // for (let i=0; i<10; i++) {
-//     console.log(e.strings[i]);
-//     console.log(e.evaluations[i]);
+//     // console.log(e.strings[i]);
+//     // console.log(e.evaluations[i]);
+//     // console.log(getBooleanArrayIndexOfItem(item, aa));
 //     // console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
 // }
