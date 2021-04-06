@@ -60,9 +60,9 @@ export default class MainGame extends Phaser.Scene {
         this.goal2 = this.expressions[this.currentRound][2];
         this.goal2.value = this.goal2[Object.keys(this.goal2)];
         console.log(this.goal1.value);
-        this.goal1sprite = this.add.sprite(20, 50, "redplainsquare.png", 0);
+        this.goal1sprite = this.add.sprite(20, 50, "attributes", getSprite(this.goal1.value));
         this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
-        this.goal2sprite = this.add.sprite(120, 50, getSprite(this.goal2.value), 0);
+        this.goal2sprite = this.add.sprite(120, 50, "attributes", getSprite(this.goal2.value));
         this.win = false;
 
         // generates selection circles
