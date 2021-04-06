@@ -31,6 +31,10 @@ export default class MainGame extends Phaser.Scene {
         // this.goal31 = 'Shape';
         // this.goal32 = 'square';
 
+        //new things for the display
+        this.goal1;
+        this.goal2;
+
         this.circles = new Array(16);
 
         // this.selection = []; //just holds the selected items
@@ -51,8 +55,14 @@ export default class MainGame extends Phaser.Scene {
 
         this.selection = [];
         this.solution = [];
-        console.log(this.expressions[this.currentRound]);
-        this.expressionText = this.add.text(20, 30, this.strings[this.currentRound], fontStyle2);
+        this.goal1 = this.expressions[this.currentRound][0];
+        this.goal1.value = this.goal1[Object.keys(this.goal1)];
+        this.goal2 = this.expressions[this.currentRound][2];
+        this.goal2.value = this.goal2[Object.keys(this.goal2)];
+        console.log(this.goal1.value);
+        this.goal1sprite = this.add.sprite(20, 50, "redplainsquare.png", 0);
+        this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
+        this.goal2sprite = this.add.sprite(120, 50, getSprite(this.goal2.value), 0);
         this.win = false;
 
         // generates selection circles
@@ -390,6 +400,51 @@ function xyConvertToIndex(x,y) {
     x = (x-270)/120
     y = (y-190)/120
     return x+4*y
+}
+
+function getSprite(attribute) {
+    switch (attribute) {
+        case "SQUARE":
+            return "attributes-0.png";
+        case "TRIANGLE":
+            return "attributes-1.png";
+        case "BLACK":
+            return "attributes-2.png";
+        case "BRONZE":
+            return "attributes-3.png";
+        case "SILVER":
+            return "attributes-4.png";
+        case "GOLD":
+            return "attributes-5.png";
+        case "LIGHTBLUE":
+            return "attributes-6.png";
+        case "CIRCLE":
+            return "attributes-7.png";
+        case "PENTAGON":
+            return "attributes-8.png";
+        case "TRAPEZOID":
+            return "attributes-9.png";
+        case "RED":
+            return "attributes-10.png";
+        case "ORANGE":
+            return "attributes-11.png";
+        case "GREEN":
+            return "attributes-12.png";
+        case "BLUE":
+            return "attributes-13.png";
+        case "PURPLE":
+            return "attributes-14.png";
+        case "PLAIN":
+            return "attributes-15.png";
+        case "STRIPED":
+            return "attributes-16.png";
+        case "SPOTTED":
+            return "attributes-17.png";
+        case "NET":
+            return "attributes-18.png";
+        case "SPIRAL":
+            return "attributes-19.png";
+    }
 }
 
 const fontStyle = {
