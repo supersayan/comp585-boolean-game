@@ -63,6 +63,11 @@ export default class MainGame extends Phaser.Scene {
         this.goal1sprite = this.add.sprite(20, 50, "attributes", getSprite(this.goal1.value));
         this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
         this.goal2sprite = this.add.sprite(120, 50, "attributes", getSprite(this.goal2.value));
+        this.goal1sprite.setScale(0.4);
+        this.goal1sprite.depth = 1;
+        this.goal2sprite.setScale(0.4);
+        this.goal2sprite.depth = 1;
+        this.expressionText.depth = 1;
         this.win = false;
 
         // generates selection circles
@@ -288,7 +293,14 @@ export default class MainGame extends Phaser.Scene {
         this.selection = [];
         this.solution = [];
         this.expressionText.destroy();
-        this.expressionText = this.add.text(20, 30, this.strings[this.currentRound], fontStyle2);
+        this.goal1 = this.expressions[this.currentRound][0];
+        this.goal1.value = this.goal1[Object.keys(this.goal1)];
+        this.goal2 = this.expressions[this.currentRound][2];
+        this.goal2.value = this.goal2[Object.keys(this.goal2)];
+        console.log(this.goal1.value);
+        this.goal1sprite.setFrame(getSprite(this.goal1.value));
+        this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
+        this.goal2sprite.setFrame(getSprite(this.goal2.value));
         this.win = false;
         
 
@@ -405,45 +417,45 @@ function xyConvertToIndex(x,y) {
 function getSprite(attribute) {
     switch (attribute) {
         case "SQUARE":
-            return "attributes-0.png";
+            return "square.png";
         case "TRIANGLE":
-            return "attributes-1.png";
+            return "triangle.png";
         case "BLACK":
-            return "attributes-2.png";
-        case "BRONZE":
-            return "attributes-3.png";
-        case "SILVER":
-            return "attributes-4.png";
-        case "GOLD":
-            return "attributes-5.png";
-        case "LIGHTBLUE":
-            return "attributes-6.png";
-        case "CIRCLE":
-            return "attributes-7.png";
-        case "PENTAGON":
-            return "attributes-8.png";
-        case "TRAPEZOID":
-            return "attributes-9.png";
-        case "RED":
-            return "attributes-10.png";
-        case "ORANGE":
-            return "attributes-11.png";
-        case "GREEN":
-            return "attributes-12.png";
-        case "BLUE":
-            return "attributes-13.png";
-        case "PURPLE":
-            return "attributes-14.png";
-        case "PLAIN":
             return "attributes-15.png";
-        case "STRIPED":
+        case "BRONZE":
             return "attributes-16.png";
-        case "SPOTTED":
+        case "SILVER":
             return "attributes-17.png";
-        case "NET":
+        case "GOLD":
             return "attributes-18.png";
-        case "SPIRAL":
+        case "LIGHTBLUE":
             return "attributes-19.png";
+        case "CIRCLE":
+            return "circle.png";
+        case "PENTAGON":
+            return "pentagon.png";
+        case "TRAPEZOID":
+            return "trapezoid.png";
+        case "RED":
+            return "red.png";
+        case "ORANGE":
+            return "orange.png";
+        case "GREEN":
+            return "green.png";
+        case "BLUE":
+            return "blue.png";
+        case "PURPLE":
+            return "purple.png";
+        case "PLAIN":
+            return "plain.png";
+        case "STRIPED":
+            return "striped.png";
+        case "SPOTTED":
+            return "spotted.png";
+        case "NET":
+            return "lattice.png";
+        case "SPIRAL":
+            return "swirl.png";
     }
 }
 
