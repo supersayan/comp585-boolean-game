@@ -287,7 +287,7 @@ export default class MainGame extends Phaser.Scene {
                 // for (let i = 0; i < this.attributes.length; i++) {
 
                 // }
-                console.log(i, ": ", item);
+                // console.log(i, ": ", item);
                 this.solution.push(i);
             }
             let shape = 0;
@@ -347,6 +347,7 @@ export default class MainGame extends Phaser.Scene {
             this.currentRound++;
         } else {
             // end level
+            this.newLevel();
         }
         this.selection = [];
         console.log(this.expressions[this.currentRound]);
@@ -359,7 +360,7 @@ export default class MainGame extends Phaser.Scene {
             this.goal3 = this.expressions[this.currentRound][4];
             this.goal3.value = this.goal3[Object.keys(this.goal3)];
         }
-        console.log(this.goal1.value);
+        // console.log(this.goal1.value);
         this.goal1sprite.setFrame(getSprite(this.goal1.value));
         this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
         this.goal2sprite.setFrame(getSprite(this.goal2.value));
@@ -389,7 +390,7 @@ export default class MainGame extends Phaser.Scene {
                 this.arrangeGrid()
                 this.winText.setAlpha(0);
                 let children = this.items.getChildren();
-                console.log(children)
+                // console.log(children);
                 children.forEach((child) => {
                     child.setInteractive();
                     child.on('gameobjectdown', this.selectItem, this)
@@ -426,8 +427,21 @@ export default class MainGame extends Phaser.Scene {
         // TODO: display new expression
     }
 
+    newLevel() {
+        if (this.level+1 in pickLevelParameters)
+            this.level++;
+        this.currentRound = 0; // iterates every new round
+        let levelParams = pickLevelParameters[this.level];
+        this.attributes = levelParams.attributes;
+        this.numRounds = levelParams.numExpressions;
+        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.makeFeaturesDifferentAttributes);
+        this.expressions = evalOutput.expressions;
+        this.evaluations = evalOutput.evaluations;
+        this.strings = evalOutput.strings;
+    }
+
     checkSolution() {
-        console.log(this.solution, this.selection);
+        // console.log(this.solution, this.selection);
         // if index arrays solution and selection are equal, return true
         for (let i = 0; i < this.selection.length; i++) {
             if (!this.solution.includes(this.selection[i])) {
@@ -445,7 +459,7 @@ export default class MainGame extends Phaser.Scene {
 
     submitSelection () {
         let win = (this.checkSolution())
-        console.log(win);
+        // console.log(win);
         
         this.input.off('gameobjectdown', this.selectItem, this);
         if (win) {
