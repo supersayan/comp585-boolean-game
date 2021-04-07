@@ -21,6 +21,7 @@ export default class MainGame extends Phaser.Scene {
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
         this.items; // phaser group
+        this.itemsBorders;
         this.itemAttributes; // store array of attribute:feature objects for each item
 
         //added variables so we don't need to do multiple level .js
@@ -81,6 +82,20 @@ export default class MainGame extends Phaser.Scene {
         //  Create a 4x4 grid aligned group to hold our sprites
 
         this.items = this.add.group({
+            key: 'shapes',
+            frameQuantity: 1,
+            repeat: 15,
+            gridAlign: {
+                width: 4,
+                height: 4,
+                cellWidth: 120,
+                cellHeight: 120,
+                x: 280,
+                y: 200
+            }
+        });
+
+        this.itemsBorders = this.add.group({
             key: 'shapes',
             frameQuantity: 1,
             repeat: 15,
@@ -223,6 +238,7 @@ export default class MainGame extends Phaser.Scene {
         //TODO: add items guaranteed to be part of solution
         // console.log(this.strings[this.currentRound]); //TODO: fix expression display going under submit button
         let children = this.items.getChildren();
+        let childrenBorder = this.itemsBorders.getChildren();
         this.itemAttributes = [];
         // randomly generate items
         for (let i = 0; i < 16; i++) {
@@ -239,6 +255,9 @@ export default class MainGame extends Phaser.Scene {
             this.itemAttributes.push(item);
             // if the generated item is part of solution, add its index to this.solution
             if (this.evaluations[this.currentRound][getBooleanArrayIndexOfItem(item, this.attributes)]) {
+                for (let i = 0; i < this.attributes.length; i++) {
+
+                }
                 this.solution.push(i);
             }
             let shape = 0;
@@ -268,12 +287,21 @@ export default class MainGame extends Phaser.Scene {
             // console.log(ATTR["PATTERN"][pattern]);
             // console.log(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
             children[i].setFrame(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
+            childrenBorder[i].setFrame(ATTR["BORDER"][border].toLowerCase() + "border" + ATTR["SHAPE"][shape].toLowerCase() + ".png");
         }
         // console.log(this.solution);
 
         //  Stagger tween them all in
         this.tweens.add({
             targets: children,
+            scale: { start: 0, from: 0, to: 1 },
+            ease: 'bounce.out',
+            duration: 600,
+            delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' })
+        });
+
+        this.tweens.add({
+            targets: childrenBorder,
             scale: { start: 0, from: 0, to: 1 },
             ease: 'bounce.out',
             duration: 600,
@@ -318,6 +346,15 @@ export default class MainGame extends Phaser.Scene {
         //  Stagger tween them all out
         this.tweens.add({
             targets: this.items.getChildren(),
+            scale: 0,
+            ease: 'power2',
+            duration: 600,
+            delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
+            onComplete: () => this.arrangeGrid()
+        });
+
+        this.tweens.add({
+            targets: this.itemsBorders.getChildren(),
             scale: 0,
             ease: 'power2',
             duration: 600,
@@ -508,6 +545,7 @@ const pickLevelParameters = {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            //{"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]}
         ],
         operators: ["AND"],
         numFeatures: 2,
@@ -528,7 +566,7 @@ const pickLevelParameters = {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
-            {"PATTERN": ["PLAIN", "STRIPED", "SPOTS", "LATTICE", "SWIRL"]}, 
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]}, 
         ],
         operators: ["AND", "OR"],
         numFeatures: 3,

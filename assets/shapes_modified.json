@@ -3010,9 +3010,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-125.png",
+					"filename": "blackbordersquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "square",
+					"border": "black",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3031,9 +3033,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-126.png",
+					"filename": "bronzebordersquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "square",
+					"border": "bronze",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3052,9 +3056,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-127.png",
+					"filename": "silverbordersquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "square",
+					"border": "silver",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3073,9 +3079,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-128.png",
+					"filename": "goldbordersquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "square",
+					"border": "gold",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3094,9 +3102,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-129.png",
+					"filename": "lightbluebordersquare.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "square",
+					"border": "lightblue",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3115,9 +3125,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-130.png",
+					"filename": "blackbordertriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "triangle",
+					"border": "black",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3136,9 +3148,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-131.png",
+					"filename": "bronzebordertriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "triangle",
+					"border": "bronze",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3157,9 +3171,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-132.png",
+					"filename": "silverbordertriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "triangle",
+					"border": "silver",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3178,9 +3194,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-133.png",
+					"filename": "goldbordertriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "triangle",
+					"border": "gold",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3199,9 +3217,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-134.png",
+					"filename": "lightbluebordertriangle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "triangle",
+					"border": "lightblue",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3220,9 +3240,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-135.png",
+					"filename": "blackbordercircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "circle",
+					"border": "black",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3241,9 +3263,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-136.png",
+					"filename": "bronzebordercircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "circle",
+					"border": "bronze",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3262,9 +3286,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-137.png",
+					"filename": "silverbordercircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "circle",
+					"border": "silver",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3283,9 +3309,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-138.png",
+					"filename": "goldbordercircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "circle",
+					"border": "gold",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3304,9 +3332,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-139.png",
+					"filename": "lightbluebordercircle.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "circle",
+					"border": "lightblue",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3325,9 +3355,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-140.png",
+					"filename": "blackborderpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "pentagon",
+					"border": "black",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3346,9 +3378,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-141.png",
+					"filename": "bronzeborderpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "pentagon",
+					"border": "bronze",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3367,9 +3401,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-142.png",
+					"filename": "silverborderpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "pentagon",
+					"border": "silver",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3388,9 +3424,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-143.png",
+					"filename": "goldborderpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "pentagon",
+					"border": "gold",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3409,9 +3447,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-144.png",
+					"filename": "lightblueborderpentagon.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "pentagon",
+					"border": "lightblue",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3430,9 +3470,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-145.png",
+					"filename": "blackbordertrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "trapezoid",
+					"border": "black",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3451,9 +3493,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-146.png",
+					"filename": "bronzebordertrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "trapezoid",
+					"border": "bronze",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3472,9 +3516,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-147.png",
+					"filename": "silverbordertrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "trapezoid",
+					"border": "silver",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3493,9 +3539,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-148.png",
+					"filename": "goldbordertrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "trapezoid",
+					"border": "gold",
 					"sourceSize": {
 						"w": 100,
 						"h": 100
@@ -3514,9 +3562,11 @@
 					}
 				},
 				{
-					"filename": "shapes_sprited-149.png",
+					"filename": "lightbluebordertrapezoid.png",
 					"rotated": false,
 					"trimmed": false,
+					"shape": "trapezoid",
+					"border": "lightblue",
 					"sourceSize": {
 						"w": 100,
 						"h": 100

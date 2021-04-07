@@ -20,6 +20,7 @@ class TreeNode {
     constructor(value, children, nodetype) {
         this._value = value;
         this._children = children;
+        this._childrenBorder = children;
         this._nodetype = nodetype;
     }
 
@@ -29,6 +30,10 @@ class TreeNode {
 
     getChildren() {
         return this._children;
+    }
+
+    getChildrenBorder() {
+        return this._childrenBorder;
     }
 
     getNodeType() {
