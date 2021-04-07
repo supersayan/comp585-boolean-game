@@ -1,4 +1,4 @@
-import { OPER, ATTR, createUniqueExpressions, getBooleanArrayIndexOfItem } from './Eval.js';
+import { OPER, ATTR, createUniqueExpressions, getBooleanArrayIndexOfItem, getItemFromBooleanArrayIndex } from './Eval.js';
 
 export default class MainGame extends Phaser.Scene {
 
@@ -249,27 +249,45 @@ export default class MainGame extends Phaser.Scene {
     arrangeGrid () {
         //TODO: add items guaranteed to be part of solution
         // console.log(this.strings[this.currentRound]); //TODO: fix expression display going under submit button
+        this.solution = [];
         let children = this.items.getChildren();
         let childrenBorder = this.itemsBorders.getChildren();
         this.itemAttributes = [];
+        // presolved: ensure at least one item is part of solution
+        let presolved = [];
+        for (let i=0; i<this.evaluations[this.currentRound].length; i++) { // get all indices of correct items
+            if (this.evaluations[this.currentRound][i]) {
+                presolved.push(i);
+            }
+        }
+        let presolvedGrid = []; // contains index of this grid for items which will be made to be part of solution
+        presolvedGrid.push(Math.floor(16 * Math.random()));
         // randomly generate items
         for (let i = 0; i < 16; i++) {
             let item = [];
             let itemJSON = {};
-            // for each attribute generate a random feature from those available and add it to item
-            for (let a = 0; a < this.attributes.length; a++) {
-                let attr = Object.keys(this.attributes[a]);
-                let itemattr = {};
-                itemattr[attr] = this.attributes[a][attr][Math.floor(this.attributes[a][attr].length * Math.random())];
-                item.push(itemattr);
-                itemJSON[attr] = itemattr[attr];
-            }
-            this.itemAttributes.push(item);
-            // if the generated item is part of solution, add its index to this.solution
-            if (this.evaluations[this.currentRound][getBooleanArrayIndexOfItem(item, this.attributes)]) {
-                for (let i = 0; i < this.attributes.length; i++) {
-
+            if (presolvedGrid.includes(i)) {
+                item = getItemFromBooleanArrayIndex(presolved[Math.floor(presolved.length * Math.random())], this.attributes);
+                for (let a=0; a<item.length; a++) {
+                    itemJSON[Object.keys(item[a])[0]] = Object.values(item[a])[0];
                 }
+            } else {
+                // for each attribute generate a random feature from those available and add it to item
+                for (let a = 0; a < this.attributes.length; a++) {
+                    let attr = Object.keys(this.attributes[a]);
+                    let itemattr = {};
+                    itemattr[attr] = this.attributes[a][attr][Math.floor(this.attributes[a][attr].length * Math.random())];
+                    item.push(itemattr);
+                    itemJSON[attr] = itemattr[attr];
+                }
+                this.itemAttributes.push(item);
+                // if the generated item is part of solution, add its index to this.solution
+            }
+            if (this.evaluations[this.currentRound][getBooleanArrayIndexOfItem(item, this.attributes)]) {
+                // for (let i = 0; i < this.attributes.length; i++) {
+
+                // }
+                console.log(i, ": ", item);
                 this.solution.push(i);
             }
             let shape = 0;
@@ -331,7 +349,6 @@ export default class MainGame extends Phaser.Scene {
             // end level
         }
         this.selection = [];
-        this.solution = [];
         console.log(this.expressions[this.currentRound]);
         this.expressionText.destroy();
         this.goal1 = this.expressions[this.currentRound][0];
@@ -404,7 +421,6 @@ export default class MainGame extends Phaser.Scene {
             ease: 'power2',
             duration: 600,
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
-            onComplete: () => this.arrangeGrid()
         });
 
         // TODO: display new expression
