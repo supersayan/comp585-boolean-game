@@ -58,14 +58,13 @@ export default class MainGame extends Phaser.Scene {
         this.selection = [];
         this.solution = [];
         this.goal1 = this.expressions[this.currentRound][0];
-        this.goal1.value = this.goal1[Object.keys(this.goal1)];
+        this.goal1.value = this.goal1[Object.keys(this.goal1)[0]];
         this.goal2 = this.expressions[this.currentRound][2];
-        this.goal2.value = this.goal2[Object.keys(this.goal2)];
+        this.goal2.value = this.goal2[Object.keys(this.goal2)[0]];
         if(this.expressions[this.currentRound][3] != undefined){
             this.goal3 = this.expressions[this.currentRound][4];
-            this.goal3.value = this.goal3[Object.keys(this.goal3)];
+            this.goal3.value = this.goal3[Object.keys(this.goal3)[0]];
         }
-        console.log(this.expressions[this.currentRound]);
         this.goal1sprite = this.add.sprite(20, 50, "attributes", getSprite(this.goal1.value));
         this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
         this.goal2sprite = this.add.sprite(120, 50, "attributes", getSprite(this.goal2.value));
@@ -350,6 +349,7 @@ export default class MainGame extends Phaser.Scene {
             // end level
         }
         this.selection = [];
+        console.log(this.expressions[this.currentRound]);
         this.expressionText.destroy();
         this.goal1 = this.expressions[this.currentRound][0];
         this.goal1.value = this.goal1[Object.keys(this.goal1)];
