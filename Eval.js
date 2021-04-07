@@ -41,7 +41,16 @@ class TreeNode {
     }
 }
 
+/**
+ * operator nodes are non-leaf nodes, they always have children
+ */
 class OperatorNode extends TreeNode {
+    /**
+     * creates a parent node with an operator
+     * @param {string} operator 
+     * @param {object array} children 
+     * [ TreeNode1, TreeNode2, ... ]
+     */
     constructor(operator, children) {
         if(!OPER.includes(operator))
             throw new Error("invalid operator");
@@ -55,10 +64,16 @@ class OperatorNode extends TreeNode {
         this._isBinary = isBinary;
     }
 
+    /**
+     * @returns {boolean} true if node has two children, false otherwise
+     */
     isBinary() {
         return this._isBinary;
     }
 
+    /**
+     * @returns {string} string representing the boolean expression of this node
+     */
     getString() {
         if (this.isBinary()) {
             return "(" + this.getChildren()[0].getString() + " " + this.getValue() + " " + this.getChildren()[1].getString() + ")";
@@ -101,6 +116,9 @@ class OperatorNode extends TreeNode {
     }
 }
 
+/**
+ * leaf nodes
+ */
 class FeatureNode extends TreeNode {
     /**
      * @param {string} attribute 
@@ -174,6 +192,8 @@ export function getBooleanArrayIndexOfItem(item, availableAttributes) {
     return recursiveBooleanArray(0, item, availableAttributes);
 }
 
+// make function to get item features from boolean array index
+
 /**
  * utility function
  * @param {integer} min 
@@ -189,20 +209,21 @@ function randomInt(max) {
  * @param {integer} numExpressions
  * @param {integer} numFeatures 
  * the number of features in each expression. should be >= 2
- * @param {object} availableAttributes 
+ * @param {object array} availableAttributes 
  * @param {string array} availableOperations 
  * @param {boolean} makeFeaturesDifferentAttributes
  * if true, every attribute is referenced in an expression at most once
+ * @param {integer} numNots
+ * if "NOT" is in availableOperations, constrain the number of NOTs to numNots. if -1 (default), make NOTs random with 50% for any node.
  * @param {boolean} repeat 
  * if true, include exactly two expressions with the same evalutaion
- * @returns {object}
+ * @returns {object} key: value
  * expressions: array of root nodes
  * evaluations: array of evaluation objects
  * repeat: two indices with the same evaluation
  */
-export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, makeFeaturesDifferentAttributes = false, repeat = false) {
+export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, makeFeaturesDifferentAttributes = false, numNots = -1, repeat = false) {
     //TODO: constrain number of NOTs
-    //TODO: return array of features
     
     let sum = 0;
     for (let a of availableAttributes) {
@@ -248,7 +269,7 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
         }
 
         // generate random trees with numFeatures leaves
-        let rootNode = treeGenerator(randFeatureNodes, useNot, availableAttributes, availableOperations);
+        let rootNode = treeGenerator(randFeatureNodes, availableAttributes, availableOperations, useNot, numNots);
         let evaluation = rootNode.evaluate(availableAttributes);
         // if(repeat === true) {
         //     while(expressionEvaluations.some(ee => objectEqual(ee, evaluation))) { // possible infinite loop
@@ -272,31 +293,62 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
 }
 
 /**
- * recursive function
+ * recursive function used to make trees
  * @param {object array} leafNodes
  * @param {boolean} useNot
  * if true, add 50% chance to make root node NOT operator
- * @param {object} availableAttributes 
+ * @param {object array} availableAttributes 
  * @param {object} availableOperations
  * @returns {object} root node of sub tree
  */
-function treeGenerator(leafNodes, useNot, availableAttributes, availableOperations) {
+function treeGenerator(leafNodes, availableAttributes, availableOperations, useNot, notsLeft = -1) {
     let rootNode;
+    let not = false; //(useNot && ((notsLeft === -1 && randomInt(2) === 0) || (notsLeft > 0 && randomInt(leafNodes.length * 2 - 1) < notsLeft)));
+    let leftNots, rightNots;
+    if (useNot) {
+        if (notsLeft < 0) {
+            if (randomInt(2) === 0) {
+                not = true;
+            }
+            leftNots, rightNots = -1;
+        } else {
+            if (randomInt(leafNodes.length * 2 - 1) < notsLeft) {
+                not = true;
+                notsLeft--;
+            }
+            // leftNots = randomInt(notsLeft + 1); // need to use leftLeaves length, otherwise some nots may never be used
+            // rightNots = notsLeft - leftNots;
+        }
+    }
     if (leafNodes.length === 0) {
         throw new Error("no leaf nodes specified");
     } else if (leafNodes.length === 1) {
         rootNode = leafNodes[0];
     } else {
+        // TODO: modify random int generated to be more likely to cut near the center
         let op = availableOperations[randomInt(availableOperations.length)];
         let cut = 1 + randomInt(leafNodes.length - 1);
         let leftLeaves = leafNodes.slice(0, cut);
         let rightLeaves = leafNodes.slice(cut);
-        let leftRoot = treeGenerator(leftLeaves, useNot, availableAttributes, availableOperations);
-        let rightRoot = treeGenerator(rightLeaves, useNot, availableAttributes, availableOperations);
+        // let r = randomInt(notsLeft + 1);
+        // leftNots = (r > leftLeaves.length * 2 - 1) ? leftLeaves.length * 2 - 1 : r;
+        // rightNots = notsLeft - leftNots;
+        if (notsLeft >= leafNodes.length * 2 - 2) {
+            leftNots = leftLeaves.length * 2 - 1;
+            rightNots = rightLeaves.length * 2 - 1;
+        } else {
+            do {
+                let r = randomInt(notsLeft + 1);
+                leftNots = (r > leftLeaves.length * 2 - 1) ? leftLeaves.length * 2 - 1 : r;
+            } while (notsLeft - leftNots > rightLeaves.length * 2 - 1); // inefficient
+            rightNots = notsLeft - leftNots;
+        }
+        let leftRoot = treeGenerator(leftLeaves, availableAttributes, availableOperations, useNot, leftNots);
+        let rightRoot = treeGenerator(rightLeaves, availableAttributes, availableOperations, useNot, rightNots);
         rootNode = new OperatorNode(op, [leftRoot, rightRoot]);
     }
-    if (useNot && randomInt(2) === 0) { // 50% chance
-        rootNode = new OperatorNode("NOT", [rootNode])
+    if (not) {
+        rootNode = new OperatorNode("NOT", [rootNode]);
     }
     return rootNode;
 }
@@ -328,7 +380,7 @@ function objectEqual(object1, object2) {
 // ]
 // // // let f = new FeatureNode("COLOR", "GREEN");
 // // // console.log(f.evaluate(aa));
-// let e = createUniqueExpressions(10, 2, aa, ["AND", "OR"], true);
+// let e = createUniqueExpressions(10, 2, aa, ["AND", "OR", "NOT"], true, 1);
 // let item = [
 //     {SHAPE: "TRIANGLE"},
 //     {COLOR: "BLUE"}
