@@ -35,6 +35,7 @@ export default class MainGame extends Phaser.Scene {
         //new things for the display
         this.goal1;
         this.goal2;
+        this.goal3;
 
         this.circles = new Array(16);
 
@@ -60,7 +61,11 @@ export default class MainGame extends Phaser.Scene {
         this.goal1.value = this.goal1[Object.keys(this.goal1)];
         this.goal2 = this.expressions[this.currentRound][2];
         this.goal2.value = this.goal2[Object.keys(this.goal2)];
-        console.log(this.goal1.value);
+        if(this.expressions[this.currentRound][3] != undefined){
+            this.goal3 = this.expressions[this.currentRound][4];
+            this.goal3.value = this.goal3[Object.keys(this.goal3)];
+        }
+        console.log(this.expressions[this.currentRound]);
         this.goal1sprite = this.add.sprite(20, 50, "attributes", getSprite(this.goal1.value));
         this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
         this.goal2sprite = this.add.sprite(120, 50, "attributes", getSprite(this.goal2.value));
@@ -69,6 +74,14 @@ export default class MainGame extends Phaser.Scene {
         this.goal2sprite.setScale(0.4);
         this.goal2sprite.depth = 1;
         this.expressionText.depth = 1;
+
+        if(this.expressions[this.currentRound][3] != undefined){
+            this.goal3sprite = this.add.sprite(220,50, "attributes", getSprite(this.goal3.value));
+            this.expressionText2 = this.add.text(140, 30, this.expressions[this.currentRound][3], fontStyle2);
+            this.goal3sprite.setScale(0.4);
+            this.goal3sprite.depth = 1;
+            this.expressionText2.depth = 1;
+        }
         this.win = false;
 
         // generates selection circles
@@ -325,10 +338,22 @@ export default class MainGame extends Phaser.Scene {
         this.goal1.value = this.goal1[Object.keys(this.goal1)];
         this.goal2 = this.expressions[this.currentRound][2];
         this.goal2.value = this.goal2[Object.keys(this.goal2)];
+        if(this.expressions[this.currentRound][3] != undefined){
+            this.goal3 = this.expressions[this.currentRound][4];
+            this.goal3.value = this.goal3[Object.keys(this.goal3)];
+        }
         console.log(this.goal1.value);
         this.goal1sprite.setFrame(getSprite(this.goal1.value));
         this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
         this.goal2sprite.setFrame(getSprite(this.goal2.value));
+
+        if(this.expressions[this.currentRound][3] != undefined){
+            this.goal3sprite = this.add.sprite(220,50, "attributes", getSprite(this.goal3.value));
+            this.expressionText2 = this.add.text(140, 30, this.expressions[this.currentRound][3], fontStyle2);
+            this.goal3sprite.setScale(0.4);
+            this.goal3sprite.depth = 1;
+            this.expressionText2.depth = 1;
+        }
         this.win = false;
         
 
@@ -545,10 +570,10 @@ const pickLevelParameters = {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
-            //{"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]}
+            {"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]}
         ],
         operators: ["AND"],
-        numFeatures: 2,
+        numFeatures: 3,
         numExpressions: 10,
         makeFeaturesDifferentAttributes: true,
     },
