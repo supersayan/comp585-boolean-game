@@ -192,7 +192,34 @@ export function getBooleanArrayIndexOfItem(item, availableAttributes) {
     return recursiveBooleanArray(0, item, availableAttributes);
 }
 
-// make function to get item features from boolean array index
+/**
+ * 
+ * @param {integer} index 
+ * @param {object array} availableAttributes 
+ * @returns the item (object array) specified by a given index in the boolean array outputted by evaluation
+ */
+export function getItemFromBooleanArrayIndex(index, availableAttributes) {
+    let attrIntervals = [];
+    for (let a=0; a<availableAttributes.length; a++) {
+        attrIntervals.push(1);
+    }
+    for (let a=availableAttributes.length-1; a>=0; a--) {
+        for (let b=a+1; b<availableAttributes.length; b++) {
+            attrIntervals[a] *= Object.values(availableAttributes[b])[0].length;
+        }
+    }
+    // console.log(attrIntervals);
+    let item = [];
+    for (let a=0; a<availableAttributes.length; a++) {
+        let itemAttr = {};
+        let i = Math.floor(index / attrIntervals[a]);
+        index %= attrIntervals[a];
+        itemAttr[Object.keys(availableAttributes[a])[0]] = Object.values(availableAttributes[a])[0][i];
+        item.push(itemAttr);
+    }
+    // console.log(item);
+    return item;
+}
 
 /**
  * utility function
@@ -377,15 +404,20 @@ function objectEqual(object1, object2) {
 // let aa = [
 //     {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
 //     {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+//     {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+//     {"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
 // ]
 // // // let f = new FeatureNode("COLOR", "GREEN");
 // // // console.log(f.evaluate(aa));
 // let e = createUniqueExpressions(10, 2, aa, ["AND", "OR", "NOT"], true, 1);
 // let item = [
 //     {SHAPE: "TRIANGLE"},
-//     {COLOR: "BLUE"}
+//     {COLOR: "BLUE"},
+//     {PATTERN: "SPOTTED"},
+//     {BORDER: "LIGHTBLUE"},
 // ]
 // // console.log(getBooleanArrayIndexOfItem(item, aa));
+// console.log(getItemFromBooleanArrayIndex(getBooleanArrayIndexOfItem(item, aa), aa));
 // for (let i=0; i<10; i++) {
 //     console.log(e.strings[i]);
 //     console.log(e.evaluations[i]);
