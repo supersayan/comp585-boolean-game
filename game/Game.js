@@ -355,13 +355,6 @@ export default class MainGame extends Phaser.Scene {
             this.expressionText2.depth = 1;
         }
         this.win = false;
-        
-
-        let children = this.items.getChildren();
-        children.forEach((child) => {
-            child.setInteractive();
-            child.on('gameobjectdown', this.selectItem, this)
-        });
 
         //this.input.on('gameobjectdown', this.selectItem, this);
         this.submitText.setInteractive({ useHandCursor: false});   
@@ -375,7 +368,34 @@ export default class MainGame extends Phaser.Scene {
             ease: 'power2',
             duration: 600,
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
-            onComplete: () => this.arrangeGrid()
+            onComplete: () => {
+                this.arrangeGrid()
+                this.winText.setAlpha(0);
+                let children = this.items.getChildren();
+                console.log(children)
+                children.forEach((child) => {
+                    child.setInteractive();
+                    child.on('gameobjectdown', this.selectItem, this)
+                });
+                this.submitText.once('pointerdown', () => {
+                    this.tweens.add({
+                        targets: [this.submitText, this.rect],
+                        alpha: {start: 1, to: 0.75},
+                        y: '+=5',
+                        ease: 'Elastic.out',
+                        duration: 100,
+                        onComplete: () => {
+                            this.tweens.add({
+                                targets:this.winText,
+                                alpha: {start: 0, to:1}
+                            
+                            })
+                            this.submitText.disableInteractive();
+                        }
+                    })
+                    this.submitSelection()
+                }, this)
+            }
         });
 
         this.tweens.add({
@@ -439,6 +459,9 @@ export default class MainGame extends Phaser.Scene {
                             //this.scene.start('MainGame');
                             if (counter == 0)
                                 this.newRound();
+                            else {
+                                this.input.once('gameobjectdown', this.selectItem, this);
+                            }
                             counter++;
                         } else if (pointer.rightButtonDown()) {
                             this.input.once('gameobjectdown', this.selectItem, this);
