@@ -1,4 +1,9 @@
 /**
+ * @typedef {Object.<string, string>} AttributeFeature
+ * @typedef {Object.<string, string[]>} AttributeFeatureArray
+ */
+
+/**
  * every operation
  */
 export const OPER = ["AND", "OR", "NOT"]
@@ -17,6 +22,12 @@ export const ATTR = {
  * node for constructing expression trees
  */
 class TreeNode {
+    /**
+     * 
+     * @param {string} value 
+     * @param {Object[]} children 
+     * @param {string} nodetype 
+     */
     constructor(value, children, nodetype) {
         this._value = value;
         this._children = children;
@@ -48,7 +59,7 @@ class OperatorNode extends TreeNode {
     /**
      * creates a parent node with an operator
      * @param {string} operator 
-     * @param {object array} children 
+     * @param {Object[]} children 
      * [ TreeNode1, TreeNode2, ... ]
      */
     constructor(operator, children) {
@@ -82,6 +93,11 @@ class OperatorNode extends TreeNode {
         }
     }
 
+    /**
+     * 
+     * @param {AttributeFeatureArray[]} availableAttributes 
+     * @returns 
+     */
     evaluate(availableAttributes) {
         let evaluatedChildren = [];
         for(let c=0; c<this.getChildren().length; c++) {
@@ -114,6 +130,14 @@ class OperatorNode extends TreeNode {
             return [this.getValue()].concat(this.getChildren()[0].getExpression());
         }
     }
+
+    clone() {
+        let newChildren = [];
+        for (let i=0; i<this.getChildren().length; i++) {
+            newChildren.push(this.getChildren()[i].clone());
+        }
+        return new OperatorNode(this.getValue(), newChildren);
+    }
 }
 
 /**
@@ -130,9 +154,9 @@ class FeatureNode extends TreeNode {
     }
 
     /**
-     * returns an object { Attribute: Feature }
-     * @param {object array} availableAttributes
-     * @returns an array of objects of available attributes as keys and available features as values
+     * returns the boolean array for this node
+     * @param {AttributeFeatureArray[]} availableAttributes
+     * @returns {boolean[]} boolean array for agreement of each possible item
      */
     evaluate(availableAttributes) {
         let booleanArray = [];
@@ -162,21 +186,34 @@ class FeatureNode extends TreeNode {
         return booleanArray;
     }
 
+    /**
+     * 
+     * @returns {Object[]} a single value array with object
+     */
     getExpression() {
         let res = {};
         res[this.attribute] = this.getValue();
         return [res];
     }
 
+    /**
+     * @returns {string}
+     */
     getString() {
         return this.getValue();
+    }
+
+    clone() {
+        return new FeatureNode(this.attribute, this.getValue());
     }
 }
 
 /**
  * 
- * @param {object} item 
- * @param {object array} availableAttributes 
+ * @param {Object} item 
+ * @param {string[]} Object.keys(item) - item attributes
+ * @param {string[]} Object.values(item) - item features
+ * @param {AttributeFeatureArray[]} availableAttributes
  * @returns index of the feature combination in the expected generated boolean array
  */
 export function getBooleanArrayIndexOfItem(item, availableAttributes) {
@@ -194,9 +231,9 @@ export function getBooleanArrayIndexOfItem(item, availableAttributes) {
 
 /**
  * 
- * @param {integer} index 
- * @param {object array} availableAttributes 
- * @returns the item (object array) specified by a given index in the boolean array outputted by evaluation
+ * @param {number} index 
+ * @param {AttributeFeatureArray[]} availableAttributes
+ * @returns {AttributeFeature[]} the item (object array) specified by a given index in the boolean array outputted by evaluation
  */
 export function getItemFromBooleanArrayIndex(index, availableAttributes) {
     let attrIntervals = [];
@@ -223,8 +260,8 @@ export function getItemFromBooleanArrayIndex(index, availableAttributes) {
 
 /**
  * utility function
- * @param {integer} min 
- * @param {integer} max 
+ * @param {number} min 
+ * @param {number} max 
  * @returns integer from 0 inclusive to max exclusive
  */
 function randomInt(max) {
@@ -232,25 +269,27 @@ function randomInt(max) {
 }
 
 /**
- * create and returns unique expression trees
- * @param {integer} numExpressions
- * @param {integer} numFeatures 
- * the number of features in each expression. should be >= 2
- * @param {object array} availableAttributes 
- * @param {string array} availableOperations 
- * @param {boolean} makeFeaturesDifferentAttributes
- * if true, every attribute is referenced in an expression at most once
- * @param {integer} numNots
- * if "NOT" is in availableOperations, constrain the number of NOTs to numNots. if -1 (default), make NOTs random with 50% for any node.
- * @param {boolean} repeat 
- * if true, include exactly two expressions with the same evalutaion
- * @returns {object} key: value
- * expressions: array of root nodes
- * evaluations: array of evaluation objects
- * repeat: two indices with the same evaluation
+ * create and return unique expression trees and their evaluations and strings
+ * @param {number} numExpressions - the number of expressions to be returned
+ * @param {number} numFeatures - the number of features in each expression. should be >= 2
+ * @param {AttributeFeatureArray[]} availableAttributes
+ * @param {string[]} availableOperations 
+ * @param {boolean} allowNullSet - if true, every attribute is referenced in an expression at most once
+ * @param {number|number[]} numNots - if "NOT" is in availableOperations, constrain the number of NOTs to numNots. if -1 (default), make NOTs random with 50% for any node.
+ * if an array, pick a random number frmo it for each expression.
+ * @param {boolean} repeat - if true, include exactly two expressions with the same evalutaion.
+ * 
+ * @typedef {Object} Expressions
+ * @property {Object[]} rootNodes
+ * @property {(AttributeFeature|string)[][]} expressions - an array of {attribute:feature} objects and string in the order to be displayed
+ * @property {boolean[][]} evaluations
+ * @property {string[]} strings
+ * @property {number[][]} repeat - if repeat is true, the two indices for the equivalent expressions
+ * @returns {Expressions}
  */
-export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, makeFeaturesDifferentAttributes = false, numNots = -1, repeat = false) {
-    //TODO: constrain number of NOTs
+export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, allowNullSet = true, numNots = -1, repeat = false) {
+    //TODO: change makeFeaturesDifferentAttributes to allowNullSet
+    //TODO: allow numNots to be an array of possible values
     
     let sum = 0;
     for (let a of availableAttributes) {
@@ -259,56 +298,175 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
     if (numFeatures > sum) {
         throw new Error("numFeatures cannot be larger than number of available features");
     }
-
-    if (makeFeaturesDifferentAttributes && (numFeatures > availableAttributes.length)) {
+    if (availableAttributes.length < 2) {
+        throw new Error("must have at least two attributes");
+    }
+    if (repeat && numExpressions < 1) {
+        throw new Error("if repeat is true, numExpressions must be >= 2");
+    }
+    if (!allowNullSet && (numFeatures > availableAttributes.length)) {
         throw new Error("if no null solution, numFeatures must be <= number of available attributes");
     }
 
-    let expressionRootNodes = [];
-    let expressionArrays = [];
-    let expressionEvaluations = [];
-    let expressionStrings = [];
+    let expressionRootNodes = [], expressionArrays = [], expressionEvaluations = [], expressionStrings = [];
 
     let useNot = false;
     if (availableOperations.includes("NOT")) {
         useNot = true;
         availableOperations = availableOperations.filter(o => o != "NOT"); //remove "NOT" from array
     }
+    if (availableOperations.length === 0) {
+        throw new Error("must have at least one binary operation (AND/OR)");
+    }
 
-    // if (repeat)
-    //     numExpressions--;
+    // if repeat, make only the first n-1 expressions unique, so the last can be the same
+    // store the repeated root node so it can be shuffled in later
+    let repeatIndex1 = randomInt(numExpressions - 1), repeatIndex2 = numExpressions - 1;
+    let repeatRoot;
+    if (repeat) {
+        numExpressions--;
+    }
+
+    // create each expression
     for (let e = 0; e < numExpressions; e++) {
-        // create random feature nodes
-        let randAttributes = [];
-        let randFeatures = [];
-        let randFeatureNodes = [];
-        for (let f=0; f<numFeatures; f++) {
-            do {
-                // select random attribute from availableAttributes.keys()
-                let r = randomInt(availableAttributes.length);
-                var rand_at = Object.keys(availableAttributes[r])[0];
-                // select random feature from availableAttributes[rand_at]
-                var rand_ft = availableAttributes[r][rand_at][randomInt(availableAttributes[r][rand_at].length)];
-            } while (randFeatures.includes(rand_ft) || (makeFeaturesDifferentAttributes && randAttributes.includes(rand_at))) // if numFeatures > number of features in availableAttributes, this is infinite loop
-            randAttributes.push(rand_at);
-            randFeatures.push(rand_ft);
-            randFeatureNodes.push(new FeatureNode(rand_at, rand_ft));
-        }
+        let rootNode;
+        let evaluation;
+        let isUnique;
+        do {
+            // create random feature nodes
+            let randAttributes = [];
+            let randFeatures = [];
+            let randFeatureNodes = [];
+            for (let f=0; f<numFeatures; f++) {
+                do {
+                    // select random attribute from availableAttributes.keys()
+                    let r = randomInt(availableAttributes.length);
+                    var rand_at = Object.keys(availableAttributes[r])[0];
+                    // select random feature from availableAttributes[rand_at]
+                    var rand_ft = availableAttributes[r][rand_at][randomInt(availableAttributes[r][rand_at].length)];
+                } while (randFeatures.includes(rand_ft)) // if numFeatures > number of features in availableAttributes, this is infinite loop
+                if (!randAttributes.includes(rand_at)) {
+                    randAttributes.push(rand_at);
+                }
+                randFeatures.push(rand_ft);
+                randFeatureNodes.push(new FeatureNode(rand_at, rand_ft));
+            }
 
-        // generate random trees with numFeatures leaves
-        let rootNode = treeGenerator(randFeatureNodes, availableAttributes, availableOperations, useNot, numNots);
-        let evaluation = rootNode.evaluate(availableAttributes);
-        // if(repeat === true) {
-        //     while(expressionEvaluations.some(ee => objectEqual(ee, evaluation))) { // possible infinite loop
-        //         rootNode = treeGenerator(numFeatures, useNot, availableAttributes, availableOperations);
-        //         evaluation = rootNode.evaluate(availableAttributes);
-        //     }
-        // }
+            // if numNots is an array instead of a number, choose a random number from it
+            let nots = numNots;
+            if (Array.isArray(numNots)) {
+                nots = numNots[Math.floor(Math.random() * numNots.length)];
+            }
+            // generate random trees with numFeatures leaves
+            rootNode = treeGenerator(randFeatureNodes, availableAttributes, availableOperations, useNot, nots);
+            evaluation = rootNode.evaluate(availableAttributes);
+
+            // check for uniqueness of the newly generated expression before pushing it
+            // if there are no other expressions already generated with the same evaluation, it is unique
+            isUnique = !expressionEvaluations.some( (ev) => {
+                for (let i=0; i<ev.length; i++) {
+                    if (ev[i] != evaluation[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+            
+        } while(!isUnique || (!allowNullSet && !evaluation.some(Boolean))); // if the expression is not unique or is a null set (is null sets aren't allowed), make another one
 
         expressionRootNodes.push(rootNode);
         expressionArrays.push(rootNode.getExpression());
         expressionEvaluations.push(evaluation);
         expressionStrings.push(rootNode.getString());
+
+        if (repeat && e === repeatIndex1) {
+            // transform the tree according to a boolean algebra law
+            // proof of concept: DeMorgan's Law
+            // NOT (A AND B) = (NOT A) OR (NOT B)
+            // NOT (A OR B) = (NOT A) AND (NOT B)
+            let children;
+            // deep copy
+            repeatRoot = rootNode.clone();
+            if (repeatRoot.getValue() === "NOT") {
+                repeatRoot = repeatRoot.getChildren()[0];
+                if (repeatRoot.getValue() === "AND") { // switch AND to OR or OR to AND
+                    repeatRoot = new OperatorNode("OR", repeatRoot.getChildren());
+                } else if (repeatRoot.getValue() === "OR") {
+                    repeatRoot = new OperatorNode("AND", repeatRoot.getChildren());
+                }
+                children = repeatRoot.getChildren();
+            } else {
+                children = repeatRoot.getChildren();
+                if (repeatRoot.getValue() === "AND") { // switch AND to OR or OR to AND
+                    repeatRoot = new OperatorNode("OR", repeatRoot.getChildren());
+                } else if (repeatRoot.getValue() === "OR") {
+                    repeatRoot = new OperatorNode("AND", repeatRoot.getChildren());
+                }
+                repeatRoot = new OperatorNode("NOT", [repeatRoot]);
+            }
+            for (let i=0; i<children.length; i++) {
+                if (children[i].getValue() === "NOT") {
+                    children[i] = children[i].getChildren()[0];
+                } else {
+                    children[i] = new OperatorNode("NOT", [children[i]]);
+                }
+            }
+        }
+    }
+
+    if(repeat) {
+        // shuffle in the repeat root node and save their indices
+        expressionRootNodes.push(repeatRoot);
+        expressionArrays.push(repeatRoot.getExpression());
+        expressionEvaluations.push(repeatRoot.evaluate(availableAttributes));
+        expressionStrings.push(repeatRoot.getString());
+
+        let currentIndex = expressionRootNodes.length, tempValue, randIndex;
+
+        while (0 !== currentIndex) {
+            randIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // if the one of the indices being swapped is a repeatIndex, change those as well
+            if (currentIndex === repeatIndex1) {
+                if (randIndex === repeatIndex2) { //swap
+                    tempValue = repeatIndex1;
+                    repeatIndex1 = repeatIndex2;
+                    repeatIndex2 = tempValue;
+                } else {
+                    repeatIndex1 = randIndex;
+                }
+            } else if (currentIndex === repeatIndex2) {
+                if (randIndex === repeatIndex1) { //swap
+                    tempValue = repeatIndex1;
+                    repeatIndex1 = repeatIndex2;
+                    repeatIndex2 = tempValue;
+                } else {
+                    repeatIndex2 = randIndex;
+                }
+            } else if (randIndex === repeatIndex1) {
+                repeatIndex1 = currentIndex;
+            } else if (randIndex === repeatIndex2) {
+                repeatIndex2 = currentIndex;
+            }
+
+            // shuffle expressionRootNodes, expressionArrays, expressionEvaluations, expressionStrings
+            tempValue = expressionRootNodes[currentIndex];
+            expressionRootNodes[currentIndex] = expressionRootNodes[randIndex];
+            expressionRootNodes[randIndex] = tempValue;
+
+            tempValue = expressionArrays[currentIndex];
+            expressionArrays[currentIndex] = expressionArrays[randIndex];
+            expressionArrays[randIndex] = tempValue;
+
+            tempValue = expressionEvaluations[currentIndex];
+            expressionEvaluations[currentIndex] = expressionEvaluations[randIndex];
+            expressionEvaluations[randIndex] = tempValue;
+
+            tempValue = expressionStrings[currentIndex];
+            expressionStrings[currentIndex] = expressionStrings[randIndex];
+            expressionStrings[randIndex] = tempValue;
+        }
     }
 
     let res = {};
@@ -316,17 +474,20 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
     res["expressions"] = expressionArrays;
     res["evaluations"] = expressionEvaluations;
     res["strings"] = expressionStrings;
+    if (repeat) {
+        res["repeat"] = [repeatIndex1, repeatIndex2].sort((a, b) => a - b); // sort in ascending order
+    }
     return res;
 }
 
 /**
  * recursive function used to make trees
- * @param {object array} leafNodes
+ * @param {Object[]} leafNodes
  * @param {boolean} useNot
  * if true, add 50% chance to make root node NOT operator
- * @param {object array} availableAttributes 
- * @param {object} availableOperations
- * @returns {object} root node of sub tree
+ * @param {AttributeFeatureArray[]} availableAttributes
+ * @param {string[]} availableOperations
+ * @returns {Object} root node of sub tree
  */
 function treeGenerator(leafNodes, availableAttributes, availableOperations, useNot, notsLeft = -1) {
     let rootNode;
@@ -382,8 +543,8 @@ function treeGenerator(leafNodes, availableAttributes, availableOperations, useN
 
 /**
  * utility function; checks shallow equality
- * @param {object} object1 
- * @param {object} object2 
+ * @param {Object} object1 
+ * @param {Object} object2 
  * @returns {boolean}
  */
 function objectEqual(object1, object2) {
@@ -409,7 +570,7 @@ function objectEqual(object1, object2) {
 // ]
 // // // let f = new FeatureNode("COLOR", "GREEN");
 // // // console.log(f.evaluate(aa));
-// let e = createUniqueExpressions(10, 2, aa, ["AND", "OR", "NOT"], true, 1);
+// let e = createUniqueExpressions(10, 2, aa, ["AND", "OR", "NOT"], true, [1, 2], true);
 // let item = [
 //     {SHAPE: "TRIANGLE"},
 //     {COLOR: "BLUE"},
@@ -420,6 +581,11 @@ function objectEqual(object1, object2) {
 // console.log(getItemFromBooleanArrayIndex(getBooleanArrayIndexOfItem(item, aa), aa));
 // for (let i=0; i<10; i++) {
 //     console.log(e.strings[i]);
-//     console.log(e.evaluations[i]);
-//     console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
+//     // console.log(e.evaluations[i]);
+//     // console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
 // }
+// // console.log(e.repeat);
+// console.log(e.strings[e.repeat[0]]);
+// console.log(e.evaluations[e.repeat[0]]);
+// console.log(e.strings[e.repeat[1]]);
+// console.log(e.evaluations[e.repeat[1]]);

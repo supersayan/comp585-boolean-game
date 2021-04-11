@@ -16,7 +16,7 @@ export default class MainGame extends Phaser.Scene {
         let levelParams = pickLevelParameters[this.level];
         this.attributes = levelParams.attributes;
         this.numRounds = levelParams.numExpressions;
-        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.makeFeaturesDifferentAttributes);
+        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
@@ -351,6 +351,7 @@ export default class MainGame extends Phaser.Scene {
         }
         this.selection = [];
         console.log(this.expressions[this.currentRound]);
+        console.log(this.strings[this.currentRound]);
         this.expressionText.destroy();
         this.goal1 = this.expressions[this.currentRound][0];
         this.goal1.value = this.goal1[Object.keys(this.goal1)];
@@ -434,7 +435,7 @@ export default class MainGame extends Phaser.Scene {
         let levelParams = pickLevelParameters[this.level];
         this.attributes = levelParams.attributes;
         this.numRounds = levelParams.numExpressions;
-        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.makeFeaturesDifferentAttributes);
+        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet);
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
@@ -628,7 +629,9 @@ const pickLevelParameters = {
         operators: ["AND"],
         numFeatures: 2,
         numExpressions: 10,
-        makeFeaturesDifferentAttributes: true,
+        allowNullSet: false,
+        numNots: -1,
+        repeat: false,
     },
     2: {
         attributes: [
@@ -638,7 +641,9 @@ const pickLevelParameters = {
         operators: ["OR"],
         numFeatures: 2,
         numExpressions: 10,
-        makeFeaturesDifferentAttributes: false,
+        allowNullSet: false,
+        numNots: -1,
+        repeat: false,
     },
     3: {
         attributes: [
@@ -649,6 +654,48 @@ const pickLevelParameters = {
         operators: ["AND", "OR"],
         numFeatures: 3,
         numExpressions: 10,
-        makeFeaturesDifferentAttributes: false,
+        allowNullSet: false,
+        numNots: -1,
+        repeat: false,
+    },
+    4: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+        ],
+        operators: ["AND", "OR", "NOT"],
+        numFeatures: 2,
+        numExpressions: 10,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
+    5: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+        ],
+        operators: ["AND", "OR", "NOT"],
+        numFeatures: 3,
+        numExpressions: 10,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
+    6: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+            {"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
+        ],
+        operators: ["AND", "OR", "NOT"],
+        numFeatures: 3,
+        numExpressions: 10,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
     },
 }
