@@ -353,6 +353,16 @@ export default class MainGame extends Phaser.Scene {
         console.log(this.expressions[this.currentRound]);
         console.log(this.strings[this.currentRound]);
         this.expressionText.destroy();
+        if(this.goal3sprite == undefined){
+
+        } else {
+            this.goal3sprite.destroy();
+        }
+        if(this.expressionText2 == undefined){
+
+        } else {
+            this.expressionText2.destroy();
+        }
         this.goal1 = this.expressions[this.currentRound][0];
         this.goal1.value = this.goal1[Object.keys(this.goal1)];
         this.goal2 = this.expressions[this.currentRound][2];
