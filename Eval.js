@@ -125,9 +125,9 @@ class OperatorNode extends TreeNode {
 
     getExpression() {
         if (this.isBinary()) {
-            return this.getChildren()[0].getExpression().concat(this.getValue(), this.getChildren()[1].getExpression());
+            return ["("].concat(this.getChildren()[0].getExpression(), this.getValue(), this.getChildren()[1].getExpression(), [")"]);
         } else {
-            return [this.getValue()].concat(this.getChildren()[0].getExpression());
+            return ["("].concat([this.getValue()], this.getChildren()[0].getExpression(), [")"]);
         }
     }
 
@@ -288,8 +288,6 @@ function randomInt(max) {
  * @returns {Expressions}
  */
 export function createUniqueExpressions(numExpressions, numFeatures, availableAttributes, availableOperations, allowNullSet = true, numNots = -1, repeat = false) {
-    //TODO: change makeFeaturesDifferentAttributes to allowNullSet
-    //TODO: allow numNots to be an array of possible values
     
     let sum = 0;
     for (let a of availableAttributes) {
@@ -298,10 +296,16 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
     if (numFeatures > sum) {
         throw new Error("numFeatures cannot be larger than number of available features");
     }
+    if (numFeatures < 2) {
+        throw new Error("invalid number of features");
+    }
     if (availableAttributes.length < 2) {
         throw new Error("must have at least two attributes");
     }
-    if (repeat && numExpressions < 1) {
+    if (numExpressions < 1 || numExpressions > 15) {
+        throw new Error("invalid number of expressions");
+    }
+    if (repeat && numExpressions < 2) {
         throw new Error("if repeat is true, numExpressions must be >= 2");
     }
     if (!allowNullSet && (numFeatures > availableAttributes.length)) {
