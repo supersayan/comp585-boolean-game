@@ -19,6 +19,8 @@ export default class MainGame extends Phaser.Scene {
         this.expOperators;
         this.expSize;
         this.expCompact;
+        this.parentheses;
+        this.parenthesesLength;
         this.strings = evalOutput.strings;
         this.items; // phaser group
         this.itemsBorders;
@@ -71,7 +73,33 @@ export default class MainGame extends Phaser.Scene {
         for(let i = 0; i<this.expOperators.length; i++){
             this.expCompact[2*i + 1] = this.expOperators[i];
         }
-        console.log(this.expCompact);
+        this.parenthesesLength = 6;
+        this.parentheses = new Array(this.parenthesesLength);
+        let j = 0;
+        let k = 0;
+        let par = [];
+        for(let i = 0; i<this.expressions[this.currentRound].length; i++){
+            if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")"){
+                par.push(this.expressions[this.currentRound][i]);
+            } else if (this.expressions[this.currentRound][i] == "AND" || this.expressions[this.currentRound][i] == "OR"){
+                k++;
+                if (k == 2){
+                    this.parentheses[j] = par;
+                    j++;
+                    par = [];
+                }
+            } else {
+                this.parentheses[j] = par;
+                j++;
+                par = [];
+            }
+            if(i == this.expressions[this.currentRound].length - 1){
+                this.parentheses[j] = par;
+            }
+        }
+        console.log(this.expressions[this.currentRound]);
+        console.log(this.parentheses);
+        console.log(this.level);
         console.log(Object.keys(this.expressions[this.currentRound][0]));
         this.add.image(400, 300, 'background');
 
@@ -89,9 +117,51 @@ export default class MainGame extends Phaser.Scene {
             this.goal4 = this.expCompact[6];
             this.goal4.value = this.goal4[Object.keys(this.goal4)[0]];
         }
-        this.goal1sprite = this.add.sprite(20, 50, "attributes", getSprite(this.goal1.value));
-        this.expressionText = this.add.text(40, 30, this.expCompact[1], fontStyle2);
-        this.goal2sprite = this.add.sprite(120, 50, "attributes", getSprite(this.goal2.value));
+        if(this.parentheses[0] == undefined){this.parentheses[0]=""};
+        if(this.parentheses[1] == undefined){this.parentheses[1]=""};
+        if(this.parentheses[2] == undefined){this.parentheses[2]=""};
+        if(this.parentheses[3] == undefined){this.parentheses[3]=""};
+        if(this.parentheses[4] == undefined){this.parentheses[4]=""};
+        if(this.parentheses[5] == undefined){this.parentheses[5]=""};
+        if(this.parentheses[0].length > 1){
+            this.parentheses[0] = this.parentheses[0].join();
+            this.parentheses[0] = this.parentheses[0].replace(',','');
+        }
+        if(this.parentheses[1].length > 1){
+            this.parentheses[1] = this.parentheses[1].join();
+            this.parentheses[1] = this.parentheses[1].replace(',','');
+        }
+        if(this.parentheses[2].length > 1){
+            this.parentheses[2] = this.parentheses[2].join();
+            this.parentheses[2] = this.parentheses[2].replace(',','');
+        }
+        if(this.parentheses[3].length > 1){
+            this.parentheses[3] = this.parentheses[3].join();
+            this.parentheses[3] = this.parentheses[3].replace(',','');
+        }
+        if(this.parentheses[4].length > 1){
+            this.parentheses[4] = this.parentheses[4].join();
+            this.parentheses[4] = this.parentheses[4].replace(',','');
+        }
+        if(this.parentheses[5].length > 1){
+            this.parentheses[5] = this.parentheses[5].join();
+            this.parentheses[5] = this.parentheses[5].replace(',','');
+        }
+        this.parentheses1 = this.add.text(0, 30, this.parentheses[0], fontStyle2);
+        this.parentheses2 = this.add.text(130, 30, this.parentheses[1], fontStyle2);
+        this.parentheses3 = this.add.text(200, 30, this.parentheses[2], fontStyle2);
+        this.parentheses4 = this.add.text(260, 30, this.parentheses[3], fontStyle2);
+        this.parentheses5 = this.add.text(340, 30, this.parentheses[4], fontStyle2);
+        this.parentheses6 = this.add.text(470, 30, this.parentheses[5], fontStyle2);
+        this.parentheses1.depth = 2;
+        this.parentheses2.depth = 2;
+        this.parentheses3.depth = 2;
+        this.parentheses4.depth = 2;
+        this.parentheses5.depth = 2;
+        this.parentheses6.depth = 2;
+        this.goal1sprite = this.add.sprite(50, 50, "attributes", getSprite(this.goal1.value));
+        this.expressionText = this.add.text(70, 30, this.expCompact[1], fontStyle2);
+        this.goal2sprite = this.add.sprite(180, 50, "attributes", getSprite(this.goal2.value));
         this.goal1sprite.setScale(0.4);
         this.goal1sprite.depth = 1;
         this.goal2sprite.setScale(0.4);
@@ -99,15 +169,15 @@ export default class MainGame extends Phaser.Scene {
         this.expressionText.depth = 1;
 
         if(this.expCompact[3] != undefined){
-            this.goal3sprite = this.add.sprite(220,50, "attributes", getSprite(this.goal3.value));
-            this.expressionText2 = this.add.text(140, 30, this.expCompact[3], fontStyle2);
+            this.goal3sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal3.value));
+            this.expressionText2 = this.add.text(230, 30, this.expCompact[3], fontStyle2);
             this.goal3sprite.setScale(0.4);
             this.goal3sprite.depth = 1;
             this.expressionText2.depth = 1;
         }
         if(this.expCompact[5] != undefined){
-            this.goal4sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal4.value));
-            this.expressionText3 = this.add.text(240, 30, this.expCompact[5], fontStyle2);
+            this.goal4sprite = this.add.sprite(380,50, "attributes", getSprite(this.goal4.value));
+            this.expressionText3 = this.add.text(300, 30, this.expCompact[5], fontStyle2);
             this.goal4sprite.setScale(0.4);
             this.goal4sprite.depth = 1;
             this.expressionText3.depth = 1;
@@ -396,6 +466,30 @@ export default class MainGame extends Phaser.Scene {
         for(let i = 0; i<this.expOperators.length; i++){
             this.expCompact[2*i + 1] = this.expOperators[i];
         }
+        this.parenthesesLength = 6;
+        this.parentheses = new Array(this.parenthesesLength);
+        let j = 0;
+        let k = 0;
+        let par = [];
+        for(let i = 0; i<this.expressions[this.currentRound].length; i++){
+            if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")"){
+                par.push(this.expressions[this.currentRound][i]);
+            } else if (this.expressions[this.currentRound][i] == "AND" || this.expressions[this.currentRound][i] == "OR"){
+                k++;
+                if (k == 2){
+                    this.parentheses[j] = par;
+                    j++;
+                    par = [];
+                }
+            } else {
+                this.parentheses[j] = par;
+                j++;
+                par = [];
+            }
+            if(i == this.expressions[this.currentRound].length - 1){
+                this.parentheses[j] = par;
+            }
+        }
         this.expressionText.destroy();
         if(this.goal3sprite == undefined){
 
@@ -430,20 +524,68 @@ export default class MainGame extends Phaser.Scene {
             this.goal4.value = this.goal4[Object.keys(this.goal4)];
         }
         // console.log(this.goal1.value);
+        if(this.parentheses[0] == undefined){this.parentheses[0]=""};
+        if(this.parentheses[1] == undefined){this.parentheses[1]=""};
+        if(this.parentheses[2] == undefined){this.parentheses[2]=""};
+        if(this.parentheses[3] == undefined){this.parentheses[3]=""};
+        if(this.parentheses[4] == undefined){this.parentheses[4]=""};
+        if(this.parentheses[5] == undefined){this.parentheses[5]=""};
+        if(this.parentheses[0].length > 1){
+            this.parentheses[0] = this.parentheses[0].join();
+            this.parentheses[0] = this.parentheses[0].replace(',','');
+        }
+        if(this.parentheses[1].length > 1){
+            this.parentheses[1] = this.parentheses[1].join();
+            this.parentheses[1] = this.parentheses[1].replace(',','');
+        }
+        if(this.parentheses[2].length > 1){
+            this.parentheses[2] = this.parentheses[2].join();
+            this.parentheses[2] = this.parentheses[2].replace(',','');
+        }
+        if(this.parentheses[3].length > 1){
+            this.parentheses[3] = this.parentheses[3].join();
+            this.parentheses[3] = this.parentheses[3].replace(',','');
+        }
+        if(this.parentheses[4].length > 1){
+            this.parentheses[4] = this.parentheses[4].join();
+            this.parentheses[4] = this.parentheses[4].replace(',','');
+        }
+        if(this.parentheses[5].length > 1){
+            this.parentheses[5] = this.parentheses[5].join();
+            this.parentheses[5] = this.parentheses[5].replace(',','');
+        }
+        this.parentheses1.destroy();
+        this.parentheses2.destroy();
+        this.parentheses3.destroy();
+        this.parentheses4.destroy();
+        this.parentheses5.destroy();
+        this.parentheses6.destroy();
+        this.parentheses1 = this.add.text(0, 30, this.parentheses[0], fontStyle2);
+        this.parentheses2 = this.add.text(130, 30, this.parentheses[1], fontStyle2);
+        this.parentheses3 = this.add.text(200, 30, this.parentheses[2], fontStyle2);
+        this.parentheses4 = this.add.text(260, 30, this.parentheses[3], fontStyle2);
+        this.parentheses5 = this.add.text(340, 30, this.parentheses[4], fontStyle2);
+        this.parentheses6 = this.add.text(470, 30, this.parentheses[5], fontStyle2);
+        this.parentheses1.depth = 2;
+        this.parentheses2.depth = 2;
+        this.parentheses3.depth = 2;
+        this.parentheses4.depth = 2;
+        this.parentheses5.depth = 2;
+        this.parentheses6.depth = 2;
         this.goal1sprite.setFrame(getSprite(this.goal1.value));
-        this.expressionText = this.add.text(40, 30, this.expCompact[1], fontStyle2);
+        this.expressionText = this.add.text(70, 30, this.expCompact[1], fontStyle2);
         this.goal2sprite.setFrame(getSprite(this.goal2.value));
 
         if(this.expCompact[3] != undefined){
-            this.goal3sprite = this.add.sprite(220,50, "attributes", getSprite(this.goal3.value));
-            this.expressionText2 = this.add.text(140, 30, this.expCompact[3], fontStyle2);
+            this.goal3sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal3.value));
+            this.expressionText2 = this.add.text(230, 30, this.expCompact[3], fontStyle2);
             this.goal3sprite.setScale(0.4);
             this.goal3sprite.depth = 1;
             this.expressionText2.depth = 1;
         }
         if(this.expCompact[5] != undefined){
-            this.goal4sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal4.value));
-            this.expressionText3 = this.add.text(240, 30, this.expCompact[5], fontStyle2);
+            this.goal4sprite = this.add.sprite(380,50, "attributes", getSprite(this.goal4.value));
+            this.expressionText3 = this.add.text(300, 30, this.expCompact[5], fontStyle2);
             this.goal4sprite.setScale(0.4);
             this.goal4sprite.depth = 1;
             this.expressionText3.depth = 1;
