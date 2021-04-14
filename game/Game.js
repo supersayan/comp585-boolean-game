@@ -51,6 +51,8 @@ export default class MainGame extends Phaser.Scene {
         this.highscore = 0;
         this.submitText;
         this.expressionText;
+
+        this.counter2 = 0
     }
 
     init (data) {
@@ -370,7 +372,7 @@ export default class MainGame extends Phaser.Scene {
     }
 
     newRound () {
-
+        this.counter2 = 0;  
         this.selection.forEach((e) => {
             this.circles[e].setVisible(false)
         })
@@ -462,13 +464,14 @@ export default class MainGame extends Phaser.Scene {
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
             onComplete: () => {
                 this.arrangeGrid()
-                this.winText.setAlpha(0);
                 let children = this.items.getChildren();
                 // console.log(children);
                 children.forEach((child) => {
                     child.setInteractive();
                     child.on('gameobjectdown', this.selectItem, this)
                 });
+                this.winText.setAlpha(0);
+               
                 this.tweens.add({
                     targets: [this.submitText, this.rect],
                     alpha: {start: 0.75, to: 1},
@@ -489,7 +492,7 @@ export default class MainGame extends Phaser.Scene {
                                 alpha: {start: 0, to:1}
                             
                             })
-                            this.submitText.disableInteractive();
+                            //this.submitText.disableInteractive();
                         }
                     })
                     this.submitSelection()
@@ -566,7 +569,8 @@ export default class MainGame extends Phaser.Scene {
                 ease: 'sine.inout',
                 onComplete: () => {
                     let counter = 0;
-                    this.input.on('pointerdown', (pointer) => {     
+                    let a = this.input.on('pointerdown', (pointer) => {
+                        console.log('counter1', counter)     
                         if (pointer.leftButtonDown()) { 
                             this.input.off('gameobjectdown', this.selectItem, this);
                             //this.scene.start('MainGame');
@@ -580,7 +584,7 @@ export default class MainGame extends Phaser.Scene {
                             this.input.once('gameobjectdown', this.selectItem, this);
                         }
                     }, this);
-
+                    a.off();
                 }
             });
         } else {
@@ -590,32 +594,33 @@ export default class MainGame extends Phaser.Scene {
             this.winText = this.loseText;
             this.winText.setColor('#FF0000');
             this.winText.setVisible(true);
-            let counter = 0;
 
-            this.input.on('pointerdown', (pointer) => {   
-                console.log('counter',counter)
-                if (counter > 0)
+
+            let b = this.input.on('pointerdown', (pointer) => {   
+                console.log('counter2',this.counter2)
+                if (this.counter2 > 0)
                     this.input.once('gameobjectdown', this.selectItem, this);
-                counter++;
+                this.counter2++;
             })
+            console.log(this.input)
             setTimeout( () => {            this.tweens.add({
                 targets: [this.submitText, this.rect],
                 alpha: {start: 0.75, to: 1},
                 y: '-=5',
                 ease: 'Elastic.out',
-                duration: 1000,
+                duration: 500,
                 })
 
                 this.tweens.add({
                     targets: [this.winText],
                     alpha: {start: 1, to: 0},
-                    duration: 1000,
+                    duration: 500,
                     onComplete: () => {
                         this.winText.setVisible(false);
                 }
             })
                 
-            }, 1000)
+            }, 500)
             
             //Timeout is needed so that the click to submit doesn't count for going to the main menu
             this.submitText.once('pointerdown', () => {
