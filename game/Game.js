@@ -479,7 +479,7 @@ export default class MainGame extends Phaser.Scene {
         let k = 0;
         let par = [];
         for(let i = 0; i<this.expressions[this.currentRound].length; i++){
-            if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")"){
+            if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")" || this.expressions[this.currentRound][i] == "NOT"){
                 par.push(this.expressions[this.currentRound][i]);
             } else if (this.expressions[this.currentRound][i] == "AND" || this.expressions[this.currentRound][i] == "OR"){
                 k++;
