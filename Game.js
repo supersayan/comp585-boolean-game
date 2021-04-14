@@ -101,7 +101,7 @@ export default class MainGame extends Phaser.Scene {
         console.log(this.parentheses);
         console.log(this.level);
         console.log(Object.keys(this.expressions[this.currentRound][0]));
-        this.add.image(400, 300, 'background');
+        // this.add.image(400, 300, 'background');
 
         this.selection = [];
         this.solution = [];
@@ -456,7 +456,8 @@ export default class MainGame extends Phaser.Scene {
             this.currentRound++;
         } else {
             // end level
-            this.newLevel();
+            // this.newLevel();
+            this.scene.start("LevelSelect");
         }
         this.selection = [];
         console.log(this.expressions[this.currentRound]);
@@ -660,13 +661,17 @@ export default class MainGame extends Phaser.Scene {
     }
 
     newLevel() {
-        if (this.level+1 in pickLevelParameters)
-            this.level++;
+        // if (this.level+1 in pickLevelParameters)
+        //     this.level++;
+        // else
+        //     this.scene.start('LevelSelect');
+        if (!(this.level in pickLevelParameters))
+            throw new Error("invalid level");
         this.currentRound = 0; // iterates every new round
         let levelParams = pickLevelParameters[this.level];
         this.attributes = levelParams.attributes;
         this.numRounds = levelParams.numExpressions;
-        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet);
+        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
@@ -900,7 +905,7 @@ const pickLevelParameters = {
         ],
         operators: ["AND"],
         numFeatures: 2,
-        numExpressions: 10,
+        numExpressions: 8,
         allowNullSet: false,
         numNots: -1,
         repeat: false,
@@ -912,7 +917,7 @@ const pickLevelParameters = {
         ],
         operators: ["OR"],
         numFeatures: 2,
-        numExpressions: 10,
+        numExpressions: 8,
         allowNullSet: false,
         numNots: -1,
         repeat: false,
@@ -925,7 +930,7 @@ const pickLevelParameters = {
         ],
         operators: ["AND", "OR"],
         numFeatures: 3,
-        numExpressions: 10,
+        numExpressions: 8,
         allowNullSet: false,
         numNots: -1,
         repeat: false,
@@ -938,7 +943,7 @@ const pickLevelParameters = {
         ],
         operators: ["AND", "OR", "NOT"],
         numFeatures: 2,
-        numExpressions: 10,
+        numExpressions: 8,
         allowNullSet: true,
         numNots: [1, 2],
         repeat: false,
@@ -951,7 +956,7 @@ const pickLevelParameters = {
         ],
         operators: ["AND", "OR", "NOT"],
         numFeatures: 3,
-        numExpressions: 10,
+        numExpressions: 8,
         allowNullSet: true,
         numNots: [1, 2],
         repeat: false,
@@ -965,7 +970,7 @@ const pickLevelParameters = {
         ],
         operators: ["AND", "OR", "NOT"],
         numFeatures: 3,
-        numExpressions: 10,
+        numExpressions: 8,
         allowNullSet: true,
         numNots: [1, 2],
         repeat: false,

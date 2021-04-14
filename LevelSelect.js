@@ -46,9 +46,9 @@ export default class LevelSelect extends Phaser.Scene {
     }
 
     levelClick(pointer) {
-
-        this.scene.start("MainGame", {level: Math.floor((pointer.x-100) / 100)});
-        console.log(Math.floor((pointer.x-100) / 100));
+        // console.log(pointer.x);
+        this.scene.start("MainGame", {level: Math.floor((pointer.x+50) / 100)});
+        // console.log(Math.floor((pointer.x-100) / 100));
     }
 }
 
