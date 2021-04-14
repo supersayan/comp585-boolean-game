@@ -79,7 +79,7 @@ export default class MainGame extends Phaser.Scene {
         let k = 0;
         let par = [];
         for(let i = 0; i<this.expressions[this.currentRound].length; i++){
-            if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")"){
+            if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")" || this.expressions[this.currentRound][i] == "NOT"){
                 par.push(this.expressions[this.currentRound][i]);
             } else if (this.expressions[this.currentRound][i] == "AND" || this.expressions[this.currentRound][i] == "OR"){
                 k++;
@@ -126,33 +126,39 @@ export default class MainGame extends Phaser.Scene {
         if(this.parentheses[0].length > 1){
             this.parentheses[0] = this.parentheses[0].join();
             this.parentheses[0] = this.parentheses[0].replace(',','');
+            this.parentheses[0] = this.parentheses[0].replace(',','');
         }
         if(this.parentheses[1].length > 1){
             this.parentheses[1] = this.parentheses[1].join();
+            this.parentheses[1] = this.parentheses[1].replace(',','');
             this.parentheses[1] = this.parentheses[1].replace(',','');
         }
         if(this.parentheses[2].length > 1){
             this.parentheses[2] = this.parentheses[2].join();
             this.parentheses[2] = this.parentheses[2].replace(',','');
+            this.parentheses[2] = this.parentheses[2].replace(',','');
         }
         if(this.parentheses[3].length > 1){
             this.parentheses[3] = this.parentheses[3].join();
+            this.parentheses[3] = this.parentheses[3].replace(',','');
             this.parentheses[3] = this.parentheses[3].replace(',','');
         }
         if(this.parentheses[4].length > 1){
             this.parentheses[4] = this.parentheses[4].join();
             this.parentheses[4] = this.parentheses[4].replace(',','');
+            this.parentheses[4] = this.parentheses[4].replace(',','');
         }
         if(this.parentheses[5].length > 1){
             this.parentheses[5] = this.parentheses[5].join();
+            this.parentheses[5] = this.parentheses[5].replace(',','');
             this.parentheses[5] = this.parentheses[5].replace(',','');
         }
         this.parentheses1 = this.add.text(0, 30, this.parentheses[0], fontStyle2);
         this.parentheses2 = this.add.text(130, 30, this.parentheses[1], fontStyle2);
         this.parentheses3 = this.add.text(200, 30, this.parentheses[2], fontStyle2);
-        this.parentheses4 = this.add.text(260, 30, this.parentheses[3], fontStyle2);
+        this.parentheses4 = this.add.text(280, 30, this.parentheses[3], fontStyle2);
         this.parentheses5 = this.add.text(340, 30, this.parentheses[4], fontStyle2);
-        this.parentheses6 = this.add.text(470, 30, this.parentheses[5], fontStyle2);
+        this.parentheses6 = this.add.text(460, 30, this.parentheses[5], fontStyle2);
         this.parentheses1.depth = 2;
         this.parentheses2.depth = 2;
         this.parentheses3.depth = 2;
@@ -176,8 +182,8 @@ export default class MainGame extends Phaser.Scene {
             this.expressionText2.depth = 1;
         }
         if(this.expCompact[5] != undefined){
-            this.goal4sprite = this.add.sprite(380,50, "attributes", getSprite(this.goal4.value));
-            this.expressionText3 = this.add.text(300, 30, this.expCompact[5], fontStyle2);
+            this.goal4sprite = this.add.sprite(440,50, "attributes", getSprite(this.goal4.value));
+            this.expressionText3 = this.add.text(360, 30, this.expCompact[5], fontStyle2);
             this.goal4sprite.setScale(0.4);
             this.goal4sprite.depth = 1;
             this.expressionText3.depth = 1;
@@ -235,9 +241,9 @@ export default class MainGame extends Phaser.Scene {
         // this.timerText2.setColor('#32CD32');
         // this.timerText = this.add.text(20, 90, this.goal11 + '   =', fontStyle2);
 
-        this.rect = this.add.rectangle(478, 55, 125, 50,0x55ffff);
+        this.rect = this.add.rectangle(568, 55, 125, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
-        this.submitText = this.add.text(410, 20, 'Submit', fontStyle);
+        this.submitText = this.add.text(500, 20, 'Submit', fontStyle);
         this.submitText.setInteractive({ useHandCursor: false});    
         this.submitText.once('pointerdown', () => {
             this.tweens.add({
@@ -257,10 +263,10 @@ export default class MainGame extends Phaser.Scene {
             })
             this.submitSelection()
         }, this)
-        this.winText = this.add.text(550, 20, 'You Won!', fontStyle);
+        this.winText = this.add.text(620, 20, 'You Won!', fontStyle);
 
         this.winText.setAlpha(0);
-        this.loseText = this.add.text(550, 20, 'You Lost...', fontStyle);
+        this.loseText = this.add.text(620, 20, 'You Lost...', fontStyle);
         
         //this.loseText.setVisible(false);
         this.loseText.setAlpha(0);
@@ -563,9 +569,9 @@ export default class MainGame extends Phaser.Scene {
         this.parentheses1 = this.add.text(0, 30, this.parentheses[0], fontStyle2);
         this.parentheses2 = this.add.text(130, 30, this.parentheses[1], fontStyle2);
         this.parentheses3 = this.add.text(200, 30, this.parentheses[2], fontStyle2);
-        this.parentheses4 = this.add.text(260, 30, this.parentheses[3], fontStyle2);
+        this.parentheses4 = this.add.text(280, 30, this.parentheses[3], fontStyle2);
         this.parentheses5 = this.add.text(340, 30, this.parentheses[4], fontStyle2);
-        this.parentheses6 = this.add.text(470, 30, this.parentheses[5], fontStyle2);
+        this.parentheses6 = this.add.text(460, 30, this.parentheses[5], fontStyle2);
         this.parentheses1.depth = 2;
         this.parentheses2.depth = 2;
         this.parentheses3.depth = 2;
@@ -584,8 +590,8 @@ export default class MainGame extends Phaser.Scene {
             this.expressionText2.depth = 1;
         }
         if(this.expCompact[5] != undefined){
-            this.goal4sprite = this.add.sprite(380,50, "attributes", getSprite(this.goal4.value));
-            this.expressionText3 = this.add.text(300, 30, this.expCompact[5], fontStyle2);
+            this.goal4sprite = this.add.sprite(440,50, "attributes", getSprite(this.goal4.value));
+            this.expressionText3 = this.add.text(360, 30, this.expCompact[5], fontStyle2);
             this.goal4sprite.setScale(0.4);
             this.goal4sprite.depth = 1;
             this.expressionText3.depth = 1;
