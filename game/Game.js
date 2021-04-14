@@ -4,11 +4,7 @@ export default class MainGame extends Phaser.Scene {
 
     constructor (str) {
 
-        if (str == undefined ) {
-            super('MainGame');
-        } else {
-            super(str)
-        }
+        super('MainGame');
         
         // with the level number, create the expressions, evaluations, strings
         this.level = 1;
@@ -55,6 +51,11 @@ export default class MainGame extends Phaser.Scene {
         this.highscore = 0;
         this.submitText;
         this.expressionText;
+    }
+
+    init (data) {
+        this.level = data.level;
+        this.newLevel();
     }
 
     create () {
@@ -275,6 +276,7 @@ export default class MainGame extends Phaser.Scene {
 
 
     arrangeGrid () {
+        // console.log(this.level);
         //TODO: add items guaranteed to be part of solution
         // console.log(this.strings[this.currentRound]); //TODO: fix expression display going under submit button
         this.solution = [];

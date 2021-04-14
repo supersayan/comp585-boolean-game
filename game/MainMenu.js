@@ -32,7 +32,7 @@ export default class MainMenu extends Phaser.Scene
             }
         };
 
-        this.text1 = this.add.text(240, -20, 'Fruit Stand', fontStyle);
+        this.text1 = this.add.text(240, -20, 'Shape Shop', fontStyle);
         this.tweens.add({
             targets: this.text1,
             duration: 2000,
@@ -40,23 +40,23 @@ export default class MainMenu extends Phaser.Scene
             ease: 'bounce.out',
             
         });
-        let logo = undefined//this.add.image(400, -200, 'logo');
+        // let logo = this.add.image(400, -200, 'logo');
 
-        if (!this.music)
-        {
-            this.music = this.sound.play('music', { loop: true });
-        }
+        // if (!this.music)
+        // {
+        //     this.music = this.sound.play('music', { loop: true });
+        // }
 
-        this.tweens.add({
-            targets: logo,
-            y: 300,
-            ease: 'bounce.out',
-            duration: 1200
-        });
+        // this.tweens.add({
+        //     targets: logo,
+        //     y: 300,
+        //     ease: 'bounce.out',
+        //     duration: 1200
+        // });
 
         this.input.once('pointerdown', () => {
 
-            this.scene.start('MainGame');
+            this.scene.start('LevelSelect');
 
         });
     }
