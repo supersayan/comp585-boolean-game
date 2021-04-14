@@ -19,6 +19,10 @@ export default class MainGame extends Phaser.Scene {
         let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
+        this.expOperands;
+        this.expOperators;
+        this.expSize;
+        this.expCompact;
         this.strings = evalOutput.strings;
         this.items; // phaser group
         this.itemsBorders;
@@ -54,24 +58,36 @@ export default class MainGame extends Phaser.Scene {
     }
 
     create () {
+        this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
+        this.expOperators = this.expressions[this.currentRound].filter(operator => operator == "AND" || operator == "OR");
+        this.expSize = this.expOperands.length + this.expOperators.length;
+        this.expCompact = new Array(this.expSize);
+        for(let i = 0; i<this.expOperands.length; i++){
+            this.expCompact[2*i] = this.expOperands[i];
+        }
+        for(let i = 0; i<this.expOperators.length; i++){
+            this.expCompact[2*i + 1] = this.expOperators[i];
+        }
+        console.log(this.expCompact);
+        console.log(Object.keys(this.expressions[this.currentRound][0]));
         this.add.image(400, 300, 'background');
 
         this.selection = [];
         this.solution = [];
-        this.goal1 = this.expressions[this.currentRound][0];
+        this.goal1 = this.expCompact[0];
         this.goal1.value = this.goal1[Object.keys(this.goal1)[0]];
-        this.goal2 = this.expressions[this.currentRound][2];
+        this.goal2 = this.expCompact[2];
         this.goal2.value = this.goal2[Object.keys(this.goal2)[0]];
-        if(this.expressions[this.currentRound][3] != undefined){
-            this.goal3 = this.expressions[this.currentRound][4];
+        if(this.expCompact[3] != undefined){
+            this.goal3 = this.expCompact[4];
             this.goal3.value = this.goal3[Object.keys(this.goal3)[0]];
         }
-        if(this.expressions[this.currentRound][5] != undefined){
-            this.goal4 = this.expressions[this.currentRound][6];
+        if(this.expCompact[5] != undefined){
+            this.goal4 = this.expCompact[6];
             this.goal4.value = this.goal4[Object.keys(this.goal4)[0]];
         }
         this.goal1sprite = this.add.sprite(20, 50, "attributes", getSprite(this.goal1.value));
-        this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
+        this.expressionText = this.add.text(40, 30, this.expCompact[1], fontStyle2);
         this.goal2sprite = this.add.sprite(120, 50, "attributes", getSprite(this.goal2.value));
         this.goal1sprite.setScale(0.4);
         this.goal1sprite.depth = 1;
@@ -79,16 +95,16 @@ export default class MainGame extends Phaser.Scene {
         this.goal2sprite.depth = 1;
         this.expressionText.depth = 1;
 
-        if(this.expressions[this.currentRound][3] != undefined){
+        if(this.expCompact[3] != undefined){
             this.goal3sprite = this.add.sprite(220,50, "attributes", getSprite(this.goal3.value));
-            this.expressionText2 = this.add.text(140, 30, this.expressions[this.currentRound][3], fontStyle2);
+            this.expressionText2 = this.add.text(140, 30, this.expCompact[3], fontStyle2);
             this.goal3sprite.setScale(0.4);
             this.goal3sprite.depth = 1;
             this.expressionText2.depth = 1;
         }
-        if(this.expressions[this.currentRound][5] != undefined){
+        if(this.expCompact[5] != undefined){
             this.goal4sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal4.value));
-            this.expressionText3 = this.add.text(240, 30, this.expressions[this.currentRound][5], fontStyle2);
+            this.expressionText3 = this.add.text(240, 30, this.expCompact[5], fontStyle2);
             this.goal4sprite.setScale(0.4);
             this.goal4sprite.depth = 1;
             this.expressionText3.depth = 1;
@@ -352,6 +368,7 @@ export default class MainGame extends Phaser.Scene {
     }
 
     newRound () {
+
         this.selection.forEach((e) => {
             this.circles[e].setVisible(false)
         })
@@ -364,6 +381,17 @@ export default class MainGame extends Phaser.Scene {
         this.selection = [];
         console.log(this.expressions[this.currentRound]);
         console.log(this.strings[this.currentRound]);
+
+        this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
+        this.expOperators = this.expressions[this.currentRound].filter(operator => operator == "AND" || operator == "OR");
+        this.expSize = this.expOperands.length + this.expOperators.length;
+        this.expCompact = new Array(this.expSize);
+        for(let i = 0; i<this.expOperands.length; i++){
+            this.expCompact[2*i] = this.expOperands[i];
+        }
+        for(let i = 0; i<this.expOperators.length; i++){
+            this.expCompact[2*i + 1] = this.expOperators[i];
+        }
         this.expressionText.destroy();
         if(this.goal3sprite == undefined){
 
@@ -385,33 +413,33 @@ export default class MainGame extends Phaser.Scene {
         } else {
             this.expressionText3.destroy();
         }
-        this.goal1 = this.expressions[this.currentRound][0];
+        this.goal1 = this.expCompact[0];
         this.goal1.value = this.goal1[Object.keys(this.goal1)];
-        this.goal2 = this.expressions[this.currentRound][2];
+        this.goal2 = this.expCompact[2];
         this.goal2.value = this.goal2[Object.keys(this.goal2)];
-        if(this.expressions[this.currentRound][3] != undefined){
-            this.goal3 = this.expressions[this.currentRound][4];
+        if(this.expCompact[3] != undefined){
+            this.goal3 = this.expCompact[4];
             this.goal3.value = this.goal3[Object.keys(this.goal3)];
         }
-        if(this.expressions[this.currentRound][5] != undefined){
-            this.goal4 = this.expressions[this.currentRound][6];
+        if(this.expCompact[5] != undefined){
+            this.goal4 = this.expCompact[6];
             this.goal4.value = this.goal4[Object.keys(this.goal4)];
         }
         // console.log(this.goal1.value);
         this.goal1sprite.setFrame(getSprite(this.goal1.value));
-        this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
+        this.expressionText = this.add.text(40, 30, this.expCompact[1], fontStyle2);
         this.goal2sprite.setFrame(getSprite(this.goal2.value));
 
-        if(this.expressions[this.currentRound][3] != undefined){
+        if(this.expCompact[3] != undefined){
             this.goal3sprite = this.add.sprite(220,50, "attributes", getSprite(this.goal3.value));
-            this.expressionText2 = this.add.text(140, 30, this.expressions[this.currentRound][3], fontStyle2);
+            this.expressionText2 = this.add.text(140, 30, this.expCompact[3], fontStyle2);
             this.goal3sprite.setScale(0.4);
             this.goal3sprite.depth = 1;
             this.expressionText2.depth = 1;
         }
-        if(this.expressions[this.currentRound][5] != undefined){
+        if(this.expCompact[5] != undefined){
             this.goal4sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal4.value));
-            this.expressionText3 = this.add.text(240, 30, this.expressions[this.currentRound][5], fontStyle2);
+            this.expressionText3 = this.add.text(240, 30, this.expCompact[5], fontStyle2);
             this.goal4sprite.setScale(0.4);
             this.goal4sprite.depth = 1;
             this.expressionText3.depth = 1;
