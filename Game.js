@@ -180,7 +180,7 @@ export default class MainGame extends Phaser.Scene {
                         alpha: {start: 0, to:1}
                     
                     })
-                    this.submitText.disableInteractive();
+                    //this.submitText.disableInteractive();
                 }
             })
             this.submitSelection()
@@ -469,6 +469,13 @@ export default class MainGame extends Phaser.Scene {
                     child.setInteractive();
                     child.on('gameobjectdown', this.selectItem, this)
                 });
+                this.tweens.add({
+                    targets: [this.submitText, this.rect],
+                    alpha: {start: 0.75, to: 1},
+                    y: '-=5',
+                    ease: 'Elastic.out',
+                    duration: 100
+                })  
                 this.submitText.once('pointerdown', () => {
                     this.tweens.add({
                         targets: [this.submitText, this.rect],
@@ -537,7 +544,9 @@ export default class MainGame extends Phaser.Scene {
         
         this.input.off('gameobjectdown', this.selectItem, this);
         if (win) {
+           
             this.win = true;
+            this.winText = this.add.text(550, 20, 'You Won!', fontStyle);
             this.winText.setVisible(true);
             this.winText.setColor('#FFD700')
             let circledance = []
@@ -581,17 +590,53 @@ export default class MainGame extends Phaser.Scene {
             this.winText = this.loseText;
             this.winText.setColor('#FF0000');
             this.winText.setVisible(true);
+            let counter = 0;
 
-
-            //Timeout is needed so that the click to submit doesn't count for going to the main menu
-            setTimeout(() => {this.input.on('pointerdown', (pointer) => {
-                if (pointer.leftButtonDown()) { 
-                    this.input.off('gameobjectdown', this.selectItem, this);
-                    this.scene.start('MainMenu');   
-                } else if (pointer.rightButtonDown()) {
+            this.input.on('pointerdown', (pointer) => {   
+                console.log('counter',counter)
+                if (counter > 0)
                     this.input.once('gameobjectdown', this.selectItem, this);
-                } 
-            }, this)}, 100);
+                counter++;
+            })
+            setTimeout( () => {            this.tweens.add({
+                targets: [this.submitText, this.rect],
+                alpha: {start: 0.75, to: 1},
+                y: '-=5',
+                ease: 'Elastic.out',
+                duration: 1000,
+                })
+
+                this.tweens.add({
+                    targets: [this.winText],
+                    alpha: {start: 1, to: 0},
+                    duration: 1000,
+                    onComplete: () => {
+                        this.winText.setVisible(false);
+                }
+            })
+                
+            }, 1000)
+            
+            //Timeout is needed so that the click to submit doesn't count for going to the main menu
+            this.submitText.once('pointerdown', () => {
+
+                this.tweens.add({
+                    targets: [this.submitText, this.rect],
+                    alpha: {start: 1, to: 0.75},
+                    y: '+=5',
+                    ease: 'Elastic.out',
+                    duration: 100,
+                    onComplete: () => {
+                        this.tweens.add({
+                            targets:this.winText,
+                            alpha: {start: 0, to:1}
+                        
+                        })
+                        //this.submitText.disableInteractive();
+                    }
+                })
+                this.submitSelection()
+            }, this)
             
         }
    }
