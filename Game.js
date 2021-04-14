@@ -36,6 +36,7 @@ export default class MainGame extends Phaser.Scene {
         this.goal1;
         this.goal2;
         this.goal3;
+        this.goal4;
 
         this.circles = new Array(16);
 
@@ -65,6 +66,10 @@ export default class MainGame extends Phaser.Scene {
             this.goal3 = this.expressions[this.currentRound][4];
             this.goal3.value = this.goal3[Object.keys(this.goal3)[0]];
         }
+        if(this.expressions[this.currentRound][5] != undefined){
+            this.goal4 = this.expressions[this.currentRound][6];
+            this.goal4.value = this.goal4[Object.keys(this.goal4)[0]];
+        }
         this.goal1sprite = this.add.sprite(20, 50, "attributes", getSprite(this.goal1.value));
         this.expressionText = this.add.text(40, 30, this.expressions[this.currentRound][1], fontStyle2);
         this.goal2sprite = this.add.sprite(120, 50, "attributes", getSprite(this.goal2.value));
@@ -80,6 +85,13 @@ export default class MainGame extends Phaser.Scene {
             this.goal3sprite.setScale(0.4);
             this.goal3sprite.depth = 1;
             this.expressionText2.depth = 1;
+        }
+        if(this.expressions[this.currentRound][5] != undefined){
+            this.goal4sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal4.value));
+            this.expressionText3 = this.add.text(240, 30, this.expressions[this.currentRound][5], fontStyle2);
+            this.goal4sprite.setScale(0.4);
+            this.goal4sprite.depth = 1;
+            this.expressionText3.depth = 1;
         }
         this.win = false;
 
@@ -363,6 +375,16 @@ export default class MainGame extends Phaser.Scene {
         } else {
             this.expressionText2.destroy();
         }
+        if(this.goal4sprite == undefined){
+
+        } else {
+            this.goal4sprite.destroy();
+        }
+        if(this.expressionText3 == undefined){
+
+        } else {
+            this.expressionText3.destroy();
+        }
         this.goal1 = this.expressions[this.currentRound][0];
         this.goal1.value = this.goal1[Object.keys(this.goal1)];
         this.goal2 = this.expressions[this.currentRound][2];
@@ -370,6 +392,10 @@ export default class MainGame extends Phaser.Scene {
         if(this.expressions[this.currentRound][3] != undefined){
             this.goal3 = this.expressions[this.currentRound][4];
             this.goal3.value = this.goal3[Object.keys(this.goal3)];
+        }
+        if(this.expressions[this.currentRound][5] != undefined){
+            this.goal4 = this.expressions[this.currentRound][6];
+            this.goal4.value = this.goal4[Object.keys(this.goal4)];
         }
         // console.log(this.goal1.value);
         this.goal1sprite.setFrame(getSprite(this.goal1.value));
@@ -382,6 +408,13 @@ export default class MainGame extends Phaser.Scene {
             this.goal3sprite.setScale(0.4);
             this.goal3sprite.depth = 1;
             this.expressionText2.depth = 1;
+        }
+        if(this.expressions[this.currentRound][5] != undefined){
+            this.goal4sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal4.value));
+            this.expressionText3 = this.add.text(240, 30, this.expressions[this.currentRound][5], fontStyle2);
+            this.goal4sprite.setScale(0.4);
+            this.goal4sprite.depth = 1;
+            this.expressionText3.depth = 1;
         }
         this.win = false;
 
@@ -634,7 +667,8 @@ const pickLevelParameters = {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
-            //{"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]}
+            //{"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
+            //{"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
         ],
         operators: ["AND"],
         numFeatures: 2,
