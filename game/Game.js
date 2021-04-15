@@ -196,6 +196,7 @@ export default class MainGame extends Phaser.Scene {
         for(let i = 0; i < 16; i++){
             this.circles[i] = this.add.circle(0, 0, 60).setStrokeStyle(3, 0xf8960e);
             this.circles[i].depth = 1;
+            this.circles[i].setPosition((i%GRID_WIDTH)*GRID_CELLWIDTH+GRID_X-10, Math.floor(i/GRID_WIDTH)*GRID_CELLHEIGHT+GRID_Y-10);
             this.circles[i].setVisible(false);
         }
 
@@ -245,33 +246,18 @@ export default class MainGame extends Phaser.Scene {
         this.rect = this.add.rectangle(568, 55, 125, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
         this.submitText = this.add.text(500, 20, 'Submit', fontStyle);
-        this.submitText.setInteractive({ useHandCursor: false});    
-        this.submitText.once('pointerdown', () => {
-            this.tweens.add({
-                targets: [this.submitText, this.rect],
-                alpha: {start: 1, to: 0.75},
-                y: '+=5',
-                ease: 'Elastic.out',
-                duration: 100,
-                onComplete: () => {
-                    this.tweens.add({
-                        targets:this.winText,
-                        alpha: {start: 0, to:1}
-                    
-                    })
-                    //this.submitText.disableInteractive();
-                }
-            })
-            this.submitSelection()
-        }, this)
-        this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
+        this.submitText.setInteractive({ useHandCursor: false});
+        this.turnOnSubmitEvent();
 
+        this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
+        this.winText.setColor('#FFD700');
         this.winText.setAlpha(0);
         this.loseText = this.add.text(620, 20, 'Try Again', fontStyle);
-        
+        this.loseText.setColor('#FF0000');
         //this.loseText.setVisible(false);
         this.loseText.setAlpha(0);
 
+        // Back Button
         this.back_arrow = this.add.image(760, 565, 'back_arrow').setScale(0.1);
         this.back_arrow.setInteractive({ useHandCursor: false});
         this.back_arrow.once('pointerdown', () => {
@@ -280,14 +266,9 @@ export default class MainGame extends Phaser.Scene {
         // this.back_arrow.scale = 0.1;
         // this.back_arrow.setAlpha(1);
 
-        let children = this.items.getChildren();
+        this.turnOnSelectEvent();
 
-        children.forEach((child) => {
-            child.setInteractive();
-            // child.on('pointerdown', this.selectItem, this);
-        });
-
-        this.input.on('gameobjectdown', this.selectItem, this);
+        // this.input.on('gameobjectdown', this.selectItem, this);
         //this.input.once('pointerdown', this.start, this);
 
         // this.highscore = this.registry.get('highscore');
@@ -297,30 +278,51 @@ export default class MainGame extends Phaser.Scene {
         
     }
 
-    selectItem(event, pointer) {
-        let x = pointer.x;
-        let y = pointer.y;
+    turnOnSelectEvent() {
+        this.items.getChildren().forEach((child) => {
+            child.setInteractive();
+            child.on('pointerdown', this.selectItem, this);
+        });
+    }
+
+    turnOffSelectEvent() {
+        this.items.getChildren().forEach((child) => {
+            child.off('pointerdown', this.selectItem, this);
+        });
+    }
+
+    turnOnSubmitEvent() {
+        this.submitText.once('pointerdown', () => { // one time listener
+            this.tweens.add({
+                targets: [this.submitText, this.rect],
+                alpha: {start: 1, to: 0.75},
+                y: '+=5',
+                ease: 'Elastic.out',
+                duration: 100,
+            });
+            this.submitSelection();
+        }, this);
+    }
+
+    selectItem(pointer) {
+        let x = pointer.worldX;
+        let y = pointer.worldY;
         let index = xyConvertToIndex(x,y);
-        // console.log(index);
         if (index < 0 || index >= GRID_WIDTH * GRID_HEIGHT)
             return;
-        if (event.leftButtonDown()) {
-            //console.log('emoji positions are: ', emoji.x, emoji.y)
-            
+        if (pointer.leftButtonDown()) {
             //  Checks if selected object is in selection pool
             if (!this.circles[index].visible)
             {
-                this.circles[index].setPosition(x,y);
-                this.selection.push(xyConvertToIndex(x,y)) //pushes selection
+                this.selection.push(index); //pushes selection
                 this.circles[index].setVisible(true);
             } else {
                 this.circles[index].setVisible(false);
                 this.selection = this.selection.filter((value, index, array) => {
-                    // console.log(value);
                     return value != xyConvertToIndex(x,y);
                 })
             }
-        } else if (event.rightButtonDown()) { //displays properties
+        } else if (pointer.rightButtonDown()) { //displays properties
             
             this.game.canvas.oncontextmenu = (e) => {
                 e.preventDefault()
@@ -348,9 +350,9 @@ export default class MainGame extends Phaser.Scene {
                     offsetY: 2,
                     blur: 4
                 }
-            };      
+            };
 
-            let children = this.items.getChildren();
+            // let children = this.items.getChildren();
             // let a = children[index].frame.customData.item;
             // let b = children[index].frame.customData.color;
             // let c = children[index].frame.customData.pattern;
@@ -368,8 +370,6 @@ export default class MainGame extends Phaser.Scene {
 
 
     arrangeGrid () {
-        // console.log(this.level);
-        // console.log(this.strings[this.currentRound]); //TODO: fix expression display going under submit button
         this.solution = [];
         let children = this.items.getChildren();
         let childrenBorder = this.itemsBorders.getChildren();
@@ -431,12 +431,7 @@ export default class MainGame extends Phaser.Scene {
             // sprite y = 100 * (5 * pattern + shape)
             // border x = 100 * border
             // border y = 2500 + 100 * shape
-
-            // or use lowercase itemJSON["SHAPE"] etc.
             
-            // console.log(pattern);
-            // console.log(ATTR["PATTERN"][pattern]);
-            // console.log(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
             children[i].setFrame(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
             childrenBorder[i].setFrame(ATTR["BORDER"][border].toLowerCase() + "border" + ATTR["SHAPE"][shape].toLowerCase() + ".png");
         }
@@ -485,6 +480,7 @@ export default class MainGame extends Phaser.Scene {
 
         this.updateExpressionDisplay();
 
+        // TODO: move below to updateExpressionDisplay
         this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
         this.expOperators = this.expressions[this.currentRound].filter(operator => operator == "AND" || operator == "OR");
         this.expSize = this.expOperands.length + this.expOperators.length;
@@ -619,14 +615,15 @@ export default class MainGame extends Phaser.Scene {
             this.goal4sprite.depth = 1;
             this.expressionText3.depth = 1;
         }
+
         this.win = false;
 
         //this.input.on('gameobjectdown', this.selectItem, this);
-        this.submitText.setInteractive({ useHandCursor: false});   
+        // this.submitText.setInteractive({ useHandCursor: false});   
 
         // this.submitText.setText('Submit');
 
-        //  Stagger tween them all out
+        //  Stagger tween shapes all out
         this.tweens.add({
             targets: this.items.getChildren(),
             scale: 0,
@@ -634,40 +631,16 @@ export default class MainGame extends Phaser.Scene {
             duration: 600,
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
             onComplete: () => {
-                this.arrangeGrid()
-                let children = this.items.getChildren();
-                // console.log(children);
-                children.forEach((child) => {
-                    child.setInteractive();
-                    child.on('gameobjectdown', this.selectItem, this)
-                });
+                this.arrangeGrid();
+                this.turnOnSelectEvent();
+                this.turnOnSubmitEvent();
                 this.winText.setAlpha(0);
-               
-                this.tweens.add({
-                    targets: [this.submitText, this.rect],
-                    alpha: {start: 0.75, to: 1},
-                    y: '-=5',
-                    ease: 'Elastic.out',
-                    duration: 100
-                })  
-                this.submitText.once('pointerdown', () => {
-                    this.tweens.add({
-                        targets: [this.submitText, this.rect],
-                        alpha: {start: 1, to: 0.75},
-                        y: '+=5',
-                        ease: 'Elastic.out',
-                        duration: 100,
-                        onComplete: () => {
-                            this.tweens.add({
-                                targets:this.winText,
-                                alpha: {start: 0, to:1}
-                            
-                            })
-                            //this.submitText.disableInteractive();
-                        }
-                    })
-                    this.submitSelection()
-                }, this)
+                // let children = this.items.getChildren();
+                // console.log(children);
+                // children.forEach((child) => {
+                //     child.setInteractive();
+                    // child.on('gameobjectdown', this.selectItem, this);
+                // });
             }
         });
 
@@ -720,23 +693,21 @@ export default class MainGame extends Phaser.Scene {
     }
 
     submitSelection () {
-        let win = (this.checkSolution())
-        // console.log(win);
+        let win = (this.checkSolution());
         
-        this.input.off('gameobjectdown', this.selectItem, this);
+        // this.input.off('gameobjectdown', this.selectItem, this); 
+        this.turnOffSelectEvent();
         if (win) {
            
             this.win = true;
-            this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
-            this.winText.setVisible(true);
-            this.winText.setColor('#FFD700')
+            // this.winText.setVisible(true);
             let circledance = []
             for (let i = 0; i < this.selection.length; i++){
                 circledance.push(this.circles[this.selection[i]])
             }
 
             this.score = 0;
-            this.win = false
+            this.win = false;
 
             this.tweens.add({
                 targets: circledance,
@@ -746,89 +717,80 @@ export default class MainGame extends Phaser.Scene {
                 duration: 250,
                 ease: 'sine.inout',
                 onComplete: () => {
-                    let counter = 0;
-                    let a = this.input.on('pointerdown', (pointer) => {
-                        console.log('counter1', counter)     
-                        if (pointer.leftButtonDown()) { 
-                            this.input.off('gameobjectdown', this.selectItem, this);
-                            //this.scene.start('MainGame');
-                            if (counter == 0)
-                                this.newRound();
-                            else {
-                                this.input.once('gameobjectdown', this.selectItem, this);
-                            }
-                            counter++;
-                        } else if (pointer.rightButtonDown()) {
-                            this.input.once('gameobjectdown', this.selectItem, this);
-                        }
-                    }, this);
-                    a.off();
+                    // let counter = 0;
+                    // let a = this.input.on('pointerdown', (pointer) => {
+                    //     console.log('counter1', counter)     
+                    //     if (pointer.leftButtonDown()) { 
+                    //         this.input.off('gameobjectdown', this.selectItem, this);
+                    //         //this.scene.start('MainGame');
+                    //         if (counter == 0)
+                    //             this.newRound();
+                    //         else {
+                    //             this.input.on('gameobjectdown', this.selectItem, this);
+                    //         }
+                    //         counter++;
+                    //     } else if (pointer.rightButtonDown()) {
+                    //         // this.input.on('gameobjectdown', this.selectItem, this);
+                    //     }
+                    // }, this);
+                    // a.off();
+
+                    this.input.once('pointerdown', (pointer) => {
+                        this.tweens.add({
+                            targets: [this.submitText, this.rect],
+                            alpha: {start: 0.75, to: 1},
+                            y: '-=5',
+                            ease: 'Elastic.out',
+                            duration: 500,
+                        });
+                        this.newRound();
+                    })
                 }
             });
         } else {
             // if incorrect submission, should not do anything, allow to keep trying until correct
             this.score = 0;
             this.win = false;
-            this.winText = this.loseText;
-            this.winText.setColor('#FF0000');
-            this.winText.setVisible(true);
+            this.loseText.setAlpha(1);
 
+            this.turnOnSelectEvent();
 
-            let b = this.input.on('pointerdown', (pointer) => {   
-                console.log('counter2',this.counter2)
-                if (this.counter2 > 0)
-                    this.input.once('gameobjectdown', this.selectItem, this);
-                this.counter2++;
-            })
-            console.log(this.input)
-            setTimeout( () => {            this.tweens.add({
-                targets: [this.submitText, this.rect],
-                alpha: {start: 0.75, to: 1},
-                y: '-=5',
-                ease: 'Elastic.out',
-                duration: 500,
-                })
-
+            // let b = this.input.on('pointerdown', (pointer) => {   
+            //     console.log('counter2',this.counter2)
+            //     if (this.counter2 > 0)
+            //         this.input.once('gameobjectdown', this.selectItem, this);
+            //     this.counter2++;
+            // })
+            // console.log(this.input);
+            setTimeout( () => {
                 this.tweens.add({
-                    targets: [this.winText],
+                    targets: [this.submitText, this.rect],
+                    alpha: {start: 0.75, to: 1},
+                    y: '-=5',
+                    ease: 'Elastic.out',
+                    duration: 500,
+                });
+                this.tweens.add({
+                    targets: [this.loseText],
                     alpha: {start: 1, to: 0},
                     duration: 500,
                     onComplete: () => {
-                        this.winText.setVisible(false);
-                }
-            })
-                
-            }, 500)
+                        // this.loseText.setVisible(false);
+                        this.turnOnSubmitEvent();
+                    }
+                });
+            }, 500);
             
             //Timeout is needed so that the click to submit doesn't count for going to the main menu
-            this.submitText.once('pointerdown', () => {
-
-                this.tweens.add({
-                    targets: [this.submitText, this.rect],
-                    alpha: {start: 1, to: 0.75},
-                    y: '+=5',
-                    ease: 'Elastic.out',
-                    duration: 100,
-                    onComplete: () => {
-                        this.tweens.add({
-                            targets:this.winText,
-                            alpha: {start: 0, to:1}
-                        
-                        })
-                        //this.submitText.disableInteractive();
-                    }
-                })
-                this.submitSelection()
-            }, this)
             
         }
    }
 }
 
 function xyConvertToIndex(x,y) {
-    x = (x-GRID_X+10)/GRID_CELLWIDTH;
-    y = (y-GRID_Y+10)/GRID_CELLHEIGHT;
-    return x+GRID_WIDTH*y;
+    x = Math.floor((x-GRID_X+GRID_CELLWIDTH/2)/GRID_CELLWIDTH);
+    y = Math.floor((y-GRID_Y+GRID_CELLHEIGHT/2)/GRID_CELLHEIGHT);
+    return (x+GRID_WIDTH*y);
 }
 
 function getSprite(attribute) {
@@ -995,6 +957,34 @@ const pickLevelParameters = {
         ],
         operators: ["AND", "OR", "NOT"],
         numFeatures: 3,
+        numExpressions: 8,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
+    7: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+            {"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
+        ],
+        operators: ["AND", "OR"],
+        numFeatures: 4,
+        numExpressions: 8,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
+    8: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+            {"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
+        ],
+        operators: ["AND", "OR", "NOT"],
+        numFeatures: 4,
         numExpressions: 8,
         allowNullSet: true,
         numNots: [1, 2],
