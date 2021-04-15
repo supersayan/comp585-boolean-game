@@ -1,5 +1,12 @@
 import { OPER, ATTR, createUniqueExpressions, getBooleanArrayIndexOfItem, getItemFromBooleanArrayIndex } from './Eval.js';
 
+const GRID_WIDTH = 4;
+const GRID_HEIGHT = 4;
+const GRID_X = 280;
+const GRID_Y = 180;
+const GRID_CELLWIDTH = 120;
+const GRID_CELLHEIGHT = 120;
+
 export default class MainGame extends Phaser.Scene {
 
     constructor (str) {
@@ -7,32 +14,24 @@ export default class MainGame extends Phaser.Scene {
         super('MainGame');
         
         // with the level number, create the expressions, evaluations, strings
-        this.level = 1;
-        this.currentRound = 0; // iterates every new round
-        let levelParams = pickLevelParameters[this.level];
-        this.attributes = levelParams.attributes;
-        this.numRounds = levelParams.numExpressions;
-        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
-        this.expressions = evalOutput.expressions;
-        this.evaluations = evalOutput.evaluations;
+        // this.level = 1;
+        // this.currentRound = 0; // iterates every new round
+        // let levelParams = pickLevelParameters[this.level];
+        // this.attributes = levelParams.attributes;
+        // this.numRounds = levelParams.numExpressions;
+        // let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
+        // this.expressions = evalOutput.expressions;
+        // this.evaluations = evalOutput.evaluations;
         this.expOperands;
         this.expOperators;
         this.expSize;
         this.expCompact;
         this.parentheses;
         this.parenthesesLength;
-        this.strings = evalOutput.strings;
+        // this.strings = evalOutput.strings;
         this.items; // phaser group
         this.itemsBorders;
         this.itemAttributes; // store array of attribute:feature objects for each item
-
-        //added variables so we don't need to do multiple level .js
-        // this.goal11 = 'Color';
-        // this.goal12 = 'red';
-        // this.goal21 = 'Pattern';
-        // this.goal22 = 'plain';
-        // this.goal31 = 'Shape';
-        // this.goal32 = 'square';
 
         //new things for the display
         this.goal1;
@@ -63,6 +62,8 @@ export default class MainGame extends Phaser.Scene {
     }
 
     create () {
+        this.updateExpressionDisplay();
+
         this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
         this.expOperators = this.expressions[this.currentRound].filter(operator => operator == "AND" || operator == "OR");
         this.expSize = this.expOperands.length + this.expOperators.length;
@@ -205,12 +206,12 @@ export default class MainGame extends Phaser.Scene {
             frameQuantity: 1,
             repeat: 15,
             gridAlign: {
-                width: 4,
-                height: 4,
-                cellWidth: 120,
-                cellHeight: 120,
-                x: 280,
-                y: 200
+                width: GRID_WIDTH,
+                height: GRID_HEIGHT,
+                cellWidth: GRID_CELLWIDTH,
+                cellHeight: GRID_CELLHEIGHT,
+                x: GRID_X,
+                y: GRID_Y,
             }
         });
 
@@ -219,18 +220,18 @@ export default class MainGame extends Phaser.Scene {
             frameQuantity: 1,
             repeat: 15,
             gridAlign: {
-                width: 4,
-                height: 4,
-                cellWidth: 120,
-                cellHeight: 120,
-                x: 280,
-                y: 200
+                width: GRID_WIDTH,
+                height: GRID_HEIGHT,
+                cellWidth: GRID_CELLWIDTH,
+                cellHeight: GRID_CELLHEIGHT,
+                x: GRID_X,
+                y: GRID_Y,
             }
         });
 
         
 
-        this.rect3 = this.add.rectangle(0,0, 1600, 250, 0x0000FF, 0.4);
+        this.rect3 = this.add.rectangle(0,0, 1600, 220, 0x0000FF, 0.4); // blue rectangle covering top of screen
         //let sprite = this.add.sprite(200,20,"items","redapple.png")
         //sprite.tint = 0x000000;
         // this.itemtext = this.add.text(110, 85, this.goal12, fontStyle3);
@@ -263,10 +264,10 @@ export default class MainGame extends Phaser.Scene {
             })
             this.submitSelection()
         }, this)
-        this.winText = this.add.text(620, 20, 'You Won!', fontStyle);
+        this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
 
         this.winText.setAlpha(0);
-        this.loseText = this.add.text(620, 20, 'You Lost...', fontStyle);
+        this.loseText = this.add.text(620, 20, 'Try Again', fontStyle);
         
         //this.loseText.setVisible(false);
         this.loseText.setAlpha(0);
@@ -275,7 +276,7 @@ export default class MainGame extends Phaser.Scene {
 
         children.forEach((child) => {
             child.setInteractive();
-            child.on('gameobjectdown', this.selectItem, this)
+            // child.on('gameobjectdown', this.selectItem, this);
         });
 
         this.input.on('gameobjectdown', this.selectItem, this);
@@ -355,7 +356,6 @@ export default class MainGame extends Phaser.Scene {
 
     arrangeGrid () {
         // console.log(this.level);
-        //TODO: add items guaranteed to be part of solution
         // console.log(this.strings[this.currentRound]); //TODO: fix expression display going under submit button
         this.solution = [];
         let children = this.items.getChildren();
@@ -447,7 +447,14 @@ export default class MainGame extends Phaser.Scene {
         });
     }
 
+    updateExpressionDisplay() {
+        if (this.expressionString)
+            this.expressionString.destroy();
+        this.expressionString = this.add.text(0, 90, this.strings[this.currentRound]);
+    }
+
     newRound () {
+        // TODO: move all expression display code to a new function
         this.counter2 = 0;  
         this.selection.forEach((e) => {
             this.circles[e].setVisible(false)
@@ -462,6 +469,8 @@ export default class MainGame extends Phaser.Scene {
         this.selection = [];
         console.log(this.expressions[this.currentRound]);
         console.log(this.strings[this.currentRound]);
+
+        this.updateExpressionDisplay();
 
         this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
         this.expOperators = this.expressions[this.currentRound].filter(operator => operator == "AND" || operator == "OR");
@@ -675,6 +684,9 @@ export default class MainGame extends Phaser.Scene {
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
+
+        // display level number
+        this.leveltext = this.add.text(0, 545, "Level " + this.level, fontStyle);
     }
 
     checkSolution() {
@@ -702,7 +714,7 @@ export default class MainGame extends Phaser.Scene {
         if (win) {
            
             this.win = true;
-            this.winText = this.add.text(550, 20, 'You Won!', fontStyle);
+            this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
             this.winText.setVisible(true);
             this.winText.setColor('#FFD700')
             let circledance = []
@@ -801,9 +813,9 @@ export default class MainGame extends Phaser.Scene {
 }
 
 function xyConvertToIndex(x,y) {
-    x = (x-270)/120
-    y = (y-190)/120
-    return x+4*y
+    x = (x-GRID_X+10)/GRID_CELLWIDTH;
+    y = (y-GRID_Y+10)/GRID_CELLHEIGHT;
+    return x+GRID_WIDTH*y;
 }
 
 function getSprite(attribute) {
