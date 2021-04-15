@@ -272,26 +272,39 @@ export default class MainGame extends Phaser.Scene {
         //this.loseText.setVisible(false);
         this.loseText.setAlpha(0);
 
+        this.back_arrow = this.add.image(760, 565, 'back_arrow').setScale(0.1);
+        this.back_arrow.setInteractive({ useHandCursor: false});
+        this.back_arrow.once('pointerdown', () => {
+            this.scene.start('LevelSelect');
+        }, this);
+        // this.back_arrow.scale = 0.1;
+        // this.back_arrow.setAlpha(1);
+
         let children = this.items.getChildren();
 
         children.forEach((child) => {
             child.setInteractive();
-            // child.on('gameobjectdown', this.selectItem, this);
+            // child.on('pointerdown', this.selectItem, this);
         });
 
         this.input.on('gameobjectdown', this.selectItem, this);
         //this.input.once('pointerdown', this.start, this);
 
-        this.highscore = this.registry.get('highscore');
+        // this.highscore = this.registry.get('highscore');
 
         this.arrangeGrid();
+
+        
     }
 
-    selectItem(pointer, item) {
-        let x = item.x
-        let y = item.y
+    selectItem(event, pointer) {
+        let x = pointer.x;
+        let y = pointer.y;
         let index = xyConvertToIndex(x,y);
-        if (pointer.leftButtonDown()) {
+        // console.log(index);
+        if (index < 0 || index >= GRID_WIDTH * GRID_HEIGHT)
+            return;
+        if (event.leftButtonDown()) {
             //console.log('emoji positions are: ', emoji.x, emoji.y)
             
             //  Checks if selected object is in selection pool
@@ -307,7 +320,7 @@ export default class MainGame extends Phaser.Scene {
                     return value != xyConvertToIndex(x,y);
                 })
             }
-        } else if (pointer.rightButtonDown()) { //displays properties
+        } else if (event.rightButtonDown()) { //displays properties
             
             this.game.canvas.oncontextmenu = (e) => {
                 e.preventDefault()
