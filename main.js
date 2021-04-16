@@ -3,7 +3,7 @@
 import Boot from './Boot.js';
 import Preloader from './Preloader.js';
 import MainMenu from './MainMenu.js';
-import MainGame from './Game.js';
+import PickGame from './PickGame.js';
 import LevelSelect from './LevelSelect.js';
 
 const config = {
@@ -11,7 +11,7 @@ const config = {
     width: 800,
     height: 600,
     backgroundColor: '#008eb0',
-    scene: [ Boot, Preloader, MainMenu, MainGame, LevelSelect],
+    scene: [ Boot, Preloader, MainMenu, PickGame, LevelSelect],
     // shapes: ['square', 'triangle', 'circle', 'pentagon', 'trapezoid'],
     // colors: ['red', 'orange', 'green', 'blue', 'purple'],
     // patterns: ['plain', 'striped', 'spots', 'lattice', 'swirl']
