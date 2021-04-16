@@ -7,11 +7,11 @@ const GRID_Y = 180;
 const GRID_CELLWIDTH = 120;
 const GRID_CELLHEIGHT = 120;
 
-export default class MainGame extends Phaser.Scene {
+export default class PickGame extends Phaser.Scene {
 
     constructor (str) {
 
-        super('MainGame');
+        super('PickGame');
         
         // with the level number, create the expressions, evaluations, strings
         // this.level = 1;
@@ -39,7 +39,6 @@ export default class MainGame extends Phaser.Scene {
         this.goal3;
         this.goal4;
 
-        this.circles = new Array(16);
 
         // this.selection = []; //just holds the selected items
         // this.solution = []; //holds the required for AND operations
@@ -62,6 +61,7 @@ export default class MainGame extends Phaser.Scene {
     }
 
     create () {
+        this.circles = new Array(16);
         this.updateExpressionDisplay();
 
         this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
