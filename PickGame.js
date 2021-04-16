@@ -736,16 +736,17 @@ export default class PickGame extends Phaser.Scene {
                     // }, this);
                     // a.off();
 
-                    this.input.once('pointerdown', (pointer) => {
-                        this.tweens.add({
-                            targets: [this.submitText, this.rect],
-                            alpha: {start: 0.75, to: 1},
-                            y: '-=5',
-                            ease: 'Elastic.out',
-                            duration: 500,
-                        });
-                        this.newRound();
-                    })
+                    this.tweens.add({
+                        targets: [this.submitText, this.rect],
+                        alpha: {start: 0.75, to: 1},
+                        y: '-=5',
+                        ease: 'Elastic.out',
+                        duration: 500,
+                    });
+                    this.newRound();
+                    // use below for 'click to continue'
+                    // this.input.once('pointerdown', (pointer) => {
+                    // })
                 }
             });
         } else {
