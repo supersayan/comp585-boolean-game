@@ -1,3 +1,6 @@
+const NUMLEVELS = 8;
+const LEVELROWSIZE = 4;
+
 export default class LevelSelect extends Phaser.Scene {
     constructor () {
         super('LevelSelect');
@@ -23,12 +26,11 @@ export default class LevelSelect extends Phaser.Scene {
         };
         
         // let levelGroup = this.add.group();
-        let numLevels = 6;
 
-        this.add.text(400, 200, "Level Select", fontStyle).setOrigin(0.5);
-        for (let l=0; l<numLevels; l++) {
-            let levelnumber = this.add.text(100+100*l, 300, l+1, fontStyle).setOrigin(0.5);
-            levelnumber.setInteractive();
+        this.add.text(50, 200, "Level Select", fontStyle);
+        for (let l=0; l<NUMLEVELS; l++) {
+            let levelnumber = this.add.text(400+100*(l%LEVELROWSIZE), 200+100*Math.floor(l/LEVELROWSIZE), l+1, fontStyle);
+            levelnumber.setInteractive({useHandCursor: true});
             levelnumber.on('pointerdown', (pointer) => {
                 this.levelClick(pointer);
             })
@@ -46,8 +48,12 @@ export default class LevelSelect extends Phaser.Scene {
     }
 
     levelClick(pointer) {
-        // console.log(pointer.x);
-        this.scene.start("MainGame", {level: Math.floor((pointer.x+50) / 100)});
+        let x = pointer.x;
+        let y = pointer.y;
+        // console.log(x, y);
+        let level = 1 + Math.floor((x-400)/100) + Math.floor((y-200)/100)*LEVELROWSIZE;
+        // console.log(level);
+        this.scene.start("MainGame", {level: level});
         // console.log(Math.floor((pointer.x-100) / 100));
     }
 }

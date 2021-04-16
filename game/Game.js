@@ -246,7 +246,7 @@ export default class MainGame extends Phaser.Scene {
         this.rect = this.add.rectangle(568, 55, 125, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
         this.submitText = this.add.text(500, 20, 'Submit', fontStyle);
-        this.submitText.setInteractive({ useHandCursor: false});
+        this.submitText.setInteractive({useHandCursor: true});
         this.turnOnSubmitEvent();
 
         this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
@@ -259,7 +259,7 @@ export default class MainGame extends Phaser.Scene {
 
         // Back Button
         this.back_arrow = this.add.image(760, 565, 'back_arrow').setScale(0.1);
-        this.back_arrow.setInteractive({ useHandCursor: false});
+        this.back_arrow.setInteractive({useHandCursor: true});
         this.back_arrow.once('pointerdown', () => {
             this.scene.start('LevelSelect');
         }, this);
@@ -280,7 +280,7 @@ export default class MainGame extends Phaser.Scene {
 
     turnOnSelectEvent() {
         this.items.getChildren().forEach((child) => {
-            child.setInteractive();
+            child.setInteractive({useHandCursor: true});
             child.on('pointerdown', this.selectItem, this);
         });
     }
@@ -401,9 +401,9 @@ export default class MainGame extends Phaser.Scene {
                     item.push(itemattr);
                     itemJSON[attr] = itemattr[attr];
                 }
-                this.itemAttributes.push(item);
-                // if the generated item is part of solution, add its index to this.solution
             }
+            this.itemAttributes.push(item);
+            // if the generated item is part of solution, add its index to this.solution
             if (this.evaluations[this.currentRound][getBooleanArrayIndexOfItem(item, this.attributes)]) {
                 // for (let i = 0; i < this.attributes.length; i++) {
 
@@ -473,6 +473,7 @@ export default class MainGame extends Phaser.Scene {
             // end level
             // this.newLevel();
             this.scene.start("LevelSelect");
+            return;
         }
         this.selection = [];
         console.log(this.expressions[this.currentRound]);
@@ -700,7 +701,7 @@ export default class MainGame extends Phaser.Scene {
         if (win) {
            
             this.win = true;
-            // this.winText.setVisible(true);
+            this.winText.setAlpha(1);
             let circledance = []
             for (let i = 0; i < this.selection.length; i++){
                 circledance.push(this.circles[this.selection[i]])
