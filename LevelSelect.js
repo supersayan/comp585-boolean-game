@@ -27,13 +27,13 @@ export default class LevelSelect extends Phaser.Scene {
         
         // let levelGroup = this.add.group();
 
-        this.add.text(50, 200, "Level Select", fontStyle);
+        this.add.text(50, 200, "Pick", fontStyle);
         for (let l=0; l<NUMLEVELS; l++) {
             let levelnumber = this.add.text(400+100*(l%LEVELROWSIZE), 200+100*Math.floor(l/LEVELROWSIZE), l+1, fontStyle);
             levelnumber.setInteractive({useHandCursor: true});
             levelnumber.on('pointerdown', (pointer) => {
                 this.levelClick(pointer);
-            })
+            });
             // levelGroup.add(levelnumber);
         }
 
@@ -45,6 +45,12 @@ export default class LevelSelect extends Phaser.Scene {
         //     this.level = index;
 
         // })
+
+        this.buildtext = this.add.text(50, 400, "Build", fontStyle);
+        this.buildtext.setInteractive();
+        this.buildtext.on('pointerdown', (pointer) => {
+            this.scene.start("BuildGame");
+        });
     }
 
     levelClick(pointer) {
