@@ -11,14 +11,9 @@ const config = {
     width: 800,
     height: 600,
     backgroundColor: '#008eb0',
+    autoFocus: true,
+    gameTitle: 'Shape Shop',
     scene: [ Boot, Preloader, MainMenu, PickGame, LevelSelect],
-    // shapes: ['square', 'triangle', 'circle', 'pentagon', 'trapezoid'],
-    // colors: ['red', 'orange', 'green', 'blue', 'purple'],
-    // patterns: ['plain', 'striped', 'spots', 'lattice', 'swirl']
 };
 
 let game = new Phaser.Game(config);
-//game.config.colors = ['red', 'green', 'blue', 'gray', 'purple']
-// game.config.shapes = ['square', 'triangle', 'circle', 'pentagon', 'trapezoid']
-// game.config.colors = ['red', 'orange', 'green', 'blue', 'purple']
-// game.config.patterns = ['plain', 'striped', 'spotted', 'net', 'spiral']
