@@ -49,132 +49,10 @@ export default class PickGame extends Phaser.Scene {
         }
 
         this.updateExpressionDisplay();
+        createDisplay(this);
 
-        this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
-        this.expOperators = this.expressions[this.currentRound].filter(operator => operator == "AND" || operator == "OR");
-        this.expSize = this.expOperands.length + this.expOperators.length;
-        this.expCompact = new Array(this.expSize);
-        for(let i = 0; i<this.expOperands.length; i++){
-            this.expCompact[2*i] = this.expOperands[i];
-        }
-        for(let i = 0; i<this.expOperators.length; i++){
-            this.expCompact[2*i + 1] = this.expOperators[i];
-        }
-        this.parenthesesLength = 6;
-        this.parentheses = new Array(this.parenthesesLength);
-        let j = 0;
-        let k = 0;
-        let par = [];
-        for(let i = 0; i<this.expressions[this.currentRound].length; i++){
-            if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")" || this.expressions[this.currentRound][i] == "NOT"){
-                par.push(this.expressions[this.currentRound][i]);
-            } else if (this.expressions[this.currentRound][i] == "AND" || this.expressions[this.currentRound][i] == "OR"){
-                k++;
-                if (k == 2){
-                    this.parentheses[j] = par;
-                    j++;
-                    par = [];
-                }
-            } else {
-                this.parentheses[j] = par;
-                j++;
-                par = [];
-            }
-            if(i == this.expressions[this.currentRound].length - 1){
-                this.parentheses[j] = par;
-            }
-        }
-        console.log(this.expressions[this.currentRound]);
-        console.log(this.parentheses);
-        console.log(this.level);
-        console.log(Object.keys(this.expressions[this.currentRound][0]));
-        // this.add.image(400, 300, 'background');
 
-        this.selection = [];
-        this.solution = [];
-        this.goal1 = this.expCompact[0];
-        this.goal1.value = this.goal1[Object.keys(this.goal1)[0]];
-        this.goal2 = this.expCompact[2];
-        this.goal2.value = this.goal2[Object.keys(this.goal2)[0]];
-        if(this.expCompact[3] != undefined){
-            this.goal3 = this.expCompact[4];
-            this.goal3.value = this.goal3[Object.keys(this.goal3)[0]];
-        }
-        if(this.expCompact[5] != undefined){
-            this.goal4 = this.expCompact[6];
-            this.goal4.value = this.goal4[Object.keys(this.goal4)[0]];
-        }
-        if(this.parentheses[0] == undefined){this.parentheses[0]=""};
-        if(this.parentheses[1] == undefined){this.parentheses[1]=""};
-        if(this.parentheses[2] == undefined){this.parentheses[2]=""};
-        if(this.parentheses[3] == undefined){this.parentheses[3]=""};
-        if(this.parentheses[4] == undefined){this.parentheses[4]=""};
-        if(this.parentheses[5] == undefined){this.parentheses[5]=""};
-        if(this.parentheses[0].length > 1){
-            this.parentheses[0] = this.parentheses[0].join();
-            this.parentheses[0] = this.parentheses[0].replace(',','');
-            this.parentheses[0] = this.parentheses[0].replace(',','');
-        }
-        if(this.parentheses[1].length > 1){
-            this.parentheses[1] = this.parentheses[1].join();
-            this.parentheses[1] = this.parentheses[1].replace(',','');
-            this.parentheses[1] = this.parentheses[1].replace(',','');
-        }
-        if(this.parentheses[2].length > 1){
-            this.parentheses[2] = this.parentheses[2].join();
-            this.parentheses[2] = this.parentheses[2].replace(',','');
-            this.parentheses[2] = this.parentheses[2].replace(',','');
-        }
-        if(this.parentheses[3].length > 1){
-            this.parentheses[3] = this.parentheses[3].join();
-            this.parentheses[3] = this.parentheses[3].replace(',','');
-            this.parentheses[3] = this.parentheses[3].replace(',','');
-        }
-        if(this.parentheses[4].length > 1){
-            this.parentheses[4] = this.parentheses[4].join();
-            this.parentheses[4] = this.parentheses[4].replace(',','');
-            this.parentheses[4] = this.parentheses[4].replace(',','');
-        }
-        if(this.parentheses[5].length > 1){
-            this.parentheses[5] = this.parentheses[5].join();
-            this.parentheses[5] = this.parentheses[5].replace(',','');
-            this.parentheses[5] = this.parentheses[5].replace(',','');
-        }
-        this.parentheses1 = this.add.text(0, 30, this.parentheses[0], fontStyle2);
-        this.parentheses2 = this.add.text(130, 30, this.parentheses[1], fontStyle2);
-        this.parentheses3 = this.add.text(200, 30, this.parentheses[2], fontStyle2);
-        this.parentheses4 = this.add.text(280, 30, this.parentheses[3], fontStyle2);
-        this.parentheses5 = this.add.text(340, 30, this.parentheses[4], fontStyle2);
-        this.parentheses6 = this.add.text(460, 30, this.parentheses[5], fontStyle2);
-        this.parentheses1.depth = 2;
-        this.parentheses2.depth = 2;
-        this.parentheses3.depth = 2;
-        this.parentheses4.depth = 2;
-        this.parentheses5.depth = 2;
-        this.parentheses6.depth = 2;
-        this.goal1sprite = this.add.sprite(50, 50, "attributes", getSprite(this.goal1.value));
-        this.expressionText = this.add.text(70, 30, this.expCompact[1], fontStyle2);
-        this.goal2sprite = this.add.sprite(180, 50, "attributes", getSprite(this.goal2.value));
-        this.goal1sprite.setScale(0.4);
-        this.goal1sprite.depth = 1;
-        this.goal2sprite.setScale(0.4);
-        this.goal2sprite.depth = 1;
-        this.expressionText.depth = 1;
-
-        if(this.expCompact[3] != undefined){
-            this.goal3sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal3.value));
-            this.expressionText2 = this.add.text(230, 30, this.expCompact[3], fontStyle2);
-            this.goal3sprite.setScale(0.4);
-            this.goal3sprite.depth = 1;
-            this.expressionText2.depth = 1;
-        }
-        if(this.expCompact[5] != undefined){
-            this.goal4sprite = this.add.sprite(440,50, "attributes", getSprite(this.goal4.value));
-            this.expressionText3 = this.add.text(360, 30, this.expCompact[5], fontStyle2);
-            this.goal4sprite.setScale(0.4);
-            this.goal4sprite.depth = 1;
-            this.expressionText3.depth = 1;
-        }
+        
         this.win = false;
 
         //  Create a 4x4 grid aligned group to hold our sprites
@@ -221,6 +99,8 @@ export default class PickGame extends Phaser.Scene {
         this.rect.setStrokeStyle(2,0x000000);
         this.submitText = this.add.text(500, 20, 'Submit', fontStyle);
         this.submitText.setInteractive({useHandCursor: true});
+        //this.rect.depth = -1;
+        //this.submitText = -1;
 
         // text that shows on submission
         this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
@@ -456,43 +336,6 @@ export default class PickGame extends Phaser.Scene {
         console.log(this.expressions[this.currentRound]);
         console.log(this.strings[this.currentRound]);
 
-        this.updateExpressionDisplay();
-
-        // TODO: move below to updateExpressionDisplay
-        this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
-        this.expOperators = this.expressions[this.currentRound].filter(operator => operator == "AND" || operator == "OR");
-        this.expSize = this.expOperands.length + this.expOperators.length;
-        this.expCompact = new Array(this.expSize);
-        for(let i = 0; i<this.expOperands.length; i++){
-            this.expCompact[2*i] = this.expOperands[i];
-        }
-        for(let i = 0; i<this.expOperators.length; i++){
-            this.expCompact[2*i + 1] = this.expOperators[i];
-        }
-        this.parenthesesLength = 6;
-        this.parentheses = new Array(this.parenthesesLength);
-        let j = 0;
-        let k = 0;
-        let par = [];
-        for(let i = 0; i<this.expressions[this.currentRound].length; i++){
-            if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")" || this.expressions[this.currentRound][i] == "NOT"){
-                par.push(this.expressions[this.currentRound][i]);
-            } else if (this.expressions[this.currentRound][i] == "AND" || this.expressions[this.currentRound][i] == "OR"){
-                k++;
-                if (k == 2){
-                    this.parentheses[j] = par;
-                    j++;
-                    par = [];
-                }
-            } else {
-                this.parentheses[j] = par;
-                j++;
-                par = [];
-            }
-            if(i == this.expressions[this.currentRound].length - 1){
-                this.parentheses[j] = par;
-            }
-        }
         this.expressionText.destroy();
         if(this.goal3sprite == undefined){
 
@@ -514,85 +357,7 @@ export default class PickGame extends Phaser.Scene {
         } else {
             this.expressionText3.destroy();
         }
-        this.goal1 = this.expCompact[0];
-        this.goal1.value = this.goal1[Object.keys(this.goal1)];
-        this.goal2 = this.expCompact[2];
-        this.goal2.value = this.goal2[Object.keys(this.goal2)];
-        if(this.expCompact[3] != undefined){
-            this.goal3 = this.expCompact[4];
-            this.goal3.value = this.goal3[Object.keys(this.goal3)];
-        }
-        if(this.expCompact[5] != undefined){
-            this.goal4 = this.expCompact[6];
-            this.goal4.value = this.goal4[Object.keys(this.goal4)];
-        }
-        // console.log(this.goal1.value);
-        if(this.parentheses[0] == undefined){this.parentheses[0]=""};
-        if(this.parentheses[1] == undefined){this.parentheses[1]=""};
-        if(this.parentheses[2] == undefined){this.parentheses[2]=""};
-        if(this.parentheses[3] == undefined){this.parentheses[3]=""};
-        if(this.parentheses[4] == undefined){this.parentheses[4]=""};
-        if(this.parentheses[5] == undefined){this.parentheses[5]=""};
-        if(this.parentheses[0].length > 1){
-            this.parentheses[0] = this.parentheses[0].join();
-            this.parentheses[0] = this.parentheses[0].replace(',','');
-        }
-        if(this.parentheses[1].length > 1){
-            this.parentheses[1] = this.parentheses[1].join();
-            this.parentheses[1] = this.parentheses[1].replace(',','');
-        }
-        if(this.parentheses[2].length > 1){
-            this.parentheses[2] = this.parentheses[2].join();
-            this.parentheses[2] = this.parentheses[2].replace(',','');
-        }
-        if(this.parentheses[3].length > 1){
-            this.parentheses[3] = this.parentheses[3].join();
-            this.parentheses[3] = this.parentheses[3].replace(',','');
-        }
-        if(this.parentheses[4].length > 1){
-            this.parentheses[4] = this.parentheses[4].join();
-            this.parentheses[4] = this.parentheses[4].replace(',','');
-        }
-        if(this.parentheses[5].length > 1){
-            this.parentheses[5] = this.parentheses[5].join();
-            this.parentheses[5] = this.parentheses[5].replace(',','');
-        }
-        this.parentheses1.destroy();
-        this.parentheses2.destroy();
-        this.parentheses3.destroy();
-        this.parentheses4.destroy();
-        this.parentheses5.destroy();
-        this.parentheses6.destroy();
-        this.parentheses1 = this.add.text(0, 30, this.parentheses[0], fontStyle2);
-        this.parentheses2 = this.add.text(130, 30, this.parentheses[1], fontStyle2);
-        this.parentheses3 = this.add.text(200, 30, this.parentheses[2], fontStyle2);
-        this.parentheses4 = this.add.text(280, 30, this.parentheses[3], fontStyle2);
-        this.parentheses5 = this.add.text(340, 30, this.parentheses[4], fontStyle2);
-        this.parentheses6 = this.add.text(460, 30, this.parentheses[5], fontStyle2);
-        this.parentheses1.depth = 2;
-        this.parentheses2.depth = 2;
-        this.parentheses3.depth = 2;
-        this.parentheses4.depth = 2;
-        this.parentheses5.depth = 2;
-        this.parentheses6.depth = 2;
-        this.goal1sprite.setFrame(getSprite(this.goal1.value));
-        this.expressionText = this.add.text(70, 30, this.expCompact[1], fontStyle2);
-        this.goal2sprite.setFrame(getSprite(this.goal2.value));
-
-        if(this.expCompact[3] != undefined){
-            this.goal3sprite = this.add.sprite(320,50, "attributes", getSprite(this.goal3.value));
-            this.expressionText2 = this.add.text(230, 30, this.expCompact[3], fontStyle2);
-            this.goal3sprite.setScale(0.4);
-            this.goal3sprite.depth = 1;
-            this.expressionText2.depth = 1;
-        }
-        if(this.expCompact[5] != undefined){
-            this.goal4sprite = this.add.sprite(440,50, "attributes", getSprite(this.goal4.value));
-            this.expressionText3 = this.add.text(360, 30, this.expCompact[5], fontStyle2);
-            this.goal4sprite.setScale(0.4);
-            this.goal4sprite.depth = 1;
-            this.expressionText3.depth = 1;
-        }
+        createDisplay(this);
 
         this.win = false;
 
@@ -974,4 +739,172 @@ const pickLevelParameters = {
         numNots: [1, 2],
         repeat: false,
     },
+}
+
+function createDisplay(game) {
+    let ex = 0;
+    game.expOperands = game.expressions[game.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
+    game.expOperators = game.expressions[game.currentRound].filter(operator => operator == "AND" || operator == "OR");
+    game.expSize = game.expOperands.length + game.expOperators.length;
+    game.expCompact = new Array(game.expSize);
+    for(let i = 0; i<game.expOperands.length; i++){
+        game.expCompact[2*i] = game.expOperands[i];
+    }
+    for(let i = 0; i<game.expOperators.length; i++){
+        game.expCompact[2*i + 1] = game.expOperators[i];
+    }
+    game.parenthesesLength = 6;
+    game.parentheses = new Array(game.parenthesesLength);
+    let j = 0;
+    let k = 0;
+    let par = [];
+    for(let i = 0; i<game.expressions[game.currentRound].length; i++){
+        if(game.expressions[game.currentRound][i] == "(" || game.expressions[game.currentRound][i] == ")" || game.expressions[game.currentRound][i] == "NOT"){
+            par.push(game.expressions[game.currentRound][i]);
+        } /*else if (game.expressions[game.currentRound][i] == "AND" || game.expressions[game.currentRound][i] == "OR"){
+            k++;
+            if (k == 2){
+                game.parentheses[j] = par;
+                j++;
+                par = [];
+            }
+        }*/ else {
+            game.parentheses[j] = par;
+            j++;
+            par = [];
+        }
+        if(i == game.expressions[game.currentRound].length - 1){
+            game.parentheses[j] = par;
+        }
+    }
+    console.log(game.expressions[game.currentRound]);
+    console.log(game.parentheses);
+    console.log(game.level);
+    console.log(Object.keys(game.expressions[game.currentRound][0]));
+    // game.add.image(400, 300, 'background');
+    game.selection = [];
+    game.solution = [];
+    game.goal1 = game.expCompact[0];
+    game.goal1.value = game.goal1[Object.keys(game.goal1)[0]];
+    game.goal2 = game.expCompact[2];
+    game.goal2.value = game.goal2[Object.keys(game.goal2)[0]];
+    if(game.expCompact[3] != undefined){
+        game.goal3 = game.expCompact[4];
+        game.goal3.value = game.goal3[Object.keys(game.goal3)[0]];
+    }
+    if(game.expCompact[5] != undefined){
+        game.goal4 = game.expCompact[6];
+        game.goal4.value = game.goal4[Object.keys(game.goal4)[0]];
+    }
+    if(game.parentheses[0] == undefined){game.parentheses[0]=""};
+    if(game.parentheses[1] == undefined){game.parentheses[1]=""};
+    if(game.parentheses[2] == undefined){game.parentheses[2]=""};
+    if(game.parentheses[3] == undefined){game.parentheses[3]=""};
+    if(game.parentheses[4] == undefined){game.parentheses[4]=""};
+    if(game.parentheses[5] == undefined){game.parentheses[5]=""};
+    if(game.parentheses[6] == undefined){game.parentheses[6]=""};
+    if(game.parentheses[7] == undefined){game.parentheses[7]=""};
+    if(game.parentheses[0].length > 1){
+        game.parentheses[0] = game.parentheses[0].join();
+        while(game.parentheses[0].includes(",")){
+            game.parentheses[0] = game.parentheses[0].replace(',','');
+        }
+    }
+    if(game.parentheses[1].length > 1){
+        game.parentheses[1] = game.parentheses[1].join();
+        while(game.parentheses[1].includes(",")){
+            game.parentheses[1] = game.parentheses[1].replace(',','');
+        }
+    }
+    if(game.parentheses[2].length > 1){
+        game.parentheses[2] = game.parentheses[2].join();
+        while(game.parentheses[2].includes(",")){
+            game.parentheses[2] = game.parentheses[2].replace(',','');
+        }
+    }
+    if(game.parentheses[3].length > 1){
+        game.parentheses[3] = game.parentheses[3].join();
+        while(game.parentheses[3].includes(",")){
+            game.parentheses[3] = game.parentheses[3].replace(',','');
+        }
+    }
+    if(game.parentheses[4].length > 1){
+        game.parentheses[4] = game.parentheses[4].join();
+        while(game.parentheses[4].includes(",")){
+            game.parentheses[4] = game.parentheses[4].replace(',','');
+        }
+    }
+    if(game.parentheses[5].length > 1){
+        game.parentheses[5] = game.parentheses[5].join();
+        while(game.parentheses[5].includes(",")){
+            game.parentheses[5] = game.parentheses[5].replace(',','');
+        }
+    }
+    if(game.parentheses[6].length > 1){
+        game.parentheses[6] = game.parentheses[6].join();
+        while(game.parentheses[6].includes(",")){
+            game.parentheses[6] = game.parentheses[6].replace(',','');
+        }
+    }
+    if(game.parentheses[7].length > 1){
+        game.parentheses[7] = game.parentheses[7].join();
+        while(game.parentheses[7].includes(",")){
+            game.parentheses[7] = game.parentheses[7].replace(',','');
+        }
+    }
+    game.parentheses1 = game.add.text(ex, 30, game.parentheses[0], fontStyle2);
+    ex = ex + game.parentheses1.width;
+    game.goal1sprite = game.add.sprite(ex + 20, 50, "attributes", getSprite(game.goal1.value));
+    game.goal1sprite.setScale(0.4);
+    ex = ex + game.goal1sprite.width * 0.4;//40;
+    game.parentheses2 = game.add.text(ex, 30, game.parentheses[1], fontStyle2);
+    ex = ex + game.parentheses2.width;
+    game.expressionText = game.add.text(ex, 30, game.expCompact[1], fontStyle2);
+    ex = ex + game.expressionText.width;
+    game.parentheses3 = game.add.text(ex, 30, game.parentheses[2], fontStyle2);
+    ex = ex + game.parentheses3.width;
+    game.goal2sprite = game.add.sprite(ex + 20, 50, "attributes", getSprite(game.goal2.value));
+    game.goal2sprite.setScale(0.4);
+    ex = ex + game.goal2sprite.width * 0.4;
+    game.parentheses4 = game.add.text(ex, 30, game.parentheses[3], fontStyle2);
+    ex = ex + game.parentheses4.width;
+    game.parentheses1.depth = 2;
+    game.parentheses2.depth = 2;
+    game.parentheses3.depth = 2;
+    game.parentheses4.depth = 2;
+    game.goal1sprite.depth = 1;
+    game.goal2sprite.depth = 1;
+    game.expressionText.depth = 1;
+
+    if(game.expCompact[3] != undefined){
+        game.expressionText2 = game.add.text(ex, 30, game.expCompact[3], fontStyle2);
+        ex = ex + game.expressionText2.width;
+        game.parentheses5 = game.add.text(ex, 30, game.parentheses[4], fontStyle2);
+        ex = ex + game.parentheses5.width;
+        game.goal3sprite = game.add.sprite(ex + 20,50, "attributes", getSprite(game.goal3.value));
+        game.goal3sprite.setScale(0.4);
+        ex = ex + game.goal3sprite.width * 0.4;
+        game.parentheses6 = game.add.text(ex, 30, game.parentheses[5], fontStyle2);
+        ex = ex + game.parentheses6.width;
+        game.parentheses5.depth = 2;
+        game.parentheses6.depth = 2;
+        game.goal3sprite.depth = 1;
+        game.expressionText2.depth = 1;
+    }
+    //game.parentheses8 = game.add.text(620, 30, game.parentheses[5], fontStyle2);
+
+    if(game.expCompact[5] != undefined){
+        game.expressionText3 = game.add.text(ex, 30, game.expCompact[5], fontStyle2);
+        ex = ex + game.expressionText3.width;
+        game.parentheses7 = game.add.text(ex, 30, game.parentheses[6], fontStyle2);
+        ex = ex + game.parentheses7.width;
+        game.goal4sprite = game.add.sprite(ex + 20,50, "attributes", getSprite(game.goal4.value));
+        game.goal4sprite.setScale(0.4);
+        ex = ex + game.goal4sprite.width * 0.4;
+        game.parentheses8 = game.add.text(ex, 30, game.parentheses[7], fontStyle2);
+        game.parentheses7.depth = 2;
+        game.parentheses8.depth = 2;
+        game.goal4sprite.depth = 1;
+        game.expressionText3.depth = 1;
+    }
 }

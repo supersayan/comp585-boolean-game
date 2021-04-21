@@ -63,7 +63,7 @@ export default class MainGame extends Phaser.Scene {
     }
 
     create () {
-        createDisplay(this);
+        //createDisplay(this);
         this.win = false;
 
         // generates selection circles
@@ -759,14 +759,14 @@ function createDisplay(game) {
     for(let i = 0; i<game.expressions[game.currentRound].length; i++){
         if(game.expressions[game.currentRound][i] == "(" || game.expressions[game.currentRound][i] == ")" || game.expressions[game.currentRound][i] == "NOT"){
             par.push(game.expressions[game.currentRound][i]);
-        } else if (game.expressions[game.currentRound][i] == "AND" || game.expressions[game.currentRound][i] == "OR"){
+        } /*else if (game.expressions[game.currentRound][i] == "AND" || game.expressions[game.currentRound][i] == "OR"){
             k++;
             if (k == 2){
                 game.parentheses[j] = par;
                 j++;
                 par = [];
             }
-        } else {
+        }*/ else {
             game.parentheses[j] = par;
             j++;
             par = [];
@@ -800,12 +800,16 @@ function createDisplay(game) {
     if(game.parentheses[3] == undefined){game.parentheses[3]=""};
     if(game.parentheses[4] == undefined){game.parentheses[4]=""};
     if(game.parentheses[5] == undefined){game.parentheses[5]=""};
+    if(game.parentheses[6] == undefined){game.parentheses[6]=""};
+    if(game.parentheses[7] == undefined){game.parentheses[7]=""};
     if(game.parentheses[0].length > 1){
         game.parentheses[0] = game.parentheses[0].join();
-        game.parentheses[0] = game.parentheses[0].replace(',','');
+        while(game.parentheses[0].includes(",")){
             game.parentheses[0] = game.parentheses[0].replace(',','');
+            game.parentheses[0] = game.parentheses[0].replace(',','');
+        }
     }
-    if(game.parentheses[1].length > 1){
+    /*if(game.parentheses[1].length > 1){
         game.parentheses[1] = game.parentheses[1].join();
         game.parentheses[1] = game.parentheses[1].replace(',','');
         game.parentheses[1] = game.parentheses[1].replace(',','');
@@ -829,19 +833,19 @@ function createDisplay(game) {
         game.parentheses[5] = game.parentheses[5].join();
         game.parentheses[5] = game.parentheses[5].replace(',','');
         game.parentheses[5] = game.parentheses[5].replace(',','');
-    }
-    game.parentheses1 = game.add.text(0, 30, game.parentheses[0], fontStyle2);
-    game.parentheses2 = game.add.text(130, 30, game.parentheses[1], fontStyle2);
-    game.parentheses3 = game.add.text(200, 30, game.parentheses[2], fontStyle2);
-    game.parentheses4 = game.add.text(280, 30, game.parentheses[3], fontStyle2);
-    game.parentheses5 = game.add.text(340, 30, game.parentheses[4], fontStyle2);
-    game.parentheses6 = game.add.text(460, 30, game.parentheses[5], fontStyle2);
-    game.parentheses1.depth = 2;
-    game.parentheses2.depth = 2;
-    game.parentheses3.depth = 2;
-    game.parentheses4.depth = 2;
-    game.parentheses5.depth = 2;
-    game.parentheses6.depth = 2;
+    }*/
+    //game.parentheses1 = game.add.text(0, 30, game.parentheses[0], fontStyle2);
+    //game.parentheses2 = game.add.text(130, 30, game.parentheses[1], fontStyle2);
+    //game.parentheses3 = game.add.text(200, 30, game.parentheses[2], fontStyle2);
+    //game.parentheses4 = game.add.text(280, 30, game.parentheses[3], fontStyle2);
+    //game.parentheses5 = game.add.text(340, 30, game.parentheses[4], fontStyle2);
+    //game.parentheses6 = game.add.text(460, 30, game.parentheses[5], fontStyle2);
+    //game.parentheses1.depth = 2;
+    //game.parentheses2.depth = 2;
+    //game.parentheses3.depth = 2;
+    //game.parentheses4.depth = 2;
+    //game.parentheses5.depth = 2;
+    //game.parentheses6.depth = 2;
     game.goal1sprite = game.add.sprite(50, 50, "attributes", getSprite(game.goal1.value));
     game.expressionText = game.add.text(70, 30, game.expCompact[1], fontStyle2);
     game.goal2sprite = game.add.sprite(180, 50, "attributes", getSprite(game.goal2.value));
