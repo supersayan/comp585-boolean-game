@@ -237,12 +237,15 @@ export default class PickGame extends Phaser.Scene {
             }
         }
         let presolvedGrid = []; // contains index of this grid for items which will be made to be part of solution
-        presolvedGrid.push(Math.floor(16 * Math.random()));
+        // only push an index to be duplicated, if it isn't a null solution
+        if (presolved.length > 0)
+            presolvedGrid.push(Math.floor(16 * Math.random()));
         // randomly generate items
         for (let i = 0; i < 16; i++) {
             let item = [];
             let itemJSON = {};
             if (presolvedGrid.includes(i)) {
+                // console.log(presolved, presolvedGrid);
                 item = getItemFromBooleanArrayIndex(presolved[Math.floor(presolved.length * Math.random())], this.attributes);
                 for (let a=0; a<item.length; a++) {
                     itemJSON[Object.keys(item[a])[0]] = Object.values(item[a])[0];
@@ -256,6 +259,7 @@ export default class PickGame extends Phaser.Scene {
                     item.push(itemattr);
                     itemJSON[attr] = itemattr[attr];
                 }
+                // console.log(item);
             }
             this.itemAttributes.push(item);
             // if the generated item is part of solution, add its index to this.solution
@@ -287,6 +291,7 @@ export default class PickGame extends Phaser.Scene {
             // border x = 100 * border
             // border y = 2500 + 100 * shape
             
+            // console.log(color, pattern, shape);
             children[i].setFrame(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
             childrenBorder[i].setFrame(ATTR["BORDER"][border].toLowerCase() + "border" + ATTR["SHAPE"][shape].toLowerCase() + ".png");
             // children[i].setScale(2, 2);
@@ -366,10 +371,10 @@ export default class PickGame extends Phaser.Scene {
                 this.parentheses[j] = par;
             }
         }
-        console.log(this.expressions[this.currentRound]);
-        console.log(this.parentheses);
-        console.log(this.level);
-        console.log(Object.keys(this.expressions[this.currentRound][0]));
+        // console.log(this.expressions[this.currentRound]);
+        // console.log(this.parentheses);
+        // console.log(this.level);
+        // console.log(Object.keys(this.expressions[this.currentRound][0]));
         // this.add.image(400, 300, 'background');
         this.selection = [];
         this.solution = [];
@@ -513,8 +518,8 @@ export default class PickGame extends Phaser.Scene {
             return;
         }
         this.selection = [];
-        console.log(this.expressions[this.currentRound]);
-        console.log(this.strings[this.currentRound]);
+        // console.log(this.expressions[this.currentRound]);
+        // console.log(this.strings[this.currentRound]);
 
         this.updateExpressionDisplay();
 
