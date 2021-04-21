@@ -30,6 +30,7 @@ export default class PickGame extends Phaser.Scene {
         this.goal2;
         this.goal3;
         this.goal4;
+        this.colorblind = false;
     }
 
     init (data) {
@@ -568,6 +569,10 @@ export default class PickGame extends Phaser.Scene {
             throw new Error("invalid level");
         this.currentRound = 0; // iterates every new round
         let levelParams = pickLevelParameters[this.level];
+        if (this.colorblind) {
+            levelParams = pickLevelParameters[this.level * 10];
+        }
+        
         this.attributes = levelParams.attributes;
         this.numRounds = levelParams.numExpressions;
         let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
@@ -807,6 +812,21 @@ const pickLevelParameters = {
         numNots: -1,
         repeat: false,
     },
+    //10 is colorblind version of 1
+    10: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "PURPLE", "BLUE"]},
+            //{"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
+            //{"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+        ],
+        operators: ["AND"],
+        numFeatures: 2,
+        numExpressions: 8,
+        allowNullSet: false,
+        numNots: -1,
+        repeat: false,
+    },
     2: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
@@ -819,10 +839,37 @@ const pickLevelParameters = {
         numNots: -1,
         repeat: false,
     },
+    //20 is colorblind 2
+    20: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "PURPLE", "BLUE"]},
+        ],
+        operators: ["OR"],
+        numFeatures: 2,
+        numExpressions: 8,
+        allowNullSet: false,
+        numNots: -1,
+        repeat: false,
+    },
     3: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]}, 
+        ],
+        operators: ["AND", "OR"],
+        numFeatures: 3,
+        numExpressions: 8,
+        allowNullSet: false,
+        numNots: -1,
+        repeat: false,
+    },
+    //30 is colorblind 3
+    30: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "PURPLE", "BLUE"]},
             {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]}, 
         ],
         operators: ["AND", "OR"],
@@ -845,10 +892,38 @@ const pickLevelParameters = {
         numNots: [1, 2],
         repeat: false,
     },
+    //40 is colorblind 4
+    40: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "PURPLE", "BLUE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+        ],
+        operators: ["AND", "OR", "NOT"],
+        numFeatures: 2,
+        numExpressions: 8,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
     5: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+        ],
+        operators: ["AND", "OR", "NOT"],
+        numFeatures: 3,
+        numExpressions: 8,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
+    //50 is colorblind 5
+    50: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "PURPLE", "BLUE"]},
             {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
         ],
         operators: ["AND", "OR", "NOT"],
@@ -872,6 +947,21 @@ const pickLevelParameters = {
         numNots: [1, 2],
         repeat: false,
     },
+    //60 is colorblind 6
+    60: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "PURPLE", "BLUE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+            {"BORDER": ["BLACK", "BRONZE", "GOLD"]},
+        ],
+        operators: ["AND", "OR", "NOT"],
+        numFeatures: 3,
+        numExpressions: 8,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
     7: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
@@ -886,12 +976,42 @@ const pickLevelParameters = {
         numNots: [1, 2],
         repeat: false,
     },
+    //70 is colorblind 7
+    70: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "PURPLE", "BLUE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+            {"BORDER": ["BLACK", "BRONZE", "GOLD"]},
+        ],
+        operators: ["AND", "OR"],
+        numFeatures: 4,
+        numExpressions: 8,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
     8: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
             {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
             {"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
+        ],
+        operators: ["AND", "OR", "NOT"],
+        numFeatures: 4,
+        numExpressions: 8,
+        allowNullSet: true,
+        numNots: [1, 2],
+        repeat: false,
+    },
+    //80 is colorblind 8
+    80: {
+        attributes: [
+            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
+            {"COLOR": ["RED", "PURPLE", "BLUE"]},
+            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
+            {"BORDER": ["BLACK", "BRONZE", "GOLD"]},
         ],
         operators: ["AND", "OR", "NOT"],
         numFeatures: 4,
