@@ -5,6 +5,7 @@ export default class MainMenu extends Phaser.Scene
         super('MainMenu');
 
         this.music;
+        this.state = "main";
     }
 
     create ()
@@ -55,9 +56,20 @@ export default class MainMenu extends Phaser.Scene
         // });
 
         this.input.once('pointerdown', () => {
+            this.state = "intro";
+            this.add.image(400, 300, 'background');
+            let intro = this.add.image(400,300, 'intro');
 
-            this.scene.start('LevelSelect');
+            this.tweens.add({
+                targets: intro,
+                alpha: { from: 0, to: 1 },
+                duration: 100
+            });
 
+            this.input.once('pointerdown', () => {
+                this.state = "game";
+                this.scene.start('LevelSelect');
+            })
         });
     }
 }
