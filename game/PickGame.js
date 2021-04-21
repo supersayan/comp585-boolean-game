@@ -533,7 +533,7 @@ export default class PickGame extends Phaser.Scene {
             duration: 600,
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
             onComplete: () => {
-                // if (this.proptext)
+                if (this.proptext)
                     for (let i = 0; i < this.proptext.length; i++) {
                         this.proptext[i].destroy();
                     }
