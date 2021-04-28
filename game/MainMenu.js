@@ -68,7 +68,7 @@ export default class MainMenu extends Phaser.Scene
 
             this.input.once('pointerdown', () => {
                 this.state = "game";
-                this.scene.start('LevelSelect');
+                this.scene.start('LevelSelect', {colorblind: false});
             })
         });
     }
