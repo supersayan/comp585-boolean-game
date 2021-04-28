@@ -95,17 +95,20 @@ export default class PickGame extends Phaser.Scene {
         this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
 
         // submission button
-        this.rect = this.add.rectangle(745, 375, 100, 50,0x55ffff);
+        this.rect = this.add.rectangle(745, 355, 100, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
-        this.submitText = this.add.text(680, 345, 'Submit', fontStyle);
+        this.submitText = this.add.text(680, 325, 'Submit', fontStyle);
         this.submitText.setInteractive({useHandCursor: true});
 
-        // flip button and reset button
-        this.flipButton = this.add.sprite(750, 450, "attributes", getSprite(this.goal1.value)).setScale(0.5);
+        // flip button and reset button and help button
+        this.flipButton = this.add.image(750, 425, 'invert').setScale(0.4);
         this.flipButton.setInteractive();
 
-        this.resetButton = this.add.sprite(750,500, "attributes", getSprite(this.goal1.value)).setScale(0.5);
+        this.resetButton = this.add.image(750,500, 'restart').setScale(0.4);
         this.resetButton.setInteractive();
+
+        this.helpButton = this.add.image(750,150, 'help').setScale(0.4);
+        this.helpButton.setInteractive();
         //this.rect.depth = -1;
         //this.submitText = -1;
 
@@ -135,7 +138,7 @@ export default class PickGame extends Phaser.Scene {
         this.turnOnSubmitEvent();
         this.turnOnResetEvent();
         this.turnOnFlipEvent();
-
+        this.turnOnHelpEvent(); 
         this.starttime = new Date();
     }
 
@@ -218,6 +221,12 @@ export default class PickGame extends Phaser.Scene {
                 this.circles[this.selection[i]].setVisible(false);
             }
             this.selection = a;
+        })
+    }
+
+    turnOnHelpEvent() {
+        this.helpButton.on('pointerdown', () => {
+            window.open('https://en.wikipedia.org/wiki/Boolean_algebra', '_blank');
         })
     }
 
