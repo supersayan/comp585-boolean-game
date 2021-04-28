@@ -167,63 +167,55 @@ export default class PickGame extends Phaser.Scene {
 
     turnOnSubmitEvent() {
         this.submitButton.once('pointerdown', () => { // one time listener
-            /*this.tweens.add({
+            this.tweens.add({
                 targets: [this.submitButton],
                 alpha: {start: 1, to: 0.75},
                 y: '+=5',
                 ease: 'Elastic.out',
                 duration: 100,
-            });*/
+            });
             this.submitSelection();
         }, this);
     }
 
-    turnOnFlipEvent() {
-        
-        this.flipButton.on('pointerdown', () => {
-            let a = [];
-            for (let i = 0; i < 16; i++) {
-                let inside = false;
-                for (let j = 0; j < this.selection.length; j++) {
-                    if (i == this.selection[j]) {
-                        inside = true; 
-                        break;
-                    }
-                }
-                if (inside) {
-                    this.circles[i].setVisible(false);
-                } else {
-                    a.push(i)
-                    this.circles[i].setVisible(true);
+    flip() {
+        let a = [];
+        for (let i = 0; i < 16; i++) {
+            let inside = false;
+            for (let j = 0; j < this.selection.length; j++) {
+                if (i == this.selection[j]) {
+                    inside = true; 
+                    break;
                 }
             }
-            this.selection = a;
-        })
+            if (inside) {
+                this.circles[i].setVisible(false);
+            } else {
+                a.push(i)
+                this.circles[i].setVisible(true);
+            }
+        }
+        this.selection = a;
+    }
+
+    turnOnFlipEvent() {
+        this.flipButton.on('pointerdown', this.flip, this)
     }
 
     turnOffFlipEvent() {
-        this.flipButton.off('pointerdown', () => {
-            let a = [];
-            for (let i = 0; i < 16; i++) {
-                if (i in this.selection) {
-                    this.circles[i].setVisible(false);
-                } else {
-                    a.push(i)
-                    this.circles[i].setVisible(true);
-                }
-            }
-            this.selection = a;
-        })
+        this.flipButton.off('pointerdown', this.flip, this)
+    }
+
+    reset() {
+        let a = [];
+        for (let i = 0; i < this.selection.length; i++) {
+            this.circles[this.selection[i]].setVisible(false);
+        }
+        this.selection = a;
     }
 
     turnOnResetEvent() {
-        this.resetButton.on('pointerdown', () => {
-            let a = [];
-            for (let i = 0; i < this.selection.length; i++) {
-                this.circles[this.selection[i]].setVisible(false);
-            }
-            this.selection = a;
-        })
+        this.resetButton.on('pointerdown', this.reset, this)
     }
 
     turnOnHelpEvent() {
@@ -233,13 +225,7 @@ export default class PickGame extends Phaser.Scene {
     }
 
     turnOffResetEvent() {
-        this.resetButton.off('pointerdown', () => {
-            let a = [];
-            for (let i = 0; i < this.selection.length; i++) {
-                this.circles[this.selection[i]].setVisible(false);
-            }
-            this.selection = a;
-        })
+         this.resetButton.off('pointerdown', this.reset, this)
     }
 
     selectItem(pointer) {
@@ -693,6 +679,8 @@ export default class PickGame extends Phaser.Scene {
         
         // this.input.off('gameobjectdown', this.selectItem, this); 
         this.turnOffSelectEvent();
+        this.turnOffFlipEvent();
+        this.turnOffResetEvent();
         if (win) {
            
             this.win = true;
@@ -732,7 +720,7 @@ export default class PickGame extends Phaser.Scene {
                     // a.off();
 
                     this.tweens.add({
-                        targets: [this.submitText, this.rect],
+                        targets: [this.submitButton],
                         alpha: {start: 0.75, to: 1},
                         y: '-=5',
                         ease: 'Elastic.out',
@@ -761,7 +749,7 @@ export default class PickGame extends Phaser.Scene {
             // console.log(this.input);
             setTimeout( () => {
                 this.tweens.add({
-                    targets: [this.submitText, this.rect],
+                    targets: [this.submitButton],
                     alpha: {start: 0.75, to: 1},
                     y: '-=5',
                     ease: 'Elastic.out',
@@ -774,6 +762,8 @@ export default class PickGame extends Phaser.Scene {
                     onComplete: () => {
                         // this.loseText.setVisible(false);
                         this.turnOnSubmitEvent();
+                        this.turnOnFlipEvent();
+                        this.turnOnResetEvent();
                     }
                 });
             }, 500);
