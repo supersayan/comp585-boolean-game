@@ -30,11 +30,11 @@ export default class PickGame extends Phaser.Scene {
         this.goal2;
         this.goal3;
         this.goal4;
-        this.colorblind = false;
     }
 
     init (data) {
         this.level = data.level;
+        this.colorblind = data.colorblind;
         this.leveltext = this.add.text(0, 540, "", fontStyle);
         this.newLevel();
     }
@@ -127,7 +127,7 @@ export default class PickGame extends Phaser.Scene {
         this.back_arrow = this.add.image(760, 565, 'back_arrow').setScale(0.1);
         this.back_arrow.setInteractive({useHandCursor: true});
         this.back_arrow.once('pointerdown', () => {
-            this.scene.start('LevelSelect');
+            this.scene.start('LevelSelect', {colorblind: this.colorblind});
         }, this);
 
         this.timetext = this.add.text(5, 510, "", fontStyle);
@@ -578,7 +578,7 @@ export default class PickGame extends Phaser.Scene {
         } else {
             // end level
             // this.newLevel();
-            this.scene.start("LevelSelect");
+            this.scene.start("LevelSelect", {colorblind: this.colorblind});
             return;
         }
         this.selection = [];

@@ -6,9 +6,23 @@ export default class LevelSelect extends Phaser.Scene {
         super('LevelSelect');
     }
 
+    init (data) {
+        this.colorblind = data.colorblind;
+    }
+
     create () {
         this.add.image(400, 300, 'background');
         this.level = 0;
+
+        if (this.colorblind == true) {
+            this.colorblindButton = this.add.image(750, 550, 'colorblindOn').setScale(0.15);
+        } else {
+            this.colorblindButton = this.add.image(750, 550, 'colorblindOff').setScale(0.15);
+        }
+        this.colorblindButton.setInteractive({useHandCursor: true});
+        this.turnOnColorblindEvent();
+
+        
 
         const fontStyle = {
             fontFamily: 'Arial',
@@ -37,6 +51,7 @@ export default class LevelSelect extends Phaser.Scene {
             // levelGroup.add(levelnumber);
         }
 
+
         // this.input.on('gameobjectdown', (pointer, gameObject) => {
         //     this.levelClick(pointer);
         // });
@@ -53,8 +68,25 @@ export default class LevelSelect extends Phaser.Scene {
         // console.log(x, y);
         let level = 1 + Math.floor((x-400)/100) + Math.floor((y-200)/100)*LEVELROWSIZE;
         // console.log(level);
-        this.scene.start("PickGame", {level: level});
+        this.scene.start("PickGame", {level: level, colorblind: this.colorblind});
         // console.log(Math.floor((pointer.x-100) / 100));
+    }
+
+    turnOnColorblindEvent() {
+        this.colorblindButton.on('pointerdown', () => 
+        {if (this.colorblind == false) {
+            this.colorblind = true;
+            this.colorblindButton = this.add.image(750, 550, 'colorblindOn').setScale(0.15);
+        } else {
+            this.colorblind = false;
+            this.colorblindButton = this.add.image(750, 550, 'colorblindOff').setScale(0.15);
+        }}
+        
+        );
+    }
+
+    turnOffColorblindEvent() {
+        this.colorblindButton.off('pointerdown', this.colorblindToggle(), this)
     }
 }
 
