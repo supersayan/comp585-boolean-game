@@ -5,6 +5,7 @@ import Preloader from './Preloader.js';
 import MainMenu from './MainMenu.js';
 import PickGame from './PickGame.js';
 import LevelSelect from './LevelSelect.js';
+import PauseMenu from './PauseMenu.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -13,7 +14,7 @@ const config = {
     backgroundColor: '#008eb0',
     autoFocus: true,
     gameTitle: 'Shape Shop',
-    scene: [ Boot, Preloader, MainMenu, PickGame, LevelSelect],
+    scene: [ Boot, Preloader, MainMenu, PickGame, LevelSelect, PauseMenu],
 };
 
 let game = new Phaser.Game(config);
