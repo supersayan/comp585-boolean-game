@@ -33,8 +33,6 @@ export default class PickGame extends Phaser.Scene {
         }
 
         this.updateExpressionDisplay();
-
-
         
         this.win = false;
 
@@ -77,6 +75,8 @@ export default class PickGame extends Phaser.Scene {
         // blue rectangle covering top of screen
         this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
 
+        // Create Buttons
+
         // submission button
         /*this.rect = this.add.rectangle(745, 355, 100, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
@@ -96,6 +96,10 @@ export default class PickGame extends Phaser.Scene {
         this.helpButton.setInteractive({useHandCursor: true});
         //this.rect.depth = -1;
         //this.submitText = -1;
+
+        this.pauseButton = this.add.image(750, 50, 'pause').setScale(0.15);
+        this.pauseButton.setInteractive({useHandCursor: true});
+        // this.pauseButton.depth = 3;
 
         // text that shows on submission
         this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
@@ -119,12 +123,13 @@ export default class PickGame extends Phaser.Scene {
 
         this.arrangeGrid();
         
+        // add Event Listeners
         this.turnOnSelectEvent();
         this.turnOnSubmitEvent();
         this.turnOnResetEvent();
         this.turnOnFlipEvent();
         this.turnOnHelpEvent();
-
+        this.turnOnPauseEvent();
 
         // Score / Time
         this.timeEvent = this.time.addEvent({
@@ -225,6 +230,13 @@ export default class PickGame extends Phaser.Scene {
 
     turnOffResetEvent() {
          this.resetButton.off('pointerdown', this.reset, this)
+    }
+
+    turnOnPauseEvent() {
+        this.pauseButton.on('pointerdown', () => {
+            this.scene.pause();
+            this.scene.launch('PauseMenu');
+        }, this);
     }
 
     selectItem(pointer) {
@@ -577,6 +589,7 @@ export default class PickGame extends Phaser.Scene {
         } else {
             // end level
             // this.newLevel();
+            this.registry.set('level' + this.level, this.score);
             this.scene.start("LevelSelect", {colorblind: this.colorblind});
             return;
         }
