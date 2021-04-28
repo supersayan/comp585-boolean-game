@@ -95,20 +95,22 @@ export default class PickGame extends Phaser.Scene {
         this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
 
         // submission button
-        this.rect = this.add.rectangle(745, 355, 100, 50,0x55ffff);
+        /*this.rect = this.add.rectangle(745, 355, 100, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
         this.submitText = this.add.text(680, 325, 'Submit', fontStyle);
-        this.submitText.setInteractive({useHandCursor: true});
+        this.submitText.setInteractive({useHandCursor: true});*/
+        this.submitButton = this.add.image(750, 325, 'check').setScale(0.15);
+        this.submitButton.setInteractive({useHandCursor: true});
 
         // flip button and reset button and help button
-        this.flipButton = this.add.image(750, 425, 'invert').setScale(0.4);
-        this.flipButton.setInteractive();
+        this.flipButton = this.add.image(750, 425, 'invert').setScale(0.15);
+        this.flipButton.setInteractive({useHandCursor: true});
 
         this.resetButton = this.add.image(750,500, 'restart').setScale(0.4);
-        this.resetButton.setInteractive();
+        this.resetButton.setInteractive({useHandCursor: true});
 
         this.helpButton = this.add.image(750,150, 'help').setScale(0.4);
-        this.helpButton.setInteractive();
+        this.helpButton.setInteractive({useHandCursor: true});
         //this.rect.depth = -1;
         //this.submitText = -1;
 
@@ -164,14 +166,14 @@ export default class PickGame extends Phaser.Scene {
     }
 
     turnOnSubmitEvent() {
-        this.submitText.once('pointerdown', () => { // one time listener
-            this.tweens.add({
-                targets: [this.submitText, this.rect],
+        this.submitButton.once('pointerdown', () => { // one time listener
+            /*this.tweens.add({
+                targets: [this.submitButton],
                 alpha: {start: 1, to: 0.75},
                 y: '+=5',
                 ease: 'Elastic.out',
                 duration: 100,
-            });
+            });*/
             this.submitSelection();
         }, this);
     }

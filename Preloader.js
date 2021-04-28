@@ -16,7 +16,7 @@ export default class Preloader extends Phaser.Scene
         this.loadText.setShadow(2, 2, '#2d2d2d', 4, true, false);
 
         this.load.setPath('assets/');
-        this.load.image([ 'background', 'back_arrow', 'intro', 'help', 'invert', 'restart']);
+        this.load.image([ 'background', 'back_arrow', 'intro', 'help', 'invert', 'restart', 'check']);
         // this.load.atlas('fruits', 'fruits2.png', 'fruits2.json');
         this.load.atlas('shapes', 'shapes_modified.png', 'shapes_modified.json');
         this.load.atlas('attributes', 'attributes_modified.png', 'attributes_modified.json');
