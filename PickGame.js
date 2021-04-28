@@ -95,10 +95,17 @@ export default class PickGame extends Phaser.Scene {
         this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
 
         // submission button
-        this.rect = this.add.rectangle(568, 55, 125, 50,0x55ffff);
+        this.rect = this.add.rectangle(745, 375, 100, 50,0x55ffff);
         this.rect.setStrokeStyle(2,0x000000);
-        this.submitText = this.add.text(500, 20, 'Submit', fontStyle);
+        this.submitText = this.add.text(680, 345, 'Submit', fontStyle);
         this.submitText.setInteractive({useHandCursor: true});
+
+        // flip button and reset button
+        this.flipButton = this.add.sprite(750, 450, "attributes", getSprite(this.goal1.value)).setScale(0.5);
+        this.flipButton.setInteractive();
+
+        this.resetButton = this.add.sprite(750,500, "attributes", getSprite(this.goal1.value)).setScale(0.5);
+        this.resetButton.setInteractive();
         //this.rect.depth = -1;
         //this.submitText = -1;
 
@@ -126,6 +133,8 @@ export default class PickGame extends Phaser.Scene {
         
         this.turnOnSelectEvent();
         this.turnOnSubmitEvent();
+        this.turnOnResetEvent();
+        this.turnOnFlipEvent();
 
         this.starttime = new Date();
     }
@@ -162,6 +171,64 @@ export default class PickGame extends Phaser.Scene {
             });
             this.submitSelection();
         }, this);
+    }
+
+    turnOnFlipEvent() {
+        
+        this.flipButton.on('pointerdown', () => {
+            let a = [];
+            for (let i = 0; i < 16; i++) {
+                let inside = false;
+                for (let j = 0; j < this.selection.length; j++) {
+                    if (i == this.selection[j]) {
+                        inside = true; 
+                        break;
+                    }
+                }
+                if (inside) {
+                    this.circles[i].setVisible(false);
+                } else {
+                    a.push(i)
+                    this.circles[i].setVisible(true);
+                }
+            }
+            this.selection = a;
+        })
+    }
+
+    turnOffFlipEvent() {
+        this.flipButton.off('pointerdown', () => {
+            let a = [];
+            for (let i = 0; i < 16; i++) {
+                if (i in this.selection) {
+                    this.circles[i].setVisible(false);
+                } else {
+                    a.push(i)
+                    this.circles[i].setVisible(true);
+                }
+            }
+            this.selection = a;
+        })
+    }
+
+    turnOnResetEvent() {
+        this.resetButton.on('pointerdown', () => {
+            let a = [];
+            for (let i = 0; i < this.selection.length; i++) {
+                this.circles[this.selection[i]].setVisible(false);
+            }
+            this.selection = a;
+        })
+    }
+
+    turnOffResetEvent() {
+        this.resetButton.off('pointerdown', () => {
+            let a = [];
+            for (let i = 0; i < this.selection.length; i++) {
+                this.circles[this.selection[i]].setVisible(false);
+            }
+            this.selection = a;
+        })
     }
 
     selectItem(pointer) {
@@ -545,6 +612,8 @@ export default class PickGame extends Phaser.Scene {
                 this.arrangeGrid();
                 this.turnOnSelectEvent();
                 this.turnOnSubmitEvent();
+                this.turnOnFlipEvent();
+                this.turnOnResetEvent();
                 this.winText.setAlpha(0);
                 // let children = this.items.getChildren();
                 // console.log(children);
@@ -755,10 +824,10 @@ function getSprite(attribute) {
     }
 }
 
-// size 30
+// size 28
 const fontStyle = {
     fontFamily: 'Arial',
-    fontSize: 30,
+    fontSize: 28,
     color: '#ffffff',
     fontStyle: 'bold',
     padding: 16,
