@@ -13,23 +13,6 @@ export default class PickGame extends Phaser.Scene {
 
     constructor (str) {
         super('PickGame');
-
-        this.expOperands;
-        this.expOperators;
-        this.expSize;
-        this.expCompact;
-        this.parentheses;
-        this.parenthesesLength;
-        // this.strings = evalOutput.strings;
-        this.items; // phaser group
-        this.itemsBorders;
-        this.itemAttributes; // store array of attribute:feature objects for each item
-
-        //new things for the display
-        this.goal1;
-        this.goal2;
-        this.goal3;
-        this.goal4;
     }
 
     init (data) {
@@ -140,16 +123,32 @@ export default class PickGame extends Phaser.Scene {
         this.turnOnSubmitEvent();
         this.turnOnResetEvent();
         this.turnOnFlipEvent();
-        this.turnOnHelpEvent(); 
-        this.starttime = new Date();
+        this.turnOnHelpEvent();
+
+
+        // Score / Time
+        this.timeEvent = this.time.addEvent({
+            delay: 999000,
+            callback: this.timeEventFinish,
+            callbackScope: this,
+            repeat: 1,
+        })
+        // this.starttime = this.time.now;
+        // this.currentTime = 0;
+        this.timePenalty = 0;
+        this.score = 0;
     }
 
-    // loop
-    update() {
+    // main game loop
+    update(time) {
         // update time text
-        let currenttime = new Date();
-        this.time = Math.min(Math.floor((currenttime - this.starttime) / 1000), 999);
-        this.timetext.setText("Time: " + this.time);
+        this.score = Math.min(Math.floor((this.timeEvent.getElapsedSeconds()))+this.timePenalty, 999);
+        // this.time = Math.min(Math.floor((currenttime - this.starttime) / 1000), 999);
+        this.timetext.setText("Time: " + this.score);
+    }
+
+    timeEventFinish() {
+        // do nothing
     }
 
     turnOnSelectEvent() {
@@ -701,24 +700,6 @@ export default class PickGame extends Phaser.Scene {
                 duration: 150,
                 ease: 'sine.inout',
                 onComplete: () => {
-                    // let counter = 0;
-                    // let a = this.input.on('pointerdown', (pointer) => {
-                    //     console.log('counter1', counter)     
-                    //     if (pointer.leftButtonDown()) { 
-                    //         this.input.off('gameobjectdown', this.selectItem, this);
-                    //         //this.scene.start('MainGame');
-                    //         if (counter == 0)
-                    //             this.newRound();
-                    //         else {
-                    //             this.input.on('gameobjectdown', this.selectItem, this);
-                    //         }
-                    //         counter++;
-                    //     } else if (pointer.rightButtonDown()) {
-                    //         // this.input.on('gameobjectdown', this.selectItem, this);
-                    //     }
-                    // }, this);
-                    // a.off();
-
                     this.tweens.add({
                         targets: [this.submitButton],
                         alpha: {start: 0.75, to: 1},
@@ -737,6 +718,8 @@ export default class PickGame extends Phaser.Scene {
             this.score = 0;
             this.win = false;
             this.loseText.setAlpha(1);
+
+            this.timePenalty += 10;
 
             this.turnOnSelectEvent();
 
