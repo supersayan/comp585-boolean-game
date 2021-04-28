@@ -106,7 +106,7 @@ export default class PickGame extends Phaser.Scene {
         this.flipButton = this.add.image(750, 425, 'invert').setScale(0.15);
         this.flipButton.setInteractive({useHandCursor: true});
 
-        this.resetButton = this.add.image(750,500, 'restart').setScale(0.4);
+        this.resetButton = this.add.image(750,500, 'restart').setScale(0.15);
         this.resetButton.setInteractive({useHandCursor: true});
 
         this.helpButton = this.add.image(750,150, 'help').setScale(0.4);
