@@ -75,32 +75,6 @@ export default class PickGame extends Phaser.Scene {
         // blue rectangle covering top of screen
         this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
 
-        // Create Buttons
-
-        // submission button
-        /*this.rect = this.add.rectangle(745, 355, 100, 50,0x55ffff);
-        this.rect.setStrokeStyle(2,0x000000);
-        this.submitText = this.add.text(680, 325, 'Submit', fontStyle);
-        this.submitText.setInteractive({useHandCursor: true});*/
-        this.submitButton = this.add.image(750, 325, 'check').setScale(0.15);
-        this.submitButton.setInteractive({useHandCursor: true});
-
-        // flip button and reset button and help button
-        this.flipButton = this.add.image(750, 425, 'invert').setScale(0.15);
-        this.flipButton.setInteractive({useHandCursor: true});
-
-        this.resetButton = this.add.image(750,500, 'restart').setScale(0.15);
-        this.resetButton.setInteractive({useHandCursor: true});
-
-        this.helpButton = this.add.image(750,150, 'help').setScale(0.15);
-        this.helpButton.setInteractive({useHandCursor: true});
-        //this.rect.depth = -1;
-        //this.submitText = -1;
-
-        this.pauseButton = this.add.image(750, 50, 'pause').setScale(0.15);
-        this.pauseButton.setInteractive({useHandCursor: true});
-        // this.pauseButton.depth = 3;
-
         // text that shows on submission
         this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
         this.winText.setColor('#FFD700');
@@ -110,8 +84,34 @@ export default class PickGame extends Phaser.Scene {
         //this.loseText.setVisible(false);
         this.loseText.setAlpha(0);
 
+        // Create Buttons
+
+        // submission button
+        /*this.rect = this.add.rectangle(745, 355, 100, 50,0x55ffff);
+        this.rect.setStrokeStyle(2,0x000000);
+        this.submitText = this.add.text(680, 325, 'Submit', fontStyle);
+        this.submitText.setInteractive({useHandCursor: true});*/
+        this.submitButton = this.add.image(750, 560, 'check').setScale(0.8);
+        this.submitButton.setInteractive({useHandCursor: true});
+
+        // flip button and reset button and help button
+        this.flipButton = this.add.image(750, 420, 'invert').setScale(0.8);
+        this.flipButton.setInteractive({useHandCursor: true});
+
+        this.resetButton = this.add.image(750,490, 'restart').setScale(0.8);
+        this.resetButton.setInteractive({useHandCursor: true});
+
+        // this.helpButton = this.add.image(750,150, 'help').setScale(0.8);
+        // this.helpButton.setInteractive({useHandCursor: true});
+        //this.rect.depth = -1;
+        //this.submitText = -1;
+
+        this.pauseButton = this.add.image(750, 50, 'pause').setScale(0.7);
+        this.pauseButton.setInteractive({useHandCursor: true});
+        // this.pauseButton.depth = 3;
+
         // Back Button
-        this.back_arrow = this.add.image(760, 565, 'back_arrow').setScale(0.1);
+        this.back_arrow = this.add.image(750, 150, 'back_arrow').setScale(0.8);
         this.back_arrow.setInteractive({useHandCursor: true});
         this.back_arrow.once('pointerdown', () => {
             this.scene.start('LevelSelect', {colorblind: this.colorblind});
@@ -128,7 +128,7 @@ export default class PickGame extends Phaser.Scene {
         this.turnOnSubmitEvent();
         this.turnOnResetEvent();
         this.turnOnFlipEvent();
-        this.turnOnHelpEvent();
+        // this.turnOnHelpEvent();
         this.turnOnPauseEvent();
 
         // Score / Time
