@@ -21,33 +21,16 @@ export default class LevelSelect extends Phaser.Scene {
         }
         this.colorblindButton.setInteractive({useHandCursor: true});
         this.turnOnColorblindEvent();
-
-        
-
-        const fontStyle = {
-            fontFamily: 'Arial',
-            fontSize: 48,
-            color: '#ffffff',
-            fontStyle: 'bold',
-            padding: 16,
-            shadow: {
-                color: '#000000',
-                fill: true,
-                offsetX: 2,
-                offsetY: 2,
-                blur: 4
-            }
-        };
         
         // let levelGroup = this.add.group();
 
-        this.add.text(50, 200, "Level Select", fontStyle);
+        this.add.text(100, 80, "Level Select", fontStyle);
         for (let l=0; l<NUMLEVELS; l++) {
-            let levelnumber = this.add.text(400+100*(l%LEVELROWSIZE), 200+100*Math.floor(l/LEVELROWSIZE), l+1, fontStyle);
-            levelnumber.setInteractive({useHandCursor: true});
-            levelnumber.on('pointerdown', (pointer) => {
-                this.levelClick(pointer);
-            })
+            this.createLevelButton(150+150*(l%LEVELROWSIZE), 250+150*Math.floor(l/LEVELROWSIZE), l+1);
+            // levelnumber.setInteractive({useHandCursor: true});
+            // levelnumber.on('pointerdown', (pointer) => {
+            //     this.levelClick(pointer);
+            // })
             // levelGroup.add(levelnumber);
         }
 
@@ -60,6 +43,19 @@ export default class LevelSelect extends Phaser.Scene {
         //     this.level = index;
 
         // })
+    }
+
+    createLevelButton(x, y, level) {
+        let levelnumber = this.add.text(x, y, level, fontStyle).setOrigin(0.5).setDepth(2);
+        let btn = this.add.image(x, y, 'button_up').setInteractive({useHandCursor: true}).setScale(2).setOrigin(0.5).setDepth(1);
+        btn.on('pointerover', (ptr) => {btn.setTexture('button_hover'), levelnumber.setY(y)}); //on hover
+        btn.on('pointerout', (ptr) => {btn.setTexture('button_up'), levelnumber.setY(y)});
+        btn.on('pointerdown', (ptr) => {btn.setTexture('button_down'), levelnumber.setY(y+5)}); //on press
+        // add once listener so lifting pointer after clicking from previous scene doesn't count
+        btn.once('pointerdown', () =>
+            btn.on('pointerup', (ptr) => {this.scene.start("PickGame", {level: level, colorblind: this.colorblind})}));
+
+        return btn;
     }
 
     levelClick(pointer) {
@@ -90,3 +86,17 @@ export default class LevelSelect extends Phaser.Scene {
     }
 }
 
+const fontStyle = {
+    fontFamily: 'Arial',
+    fontSize: 48,
+    color: '#ffffff',
+    fontStyle: 'bold',
+    padding: 16,
+    shadow: {
+        color: '#000000',
+        fill: true,
+        offsetX: 2,
+        offsetY: 2,
+        blur: 4
+    }
+};
