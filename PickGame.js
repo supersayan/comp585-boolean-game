@@ -41,7 +41,7 @@ export default class PickGame extends Phaser.Scene {
         this.items = this.add.group({
             key: 'shapes',
             frameQuantity: 1,
-            repeat: 15,
+            repeat: GRID_WIDTH * GRID_HEIGHT - 1,
             gridAlign: {
                 width: GRID_WIDTH,
                 height: GRID_HEIGHT,
@@ -50,18 +50,12 @@ export default class PickGame extends Phaser.Scene {
                 x: GRID_X,
                 y: GRID_Y,
             },
-            // setScale: {
-            //     x: 0.5,
-            //     y: 0.5,
-            // }
         });
-        // this.items.getChildren().setScale(0.5);
-        // Phaser.Actions.SetScale(this.items, 0.5);
-        // testing scale , none of above work
+        
         this.itemsBorders = this.add.group({
             key: 'shapes',
             frameQuantity: 1,
-            repeat: 15,
+            repeat: GRID_WIDTH * GRID_HEIGHT - 1,
             gridAlign: {
                 width: GRID_WIDTH,
                 height: GRID_HEIGHT,
@@ -134,7 +128,7 @@ export default class PickGame extends Phaser.Scene {
         // Score / Time
         this.timeEvent = this.time.addEvent({
             delay: 999000,
-            callback: this.timeEventFinish,
+            callback: this.emptyCallback,
             callbackScope: this,
             repeat: 1,
         })
@@ -142,6 +136,18 @@ export default class PickGame extends Phaser.Scene {
         // this.currentTime = 0;
         this.timePenalty = 0;
         this.score = 0;
+
+        // this.createButton(100, 100, this.emptyCallback, this);
+    }
+
+    createButton(x, y, callback, icon) {
+        let btn = this.add.image(x, y, 'button_up').setInteractive({useHandCursor: true}).setScale(1.4);
+        btn.on('pointerover', (ptr, x, y) => {btn.setTexture('button_hover')}); //on hover
+        btn.on('pointerout', (ptr) => {btn.setTexture('button_up')});
+        btn.on('pointerdown', (ptr) => {btn.setTexture('button_down')}); //on press
+        btn.on('pointerup', (ptr) => {callback(), btn.setTexture('button_hover')});
+
+        return btn;
     }
 
     // main game loop
@@ -152,8 +158,9 @@ export default class PickGame extends Phaser.Scene {
         this.timetext.setText("Time: " + this.score);
     }
 
-    timeEventFinish() {
+    emptyCallback() {
         // do nothing
+        // console.log("hi");
     }
 
     turnOnSelectEvent() {
@@ -869,6 +876,11 @@ const fontStyle3 = {
     }
 };
 
+/**
+ * the level parameters
+ * 1,2,3 are for levels 1,2,3
+ * 10,20,30 are the colorlbind alternatives for levels 1,2,3, which have some colors (ORANGE, GREEN) removed
+ */
 const pickLevelParameters = {
     1: {
         attributes: [
