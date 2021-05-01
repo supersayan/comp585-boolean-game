@@ -14,7 +14,10 @@ export default class LevelSelect extends Phaser.Scene {
         this.add.image(400, 300, 'background');
         this.level = 0;
 
-        if (this.colorblind == true) {
+        // Colorblind Button
+        if (!this.registry.get('colorblind'))
+            this.registry.set('colorblind', false);
+        if (this.registry.get('colorblind' == false)) {
             this.colorblindButton = this.add.image(750, 550, 'colorblindOn').setScale(0.15);
         } else {
             this.colorblindButton = this.add.image(750, 550, 'colorblindOff').setScale(0.15);
@@ -53,36 +56,35 @@ export default class LevelSelect extends Phaser.Scene {
         btn.on('pointerdown', (ptr) => {btn.setTexture('button_down'), levelnumber.setY(y+5)}); //on press
         // add once listener so lifting pointer after clicking from previous scene doesn't count
         btn.once('pointerdown', () =>
-            btn.on('pointerup', (ptr) => {this.scene.start("PickGame", {level: level, colorblind: this.colorblind})}));
+            btn.on('pointerup', (ptr) => {this.scene.start("PickGame", {level: level})}));
 
         return btn;
     }
 
-    levelClick(pointer) {
-        let x = pointer.x;
-        let y = pointer.y;
-        // console.log(x, y);
-        let level = 1 + Math.floor((x-400)/100) + Math.floor((y-200)/100)*LEVELROWSIZE;
-        // console.log(level);
-        this.scene.start("PickGame", {level: level, colorblind: this.colorblind});
-        // console.log(Math.floor((pointer.x-100) / 100));
-    }
+    // levelClick(pointer) {
+    //     let x = pointer.x;
+    //     let y = pointer.y;
+    //     // console.log(x, y);
+    //     let level = 1 + Math.floor((x-400)/100) + Math.floor((y-200)/100)*LEVELROWSIZE;
+    //     // console.log(level);
+    //     this.scene.start("PickGame", {level: level});
+    //     // console.log(Math.floor((pointer.x-100) / 100));
+    // }
 
     turnOnColorblindEvent() {
-        this.colorblindButton.on('pointerdown', () => 
-        {if (this.colorblind == false) {
-            this.colorblind = true;
-            this.colorblindButton = this.add.image(750, 550, 'colorblindOn').setScale(0.15);
-        } else {
-            this.colorblind = false;
-            this.colorblindButton = this.add.image(750, 550, 'colorblindOff').setScale(0.15);
-        }}
-        
-        );
+        this.colorblindButton.on('pointerdown', () => {
+            if (this.registry.get('colorblind') == false) {
+                this.registry.set('colorblind', true);
+                this.colorblindButton = this.add.image(750, 550, 'colorblindOn').setScale(0.15);
+            } else {
+                this.registry.set('colorblind', false);
+                this.colorblindButton = this.add.image(750, 550, 'colorblindOff').setScale(0.15);
+            }
+        });
     }
 
     turnOffColorblindEvent() {
-        this.colorblindButton.off('pointerdown', this.colorblindToggle(), this)
+        this.colorblindButton.off('pointerdown');
     }
 }
 
