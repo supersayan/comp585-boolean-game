@@ -2,7 +2,7 @@ import { OPER, ATTR, createUniqueExpressions, getBooleanArrayIndexOfItem, getIte
 
 const GRID_WIDTH = 4;
 const GRID_HEIGHT = 4;
-const GRID_X = 280;
+const GRID_X = 240;
 const GRID_Y = 180;
 const GRID_CELLWIDTH = 120;
 const GRID_CELLHEIGHT = 120;
@@ -17,7 +17,6 @@ export default class PickGame extends Phaser.Scene {
 
     init (data) {
         this.level = data.level;
-        this.colorblind = data.colorblind;
         this.leveltext = this.add.text(0, 540, "", fontStyle);
         this.newLevel();
     }
@@ -70,10 +69,10 @@ export default class PickGame extends Phaser.Scene {
         this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
 
         // text that shows on submission
-        this.winText = this.add.text(620, 20, 'Correct!', fontStyle);
+        this.winText = this.add.text(570, 520, 'Correct!', fontStyle);
         this.winText.setColor('#FFD700');
         this.winText.setAlpha(0);
-        this.loseText = this.add.text(620, 20, 'Try Again', fontStyle);
+        this.loseText = this.add.text(550, 520, 'Try Again', fontStyle);
         this.loseText.setColor('#FF0000');
         //this.loseText.setVisible(false);
         this.loseText.setAlpha(0);
@@ -85,14 +84,14 @@ export default class PickGame extends Phaser.Scene {
         this.rect.setStrokeStyle(2,0x000000);
         this.submitText = this.add.text(680, 325, 'Submit', fontStyle);
         this.submitText.setInteractive({useHandCursor: true});*/
-        this.submitButton = this.add.image(750, 560, 'check').setScale(0.8);
+        this.submitButton = this.add.image(750, 550, 'check').setScale(1);
         this.submitButton.setInteractive({useHandCursor: true});
 
         // flip button and reset button and help button
-        this.flipButton = this.add.image(750, 420, 'invert').setScale(0.8);
+        this.flipButton = this.add.image(750, 380, 'invert').setScale(0.8);
         this.flipButton.setInteractive({useHandCursor: true});
 
-        this.resetButton = this.add.image(750,490, 'restart').setScale(0.8);
+        this.resetButton = this.add.image(750,460, 'restart').setScale(0.8);
         this.resetButton.setInteractive({useHandCursor: true});
 
         // this.helpButton = this.add.image(750,150, 'help').setScale(0.8);
@@ -108,7 +107,7 @@ export default class PickGame extends Phaser.Scene {
         this.back_arrow = this.add.image(750, 150, 'back_arrow').setScale(0.8);
         this.back_arrow.setInteractive({useHandCursor: true});
         this.back_arrow.once('pointerdown', () => {
-            this.scene.start('LevelSelect', {colorblind: this.colorblind});
+            this.scene.start('LevelSelect');
         }, this);
 
         this.timetext = this.add.text(5, 510, "", fontStyle);
@@ -597,7 +596,7 @@ export default class PickGame extends Phaser.Scene {
             // end level
             // this.newLevel();
             this.registry.set('level' + this.level, this.score);
-            this.scene.start("LevelSelect", {colorblind: this.colorblind});
+            this.scene.start("LevelSelect");
             return;
         }
         this.selection = [];
@@ -660,11 +659,28 @@ export default class PickGame extends Phaser.Scene {
             throw new Error("invalid level");
         this.currentRound = 0; // iterates every new round
         let levelParams = pickLevelParameters[this.level];
-        if (this.colorblind) {
-            levelParams = pickLevelParameters[this.level * 10];
-        }
         
         this.attributes = levelParams.attributes;
+
+        // modify attributes for colorblind
+        let COLORBLINDCOLORS = ["RED", "PURPLE", "BLUE"];
+        let COLORBLINDBORDERS = ["BLACK", "BRONZE", "GOLD"];
+        let c = this.attributes.findIndex(a => Object.keys(a)[0] == "COLOR");
+        let b = this.attributes.findIndex(a => Object.keys(a)[0] == "BORDER");
+        if (this.registry.get('colorblind') === true) {
+            if (c >= 0) {
+                this.attributes[c]["COLOR"] = this.attributes[c]["COLOR"].filter((clr) => COLORBLINDCOLORS.includes(clr));
+            }
+            if (b >= 0) {
+                this.attributes[b]["BORDER"] = this.attributes[b]["BORDER"].filter((clr) => COLORBLINDBORDERS.includes(clr));
+            }
+        }
+        for (let i = 0; i < this.attributes.length; i++) {
+            let k = Object.keys(this.attributes[i])[0];
+            if (this.attributes[i][k].length < 1)
+                throw new Error("invalid attributes");
+        }
+
         this.numRounds = levelParams.numExpressions;
         let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
         this.expressions = evalOutput.expressions;
@@ -896,21 +912,6 @@ const pickLevelParameters = {
         numNots: -1,
         repeat: false,
     },
-    //10 is colorblind version of 1
-    10: {
-        attributes: [
-            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-            {"COLOR": ["RED", "PURPLE", "BLUE"]},
-            //{"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
-            //{"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
-        ],
-        operators: ["AND"],
-        numFeatures: 2,
-        numExpressions: 8,
-        allowNullSet: false,
-        numNots: -1,
-        repeat: false,
-    },
     2: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
@@ -923,37 +924,10 @@ const pickLevelParameters = {
         numNots: -1,
         repeat: false,
     },
-    //20 is colorblind 2
-    20: {
-        attributes: [
-            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-            {"COLOR": ["RED", "PURPLE", "BLUE"]},
-        ],
-        operators: ["OR"],
-        numFeatures: 2,
-        numExpressions: 8,
-        allowNullSet: false,
-        numNots: -1,
-        repeat: false,
-    },
     3: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
-            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]}, 
-        ],
-        operators: ["AND", "OR"],
-        numFeatures: 3,
-        numExpressions: 8,
-        allowNullSet: false,
-        numNots: -1,
-        repeat: false,
-    },
-    //30 is colorblind 3
-    30: {
-        attributes: [
-            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-            {"COLOR": ["RED", "PURPLE", "BLUE"]},
             {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]}, 
         ],
         operators: ["AND", "OR"],
@@ -976,38 +950,10 @@ const pickLevelParameters = {
         numNots: [1, 2],
         repeat: false,
     },
-    //40 is colorblind 4
-    40: {
-        attributes: [
-            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-            {"COLOR": ["RED", "PURPLE", "BLUE"]},
-            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
-        ],
-        operators: ["AND", "OR", "NOT"],
-        numFeatures: 2,
-        numExpressions: 8,
-        allowNullSet: true,
-        numNots: [1, 2],
-        repeat: false,
-    },
     5: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
-            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
-        ],
-        operators: ["AND", "OR", "NOT"],
-        numFeatures: 3,
-        numExpressions: 8,
-        allowNullSet: true,
-        numNots: [1, 2],
-        repeat: false,
-    },
-    //50 is colorblind 5
-    50: {
-        attributes: [
-            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-            {"COLOR": ["RED", "PURPLE", "BLUE"]},
             {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
         ],
         operators: ["AND", "OR", "NOT"],
@@ -1031,21 +977,6 @@ const pickLevelParameters = {
         numNots: [1, 2],
         repeat: false,
     },
-    //60 is colorblind 6
-    60: {
-        attributes: [
-            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-            {"COLOR": ["RED", "PURPLE", "BLUE"]},
-            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
-            {"BORDER": ["BLACK", "BRONZE", "GOLD"]},
-        ],
-        operators: ["AND", "OR", "NOT"],
-        numFeatures: 3,
-        numExpressions: 8,
-        allowNullSet: true,
-        numNots: [1, 2],
-        repeat: false,
-    },
     7: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
@@ -1060,42 +991,12 @@ const pickLevelParameters = {
         numNots: [1, 2],
         repeat: false,
     },
-    //70 is colorblind 7
-    70: {
-        attributes: [
-            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-            {"COLOR": ["RED", "PURPLE", "BLUE"]},
-            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
-            {"BORDER": ["BLACK", "BRONZE", "GOLD"]},
-        ],
-        operators: ["AND", "OR"],
-        numFeatures: 4,
-        numExpressions: 8,
-        allowNullSet: true,
-        numNots: [1, 2],
-        repeat: false,
-    },
     8: {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
             {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
             {"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
-        ],
-        operators: ["AND", "OR", "NOT"],
-        numFeatures: 4,
-        numExpressions: 8,
-        allowNullSet: true,
-        numNots: [1, 2],
-        repeat: false,
-    },
-    //80 is colorblind 8
-    80: {
-        attributes: [
-            {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-            {"COLOR": ["RED", "PURPLE", "BLUE"]},
-            {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
-            {"BORDER": ["BLACK", "BRONZE", "GOLD"]},
         ],
         operators: ["AND", "OR", "NOT"],
         numFeatures: 4,
