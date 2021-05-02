@@ -34,12 +34,57 @@ export default class MainMenu extends Phaser.Scene
         };
 
         this.text1 = this.add.text(240, -20, 'Shape Shop', fontStyle);
+        let frames = this.textures.get('shapes').getFrameNames();
+        for (let i = 0; i < 10; i++ ){
+            frames.pop();
+        }
+        this.im1 = this.add.sprite(-20,-20, 'shapes').setScale(0.8)
+        this.im1.setFrame(Phaser.Utils.Array.GetRandom(frames));
+        this.im2 = this.add.sprite(this.game.canvas.width + 40,40, 'shapes').setScale(0.8)
+        this.im2.setFrame(Phaser.Utils.Array.GetRandom(frames));
+        this.im3 = this.add.sprite(-20,this.game.canvas.height +40, 'shapes').setScale(0.8)
+        this.im3.setFrame(Phaser.Utils.Array.GetRandom(frames));
+        this.im4 = this.add.sprite(-20,this.game.canvas.height +40, 'shapes').setScale(0.8)
+        this.im3.setFrame(Phaser.Utils.Array.GetRandom(frames));
+
         this.tweens.add({
             targets: this.text1,
             duration: 2000,
             y: {start: 0, to: this.game.canvas.height/2 - this.text1.height},
             ease: 'bounce.out',
             
+        });
+
+        this.tweens.add({
+            targets: this.im1,
+            duration: 2000,
+            y: {start: 0, to: this.game.canvas.height/4},
+            x: {start: 0, to:this.game.canvas.width/4},
+            ease: 'bounce.out',
+        });
+
+        this.tweens.add({
+            targets: this.im2,
+            duration: 2000,
+            y: {start: this.game.canvas.height + 40, to: this.game.canvas.height/1.5},
+            x: {start: this.game.canvas.width + 40, to:this.game.canvas.width/1.35},
+            ease: 'bounce.out',
+        });
+
+        this.tweens.add({
+            targets: this.im3,
+            duration: 2000,
+            y: {start: -20, to: this.game.canvas.height/4},
+            x: {start: this.game.canvas.width + 40, to:this.game.canvas.width/1.35},
+            ease: 'bounce.out',
+        });
+
+        this.tweens.add({
+            targets: this.im4,
+            duration: 2000,
+            y: {start: this.game.canvas.width + 40, to: this.game.canvas.height/1.5},
+            x: {start: -20, to:this.game.canvas.width/4},
+            ease: 'bounce.out',
         });
         // let logo = this.add.image(400, -200, 'logo');
 
