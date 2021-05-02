@@ -10,7 +10,7 @@ import PauseMenu from './PauseMenu.js';
 const config = {
     type: Phaser.AUTO,
     width: 800,
-    height: 600,
+    height: 700,
     backgroundColor: '#008eb0',
     autoFocus: true,
     gameTitle: 'Shape Shop',

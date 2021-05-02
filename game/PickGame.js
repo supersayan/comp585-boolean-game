@@ -17,7 +17,7 @@ export default class PickGame extends Phaser.Scene {
 
     init (data) {
         this.level = data.level;
-        this.leveltext = this.add.text(0, 540, "", fontStyle);
+        this.leveltext = this.add.text(0, 610, "", fontStyle);
         this.newLevel();
     }
 
@@ -67,7 +67,7 @@ export default class PickGame extends Phaser.Scene {
 
         // blue rectangle covering top of screen
         this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
-
+        this.bgrect1 = this.add.rectangle(0,710, 1600, 210, 0xFF0000, 0.8);
         // text that shows on submission
         this.winText = this.add.text(570, 520, 'Correct!', fontStyle);
         this.winText.setColor('#FFD700');
@@ -84,14 +84,14 @@ export default class PickGame extends Phaser.Scene {
         this.rect.setStrokeStyle(2,0x000000);
         this.submitText = this.add.text(680, 325, 'Submit', fontStyle);
         this.submitText.setInteractive({useHandCursor: true});*/
-        this.submitButton = this.add.image(750, 550, 'check').setScale(1);
+        this.submitButton = this.add.image(600, 650, 'check').setScale(1);
         this.submitButton.setInteractive({useHandCursor: true});
 
         // flip button and reset button and help button
-        this.flipButton = this.add.image(750, 380, 'invert').setScale(0.8);
+        this.flipButton = this.add.image(400, 650, 'invert').setScale(0.8);
         this.flipButton.setInteractive({useHandCursor: true});
 
-        this.resetButton = this.add.image(750,460, 'restart').setScale(0.8);
+        this.resetButton = this.add.image(500,650, 'restart').setScale(0.8);
         this.resetButton.setInteractive({useHandCursor: true});
 
         // this.helpButton = this.add.image(750,150, 'help').setScale(0.8);
@@ -104,15 +104,16 @@ export default class PickGame extends Phaser.Scene {
         // this.pauseButton.depth = 3;
 
         // Back Button
-        this.back_arrow = this.add.image(750, 150, 'back_arrow').setScale(0.8);
+        this.back_arrow = this.add.image(750, 650, 'back_arrow').setScale(0.8);
         this.back_arrow.setInteractive({useHandCursor: true});
         this.back_arrow.once('pointerdown', () => {
             this.scene.start('LevelSelect');
         }, this);
 
-        this.timetext = this.add.text(5, 510, "", fontStyle);
+        this.timetext = this.add.text(5, 650, "", fontStyle);
         // this.timetext.setStyle(fontStyle);
         this.timetext.setPadding(10);
+        
 
         this.arrangeGrid();
         
@@ -206,10 +207,11 @@ export default class PickGame extends Phaser.Scene {
             }
         }
         this.selection = a;
+        this.buttonBounceAnimation(this.flipButton, 'f');
     }
 
     turnOnFlipEvent() {
-        this.flipButton.on('pointerdown', this.flip, this)
+        this.flipButton.once('pointerdown', this.flip, this)
     }
 
     turnOffFlipEvent() {
@@ -217,15 +219,45 @@ export default class PickGame extends Phaser.Scene {
     }
 
     reset() {
+        
         let a = [];
         for (let i = 0; i < this.selection.length; i++) {
             this.circles[this.selection[i]].setVisible(false);
         }
         this.selection = a;
+        this.buttonBounceAnimation(this.resetButton, 'r');
+    }
+
+    buttonBounceAnimation(button, str) {
+
+        this.tweens.add({
+            targets: [button],
+            alpha: {start: 1, to: 0.75},
+            y: '+=5',
+            ease: 'Elastic.out',
+            duration: 200,
+            onComplete: () => {
+                this.tweens.add({
+                    targets: [button],
+                    alpha: {start: 0.75, to: 1},
+                    y: '-=5',
+                    ease: 'Elastic.out',
+                    duration: 200,
+                    onComplete: () => {
+                        if (str == 'r') {
+                            this.turnOnResetEvent();
+                        } else if (str == 'f') {
+                            this.turnOnFlipEvent();
+                        }
+                    }
+                });
+            }
+        });
+        
     }
 
     turnOnResetEvent() {
-        this.resetButton.on('pointerdown', this.reset, this)
+        this.resetButton.once('pointerdown', this.reset, this);
     }
 
     turnOnHelpEvent() {
@@ -689,6 +721,7 @@ export default class PickGame extends Phaser.Scene {
 
         // display level number
         this.leveltext.setText("Level " + this.level, fontStyle);
+
         // this.leveltext.setStyle(fontStyle);
     }
 
