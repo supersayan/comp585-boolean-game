@@ -11,6 +11,7 @@ export default class MainMenu extends Phaser.Scene
     create ()
     {
         let background = this.add.image(400, 300, 'background');
+        background.setScale(1.5,1.5);
 
         this.tweens.add({
             targets: background,
@@ -35,7 +36,7 @@ export default class MainMenu extends Phaser.Scene
 
         this.text1 = this.add.text(240, -20, 'Shape Shop', fontStyle);
         let frames = this.textures.get('shapes').getFrameNames();
-        for (let i = 0; i < 10; i++ ){
+        for (let i = 0; i < 25; i++ ){
             frames.pop();
         }
         this.im1 = this.add.sprite(-20,-20, 'shapes').setScale(0.8)
@@ -45,7 +46,7 @@ export default class MainMenu extends Phaser.Scene
         this.im3 = this.add.sprite(-20,this.game.canvas.height +40, 'shapes').setScale(0.8)
         this.im3.setFrame(Phaser.Utils.Array.GetRandom(frames));
         this.im4 = this.add.sprite(-20,this.game.canvas.height +40, 'shapes').setScale(0.8)
-        this.im3.setFrame(Phaser.Utils.Array.GetRandom(frames));
+        this.im4.setFrame(Phaser.Utils.Array.GetRandom(frames));
 
         this.tweens.add({
             targets: this.text1,
@@ -102,7 +103,8 @@ export default class MainMenu extends Phaser.Scene
 
         this.input.once('pointerdown', () => {
             this.state = "intro";
-            this.add.image(400, 300, 'background');
+            let background2 = this.add.image(400, 300, 'background');
+            background2.setScale(1.5,1.5);
             let intro = this.add.image(400,300, 'intro');
 
             this.tweens.add({
