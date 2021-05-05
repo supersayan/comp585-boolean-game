@@ -4,6 +4,7 @@ const LEVELROWSIZE = 4;
 export default class LevelSelect extends Phaser.Scene {
     constructor () {
         super('LevelSelect');
+        this.backg;
     }
 
     init (data) {
@@ -11,7 +12,8 @@ export default class LevelSelect extends Phaser.Scene {
     }
 
     create () {
-        this.add.image(400, 300, 'background');
+        this.backg = this.add.image(400, 300, 'background');
+        this.backg.setScale(1.5,1.5);
         this.level = 0;
 
         // Colorblind Button
