@@ -20,9 +20,9 @@ export default class LevelSelect extends Phaser.Scene {
         if (!this.registry.get('colorblind'))
             this.registry.set('colorblind', false);
         if (this.registry.get('colorblind' == false)) {
-            this.colorblindButton = this.add.image(750, 550, 'colorblindOn').setScale(0.15);
+            this.colorblindButton = this.add.image(650, 550, 'colorblindOn').setScale(0.25);
         } else {
-            this.colorblindButton = this.add.image(750, 550, 'colorblindOff').setScale(0.15);
+            this.colorblindButton = this.add.image(650, 550, 'colorblindOff').setScale(0.25);
         }
         this.colorblindButton.setInteractive({useHandCursor: true});
         this.turnOnColorblindEvent();
@@ -77,10 +77,10 @@ export default class LevelSelect extends Phaser.Scene {
         this.colorblindButton.on('pointerdown', () => {
             if (this.registry.get('colorblind') == false) {
                 this.registry.set('colorblind', true);
-                this.colorblindButton = this.add.image(750, 550, 'colorblindOn').setScale(0.15);
+                this.colorblindButton = this.add.image(650, 550, 'colorblindOn').setScale(0.25);
             } else {
                 this.registry.set('colorblind', false);
-                this.colorblindButton = this.add.image(750, 550, 'colorblindOff').setScale(0.15);
+                this.colorblindButton = this.add.image(650, 550, 'colorblindOff').setScale(0.25);
             }
         });
     }
