@@ -273,6 +273,7 @@ export default class PickGame extends Phaser.Scene {
     turnOnPauseEvent() {
         this.pauseButton.on('pointerdown', () => {
             this.scene.pause();
+            // will run this scene in parallel while current scene is paused
             this.scene.launch('PauseMenu');
         }, this);
     }
@@ -614,8 +615,7 @@ export default class PickGame extends Phaser.Scene {
         } else {
             // end level
             // this.newLevel();
-            this.registry.set('level' + this.level, this.score);
-            this.scene.start("LevelSelect");
+            this.scene.start("LevelFinish", {level: this.level, score: this.score});
             return;
         }
         this.selection = [];
@@ -632,6 +632,13 @@ export default class PickGame extends Phaser.Scene {
         // this.submitText.setInteractive({ useHandCursor: false});   
 
         // this.submitText.setText('Submit');
+
+        this.tweens.add({
+            targets: this.roundProgressBar,
+            width: this.game.config.width * (this.currentRound / this.numRounds),
+            ease: 'power2',
+            duration: 500,
+        })
 
         //  Stagger tween shapes all out
         this.tweens.add({
@@ -755,13 +762,6 @@ export default class PickGame extends Phaser.Scene {
 
             this.score = 0;
             this.win = false;
-
-            this.tweens.add({
-                targets: this.roundProgressBar,
-                width: this.game.config.width * (this.currentRound / this.numRounds),
-                ease: 'power2',
-                duration: 500,
-            })
 
             this.tweens.add({
                 targets: circledance,

@@ -4,7 +4,7 @@ export default class PauseMenu extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(400, 300, 'background').setDepth(4).setScale(1.5);
+        this.add.image(this.game.config.width/2, this.game.config.height/2, 'background').setDepth(4).setScale(1.5);
         // this.pausebg = this.add.rectangle(400, 300, 800, 600, 0x008eb0);
         // this.pausebg.setDepth(5);
 

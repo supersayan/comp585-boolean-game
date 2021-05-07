@@ -20,9 +20,9 @@ export default class LevelSelect extends Phaser.Scene {
         if (!this.registry.get('colorblind'))
             this.registry.set('colorblind', false);
         if (this.registry.get('colorblind' == false)) {
-            this.colorblindButton = this.add.image(650, 550, 'colorblindOn').setScale(0.25);
+            this.colorblindButton = this.add.image(700, 600, 'colorblindOn').setScale(0.25);
         } else {
-            this.colorblindButton = this.add.image(650, 550, 'colorblindOff').setScale(0.25);
+            this.colorblindButton = this.add.image(700, 600, 'colorblindOff').setScale(0.25);
         }
         this.colorblindButton.setInteractive({useHandCursor: true});
         this.turnOnColorblindEvent();
@@ -32,11 +32,9 @@ export default class LevelSelect extends Phaser.Scene {
         this.add.text(100, 80, "Level Select", fontStyle);
         for (let l=0; l<NUMLEVELS; l++) {
             this.createLevelButton(150+150*(l%LEVELROWSIZE), 250+150*Math.floor(l/LEVELROWSIZE), l+1);
-            // levelnumber.setInteractive({useHandCursor: true});
-            // levelnumber.on('pointerdown', (pointer) => {
-            //     this.levelClick(pointer);
-            // })
-            // levelGroup.add(levelnumber);
+            if (this.registry.get('level' + (l+1))) {
+                this.add.text(150+150*(l%LEVELROWSIZE), 320+150*Math.floor(l/LEVELROWSIZE), "Best: " + this.registry.get('level' + (l+1)), fontStyle2).setOrigin(0.5);
+            }
         }
 
 
@@ -93,6 +91,21 @@ export default class LevelSelect extends Phaser.Scene {
 const fontStyle = {
     fontFamily: 'Arial',
     fontSize: 48,
+    color: '#ffffff',
+    fontStyle: 'bold',
+    padding: 16,
+    shadow: {
+        color: '#000000',
+        fill: true,
+        offsetX: 2,
+        offsetY: 2,
+        blur: 4
+    }
+};
+
+const fontStyle2 = {
+    fontFamily: 'Arial',
+    fontSize: 16,
     color: '#ffffff',
     fontStyle: 'bold',
     padding: 16,

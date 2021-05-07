@@ -6,6 +6,7 @@ import MainMenu from './MainMenu.js';
 import PickGame from './PickGame.js';
 import LevelSelect from './LevelSelect.js';
 import PauseMenu from './PauseMenu.js';
+import LevelFinish from './LevelFinish.js'
 
 const config = {
     type: Phaser.AUTO,
@@ -15,7 +16,7 @@ const config = {
     parent: 'game', // id of html element
     autoFocus: true,
     gameTitle: 'Shape Shop',
-    scene: [ Boot, Preloader, MainMenu, PickGame, LevelSelect, PauseMenu],
+    scene: [ Boot, Preloader, MainMenu, PickGame, LevelSelect, PauseMenu, LevelFinish],
 };
 
 let game = new Phaser.Game(config);
