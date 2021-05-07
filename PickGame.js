@@ -139,9 +139,6 @@ export default class PickGame extends Phaser.Scene {
         this.score = 0;
 
         // this.createButton(100, 100, this.emptyCallback, this);
-
-        // used for property text
-        this.lastRightClick = -1;
     }
 
     // createButton(x, y, callback, icon) {
@@ -310,15 +307,16 @@ export default class PickGame extends Phaser.Scene {
                 }
             }
 
-            if (index != this.lastRightClick) {
+            if (this.prevIndex != index) {
                 this.proptext = [];
                 this.proptext[0] = this.add.text(10, 120, 'Properties: ', fontStyle2);
                 for (let i=0; i<this.itemAttributes[index].length; i++) {
                     this.proptext[i+1] = this.add.text(10, 150 + 30*i, Object.keys(this.itemAttributes[index][i])[0] + " = " + Object.values(this.itemAttributes[index][i])[0], fontStyle2);
+                    //if (temp[i+1] = this.proptext[i+1]);
                 }
-                this.lastRightClick = index;
+                this.prevIndex = index;
             } else {
-                this.lastRightClick = -1;
+                this.prevIndex = -1;
             }
         }
     }
@@ -653,6 +651,7 @@ export default class PickGame extends Phaser.Scene {
                 this.turnOnFlipEvent();
                 this.turnOnResetEvent();
                 this.winText.setAlpha(0);
+                this.prevIndex = -1;
                 // let children = this.items.getChildren();
                 // console.log(children);
                 // children.forEach((child) => {
