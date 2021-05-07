@@ -18,7 +18,7 @@ export default class PickGame extends Phaser.Scene {
     init (data) {
         this.level = data.level;
         this.leveltext = this.add.text(0, 610, "", fontStyle);
-        this.leveltext.depth = 2;
+        this.leveltext.setDepth(2);
         this.newLevel();
     }
 
@@ -27,7 +27,7 @@ export default class PickGame extends Phaser.Scene {
         this.circles = new Array(16);
         for(let i = 0; i < 16; i++){
             this.circles[i] = this.add.circle(0, 0, 60).setStrokeStyle(3, 0xf8960e);
-            this.circles[i].depth = 1;
+            this.circles[i].setDepth(1);
             this.circles[i].setPosition((i%GRID_WIDTH)*GRID_CELLWIDTH+GRID_X-10, Math.floor(i/GRID_WIDTH)*GRID_CELLHEIGHT+GRID_Y-10);
             this.circles[i].setVisible(false);
         }
@@ -67,8 +67,9 @@ export default class PickGame extends Phaser.Scene {
         });
 
         // blue rectangle covering top of screen
-        this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
-        this.bgrect1 = this.add.rectangle(0,710, 1600, 210, 0x0000FF, 0.4);
+        this.bgrect = this.add.rectangle(0,0, 1600, 200, 0x0000FF, 0.4);
+        // blue rectangle covering bottom of screen
+        this.bgrect1 = this.add.rectangle(0,700, 1600, 200, 0x0000FF, 0.4);
         // text that shows on submission
         this.winText = this.add.text(570, 620, 'Correct!', fontStyle);
         this.winText.setColor('#FFD700');
@@ -85,14 +86,14 @@ export default class PickGame extends Phaser.Scene {
         this.rect.setStrokeStyle(2,0x000000);
         this.submitText = this.add.text(680, 325, 'Submit', fontStyle);
         this.submitText.setInteractive({useHandCursor: true});*/
-        this.submitButton = this.add.image(500, 650, 'check').setScale(1);
+        this.submitButton = this.add.image(750, 650, 'check').setScale(1.2);
         this.submitButton.setInteractive({useHandCursor: true});
 
         // flip button and reset button and help button
-        this.flipButton = this.add.image(300, 650, 'invert').setScale(0.8);
+        this.flipButton = this.add.image(350, 650, 'invert').setScale(0.8);
         this.flipButton.setInteractive({useHandCursor: true});
 
-        this.resetButton = this.add.image(400,650, 'restart').setScale(0.8);
+        this.resetButton = this.add.image(450, 650, 'restart').setScale(0.8);
         this.resetButton.setInteractive({useHandCursor: true});
 
         // this.helpButton = this.add.image(750,150, 'help').setScale(0.8);
@@ -105,16 +106,15 @@ export default class PickGame extends Phaser.Scene {
         // this.pauseButton.depth = 3;
 
         // Back Button
-        this.back_arrow = this.add.image(750, 650, 'back_arrow').setScale(0.8);
-        this.back_arrow.setInteractive({useHandCursor: true});
-        this.back_arrow.once('pointerdown', () => {
-            this.scene.start('LevelSelect');
-        }, this);
+        // this.back_arrow = this.add.image(750, 650, 'back_arrow').setScale(0.8);
+        // this.back_arrow.setInteractive({useHandCursor: true});
+        // this.back_arrow.once('pointerdown', () => {
+        //     this.scene.start('LevelSelect');
+        // }, this);
 
         this.timetext = this.add.text(5, 650, "", fontStyle);
         // this.timetext.setStyle(fontStyle);
         this.timetext.setPadding(10);
-        
 
         this.arrangeGrid();
         
@@ -141,15 +141,15 @@ export default class PickGame extends Phaser.Scene {
         // this.createButton(100, 100, this.emptyCallback, this);
     }
 
-    createButton(x, y, callback, icon) {
-        let btn = this.add.image(x, y, 'button_up').setInteractive({useHandCursor: true}).setScale(1.4);
-        btn.on('pointerover', (ptr, x, y) => {btn.setTexture('button_hover')}); //on hover
-        btn.on('pointerout', (ptr) => {btn.setTexture('button_up')});
-        btn.on('pointerdown', (ptr) => {btn.setTexture('button_down')}); //on press
-        btn.on('pointerup', (ptr) => {callback(), btn.setTexture('button_hover')});
+    // createButton(x, y, callback, icon) {
+    //     let btn = this.add.image(x, y, 'button_up').setInteractive({useHandCursor: true}).setScale(1.4);
+    //     btn.on('pointerover', (ptr, x, y) => {btn.setTexture('button_hover')}); //on hover
+    //     btn.on('pointerout', (ptr) => {btn.setTexture('button_up')});
+    //     btn.on('pointerdown', (ptr) => {btn.setTexture('button_down')}); //on press
+    //     btn.on('pointerup', (ptr) => {callback(), btn.setTexture('button_hover')});
 
-        return btn;
-    }
+    //     return btn;
+    // }
 
     // main game loop
     update(time) {
@@ -301,36 +301,12 @@ export default class PickGame extends Phaser.Scene {
             this.game.canvas.oncontextmenu = (e) => {
                 e.preventDefault()
             }
-            //this.add.rectangle(20, 250, 150, 100, 0xFF0000);
             if (this.proptext != undefined) {
-                // this.proptext.destroy();
-                // this.proptext2.destroy();
-                // this.proptext3.destroy();
-                // this.proptext4.destroy();
-                
                 for (let i=0; i<this.proptext.length; i++) {
                     this.proptext[i].destroy();
                 }
             }
-            const fontStyle = {
-                fontFamily: 'Arial',
-                fontSize: 20,
-                color: '#ffffff',
-                fontStyle: 'bold',
-                padding: 4,
-                shadow: {
-                    color: '#000000',
-                    fill: true,
-                    offsetX: 2,
-                    offsetY: 2,
-                    blur: 4
-                }
-            };
 
-            // let children = this.items.getChildren();
-            // let a = children[index].frame.customData.item;
-            // let b = children[index].frame.customData.color;
-            // let c = children[index].frame.customData.pattern;
             if (this.prevIndex != index) {
                 this.proptext = [];
                 this.proptext[0] = this.add.text(10, 120, 'Properties: ', fontStyle2);
@@ -437,11 +413,16 @@ export default class PickGame extends Phaser.Scene {
     }
 
     updateExpressionDisplay() {
+        // for displaying the expression string
         if (this.expressionString)
             this.expressionString.destroy();
-        this.expressionString = this.add.text(5, 80, this.strings[this.currentRound], fontStyle3);
+        this.expressionString = this.add.text(15, 75, this.strings[this.currentRound], fontStyle3);
         this.expressionString.depth = 2;
         this.expressionString.setAlpha(0.7);
+
+        // for displaying the expression with images
+        const expressionX = 10;
+        const expressionY = 25;
         if(this.expressionText != undefined){this.expressionText.destroy();}
         if(this.goal1sprite != undefined){this.goal1sprite.destroy();}
         if(this.goal2sprite != undefined){this.goal2sprite.destroy();}
@@ -457,7 +438,7 @@ export default class PickGame extends Phaser.Scene {
         if(this.parentheses6 != undefined){this.parentheses6.destroy();}
         if(this.parentheses7 != undefined){this.parentheses7.destroy();}
         if(this.parentheses8 != undefined){this.parentheses8.destroy();}
-        let ex = 0;
+        let ex = expressionX;
         this.expOperands = this.expressions[this.currentRound].filter(operand => Object.keys(operand) == "SHAPE" || Object.keys(operand) ==  "COLOR" || Object.keys(operand) == "BORDER" || Object.keys(operand) == "PATTERN");
         this.expOperators = this.expressions[this.currentRound].filter(operator => operator == "AND" || operator == "OR");
         this.expSize = this.expOperands.length + this.expOperators.length;
@@ -567,21 +548,21 @@ export default class PickGame extends Phaser.Scene {
                 this.parentheses[7] = this.parentheses[7].replace(',','');
             }
         }
-        this.parentheses1 = this.add.text(ex, 30, this.parentheses[0], fontStyle2);
+        this.parentheses1 = this.add.text(ex, expressionY, this.parentheses[0], fontStyle2);
         ex = ex + this.parentheses1.width;
-        this.goal1sprite = this.add.sprite(ex + 20, 50, "attributes", getSprite(this.goal1.value));
+        this.goal1sprite = this.add.sprite(ex + 20, expressionY + 20, "attributes", getSprite(this.goal1.value));
         this.goal1sprite.setScale(0.4);
         ex = ex + this.goal1sprite.width * 0.4;//40;
-        this.parentheses2 = this.add.text(ex, 30, this.parentheses[1], fontStyle2);
+        this.parentheses2 = this.add.text(ex, expressionY, this.parentheses[1], fontStyle2);
         ex = ex + this.parentheses2.width;
-        this.expressionText = this.add.text(ex, 30, this.expCompact[1], fontStyle2);
+        this.expressionText = this.add.text(ex, expressionY, this.expCompact[1], fontStyle2);
         ex = ex + this.expressionText.width;
-        this.parentheses3 = this.add.text(ex, 30, this.parentheses[2], fontStyle2);
+        this.parentheses3 = this.add.text(ex, expressionY, this.parentheses[2], fontStyle2);
         ex = ex + this.parentheses3.width;
-        this.goal2sprite = this.add.sprite(ex + 20, 50, "attributes", getSprite(this.goal2.value));
+        this.goal2sprite = this.add.sprite(ex + 20, expressionY + 20, "attributes", getSprite(this.goal2.value));
         this.goal2sprite.setScale(0.4);
         ex = ex + this.goal2sprite.width * 0.4;
-        this.parentheses4 = this.add.text(ex, 30, this.parentheses[3], fontStyle2);
+        this.parentheses4 = this.add.text(ex, expressionY, this.parentheses[3], fontStyle2);
         ex = ex + this.parentheses4.width;
         this.parentheses1.depth = 2;
         this.parentheses2.depth = 2;
@@ -592,14 +573,14 @@ export default class PickGame extends Phaser.Scene {
         this.expressionText.depth = 1;
     
         if(this.expCompact[3] != undefined){
-            this.expressionText2 = this.add.text(ex, 30, this.expCompact[3], fontStyle2);
+            this.expressionText2 = this.add.text(ex, expressionY, this.expCompact[3], fontStyle2);
             ex = ex + this.expressionText2.width;
-            this.parentheses5 = this.add.text(ex, 30, this.parentheses[4], fontStyle2);
+            this.parentheses5 = this.add.text(ex, expressionY, this.parentheses[4], fontStyle2);
             ex = ex + this.parentheses5.width;
-            this.goal3sprite = this.add.sprite(ex + 20,50, "attributes", getSprite(this.goal3.value));
+            this.goal3sprite = this.add.sprite(ex + 20, expressionY + 20, "attributes", getSprite(this.goal3.value));
             this.goal3sprite.setScale(0.4);
             ex = ex + this.goal3sprite.width * 0.4;
-            this.parentheses6 = this.add.text(ex, 30, this.parentheses[5], fontStyle2);
+            this.parentheses6 = this.add.text(ex, expressionY, this.parentheses[5], fontStyle2);
             ex = ex + this.parentheses6.width;
             this.parentheses5.depth = 2;
             this.parentheses6.depth = 2;
@@ -609,14 +590,14 @@ export default class PickGame extends Phaser.Scene {
         //this.parentheses8 = this.add.text(620, 30, this.parentheses[5], fontStyle2);
     
         if(this.expCompact[5] != undefined){
-            this.expressionText3 = this.add.text(ex, 30, this.expCompact[5], fontStyle2);
+            this.expressionText3 = this.add.text(ex, expressionY, this.expCompact[5], fontStyle2);
             ex = ex + this.expressionText3.width;
-            this.parentheses7 = this.add.text(ex, 30, this.parentheses[6], fontStyle2);
+            this.parentheses7 = this.add.text(ex, expressionY, this.parentheses[6], fontStyle2);
             ex = ex + this.parentheses7.width;
-            this.goal4sprite = this.add.sprite(ex + 20,50, "attributes", getSprite(this.goal4.value));
+            this.goal4sprite = this.add.sprite(ex + 20, expressionY + 20, "attributes", getSprite(this.goal4.value));
             this.goal4sprite.setScale(0.4);
             ex = ex + this.goal4sprite.width * 0.4;
-            this.parentheses8 = this.add.text(ex, 30, this.parentheses[7], fontStyle2);
+            this.parentheses8 = this.add.text(ex, expressionY, this.parentheses[7], fontStyle2);
             this.parentheses7.depth = 2;
             this.parentheses8.depth = 2;
             this.goal4sprite.depth = 1;
@@ -798,6 +779,17 @@ export default class PickGame extends Phaser.Scene {
             this.loseText.setAlpha(1);
 
             this.timePenalty += 10;
+            let timePenaltyText = this.add.text(100, 635, "+10", fontStyle).setAlpha(1).setColor('#FF0000').setDepth(3);
+            this.tweens.add({
+                targets: [timePenaltyText],
+                alpha: {start: 1, to: 0},
+                y: '-=5',
+                ease: 'linear',
+                duration: 1000,
+                onComplete: () => {
+                    timePenaltyText.destroy();
+                }
+            });
 
             this.turnOnSelectEvent();
 
