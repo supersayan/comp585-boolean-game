@@ -3,7 +3,7 @@ import { OPER, ATTR, createUniqueExpressions, getBooleanArrayIndexOfItem, getIte
 const GRID_WIDTH = 4;
 const GRID_HEIGHT = 4;
 const GRID_X = 240;
-const GRID_Y = 180;
+const GRID_Y = 190;
 const GRID_CELLWIDTH = 120;
 const GRID_CELLHEIGHT = 120;
 
@@ -17,9 +17,6 @@ export default class PickGame extends Phaser.Scene {
 
     init (data) {
         this.level = data.level;
-        this.leveltext = this.add.text(0, 610, "", fontStyle);
-        this.leveltext.setDepth(2);
-        this.newLevel();
     }
 
     create () {
@@ -31,8 +28,6 @@ export default class PickGame extends Phaser.Scene {
             this.circles[i].setPosition((i%GRID_WIDTH)*GRID_CELLWIDTH+GRID_X-10, Math.floor(i/GRID_WIDTH)*GRID_CELLHEIGHT+GRID_Y-10);
             this.circles[i].setVisible(false);
         }
-
-        this.updateExpressionDisplay();
         
         this.win = false;
 
@@ -115,8 +110,6 @@ export default class PickGame extends Phaser.Scene {
         this.timetext = this.add.text(5, 650, "", fontStyle);
         // this.timetext.setStyle(fontStyle);
         this.timetext.setPadding(10);
-
-        this.arrangeGrid();
         
         // add Event Listeners
         this.turnOnSelectEvent();
@@ -139,6 +132,12 @@ export default class PickGame extends Phaser.Scene {
         this.score = 0;
 
         // this.createButton(100, 100, this.emptyCallback, this);
+        
+        this.leveltext = this.add.text(0, 610, "", fontStyle).setDepth(2);
+        // this.currentRoundText = this.add.text(0, 570, "", fontStyle).setDepth(2);
+        this.roundProgressBar = this.add.rectangle(0, 100, 0, 20, 0x0000FF, 0.4).setOrigin(0);
+
+        this.newLevel();
     }
 
     // createButton(x, y, callback, icon) {
@@ -607,7 +606,6 @@ export default class PickGame extends Phaser.Scene {
 
     newRound () {
         // TODO: move all expression display code to a new function
-        this.counter2 = 0;  
         this.selection.forEach((e) => {
             this.circles[e].setVisible(false)
         })
@@ -623,6 +621,8 @@ export default class PickGame extends Phaser.Scene {
         this.selection = [];
         // console.log(this.expressions[this.currentRound]);
         // console.log(this.strings[this.currentRound]);
+
+        // this.currentRoundText.setText("Round " + this.currentRound + "/" + this.numRounds, fontStyle);
 
         this.updateExpressionDisplay();
 
@@ -712,7 +712,12 @@ export default class PickGame extends Phaser.Scene {
         // display level number
         this.leveltext.setText("Level " + this.level, fontStyle);
 
+        // this.currentRoundText.setText("Round " + this.currentRound + "/" + this.numRounds, fontStyle);
+
         // this.leveltext.setStyle(fontStyle);
+
+        this.updateExpressionDisplay();
+        this.arrangeGrid();
     }
 
     checkSolution() {
@@ -750,6 +755,13 @@ export default class PickGame extends Phaser.Scene {
 
             this.score = 0;
             this.win = false;
+
+            this.tweens.add({
+                targets: this.roundProgressBar,
+                width: this.game.config.width * (this.currentRound / this.numRounds),
+                ease: 'power2',
+                duration: 500,
+            })
 
             this.tweens.add({
                 targets: circledance,

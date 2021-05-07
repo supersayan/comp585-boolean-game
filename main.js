@@ -12,6 +12,7 @@ const config = {
     width: 800,
     height: 700,
     backgroundColor: '#008eb0',
+    parent: 'game', // id of html element
     autoFocus: true,
     gameTitle: 'Shape Shop',
     scene: [ Boot, Preloader, MainMenu, PickGame, LevelSelect, PauseMenu],
