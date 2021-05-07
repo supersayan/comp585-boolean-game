@@ -10,13 +10,6 @@ export default class LevelFinish extends Phaser.Scene {
 
     create() {
         this.add.image(this.game.config.width/2, this.game.config.height/2, 'background').setDepth(0).setScale(1.5);
-        // this.pausebg = this.add.rectangle(400, 300, 800, 600, 0x008eb0);
-        // this.pausebg.setDepth(5);
-
-        // this.input.once('pointerdown', () => {
-        //     this.scene.resume('PickGame');
-        //     this.scene.stop('PauseMenu');
-        // });
 
         this.back_arrow = this.add.image(750, 600, 'back_arrow').setScale(0.8).setDepth(1);
         this.back_arrow.setInteractive({useHandCursor: true});
