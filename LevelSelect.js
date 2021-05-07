@@ -17,12 +17,12 @@ export default class LevelSelect extends Phaser.Scene {
         this.level = 0;
 
         // Colorblind Button
-        if (!this.registry.get('colorblind'))
+        if (this.registry.get('colorblind') == undefined)
             this.registry.set('colorblind', false);
-        if (this.registry.get('colorblind' == false)) {
-            this.colorblindButton = this.add.image(700, 600, 'colorblindOn').setScale(0.25);
-        } else {
+        if (this.registry.get('colorblind') == false) {
             this.colorblindButton = this.add.image(700, 600, 'colorblindOff').setScale(0.25);
+        } else {
+            this.colorblindButton = this.add.image(700, 600, 'colorblindOn').setScale(0.25);
         }
         this.colorblindButton.setInteractive({useHandCursor: true});
         this.turnOnColorblindEvent();
