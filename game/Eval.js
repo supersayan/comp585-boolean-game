@@ -513,7 +513,8 @@ function treeGenerator(leafNodes, availableAttributes, availableOperations, useN
     } else if (leafNodes.length === 1) {
         rootNode = leafNodes[0];
     } else {
-        // TODO: modify random int generated to be more likely to cut near the center
+        // TODO: modify random int generated to be more likely to cut near the center.
+        // this is so it is less likely to have expressions with too many parentheses on one side, making it hard to read
         let op = availableOperations[randomInt(availableOperations.length)];
         let cut = 1 + randomInt(leafNodes.length - 1);
         let leftLeaves = leafNodes.slice(0, cut);
