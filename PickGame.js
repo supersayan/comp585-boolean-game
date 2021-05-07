@@ -68,7 +68,7 @@ export default class PickGame extends Phaser.Scene {
 
         // blue rectangle covering top of screen
         this.bgrect = this.add.rectangle(0,0, 1600, 210, 0x0000FF, 0.4);
-        this.bgrect1 = this.add.rectangle(0,710, 1600, 210, 0x0000FF, 0.8);
+        this.bgrect1 = this.add.rectangle(0,710, 1600, 210, 0x0000FF, 0.4);
         // text that shows on submission
         this.winText = this.add.text(570, 620, 'Correct!', fontStyle);
         this.winText.setColor('#FFD700');
@@ -307,6 +307,7 @@ export default class PickGame extends Phaser.Scene {
                 // this.proptext2.destroy();
                 // this.proptext3.destroy();
                 // this.proptext4.destroy();
+                
                 for (let i=0; i<this.proptext.length; i++) {
                     this.proptext[i].destroy();
                 }
@@ -330,10 +331,16 @@ export default class PickGame extends Phaser.Scene {
             // let a = children[index].frame.customData.item;
             // let b = children[index].frame.customData.color;
             // let c = children[index].frame.customData.pattern;
-            this.proptext = [];
-            this.proptext[0] = this.add.text(10, 120, 'Properties: ', fontStyle2);
-            for (let i=0; i<this.itemAttributes[index].length; i++) {
-                this.proptext[i+1] = this.add.text(10, 150 + 30*i, Object.keys(this.itemAttributes[index][i])[0] + " = " + Object.values(this.itemAttributes[index][i])[0], fontStyle2);
+            if (this.prevIndex != index) {
+                this.proptext = [];
+                this.proptext[0] = this.add.text(10, 120, 'Properties: ', fontStyle2);
+                for (let i=0; i<this.itemAttributes[index].length; i++) {
+                    this.proptext[i+1] = this.add.text(10, 150 + 30*i, Object.keys(this.itemAttributes[index][i])[0] + " = " + Object.values(this.itemAttributes[index][i])[0], fontStyle2);
+                    //if (temp[i+1] = this.proptext[i+1]);
+                }
+                this.prevIndex = index;
+            } else {
+                this.prevIndex = -1;
             }
         }
     }
@@ -663,6 +670,7 @@ export default class PickGame extends Phaser.Scene {
                 this.turnOnFlipEvent();
                 this.turnOnResetEvent();
                 this.winText.setAlpha(0);
+                this.prevIndex = -1;
                 // let children = this.items.getChildren();
                 // console.log(children);
                 // children.forEach((child) => {
