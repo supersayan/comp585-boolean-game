@@ -34,7 +34,23 @@ export default class MainMenu extends Phaser.Scene
             }
         };
 
+        const miniFontStyle = {
+            fontFamily: 'Arial',
+            fontSize: 24,
+            color: '#ffffff',
+            fontStyle: 'bold',
+            padding: 16,
+            shadow: {
+                color: '#000000',
+                fill: true,
+                offsetX: 2,
+                offsetY: 2,
+                blur: 4
+            }
+        };
+
         this.text1 = this.add.text(240, -20, 'Shape Shop', fontStyle);
+        this.text2 = this.add.text(120, 2000, 'Use Boolean logic to choose the right shapes!', miniFontStyle);
         let frames = this.textures.get('shapes').getFrameNames();
         for (let i = 0; i < 25; i++ ){
             frames.pop();
@@ -52,6 +68,14 @@ export default class MainMenu extends Phaser.Scene
             targets: this.text1,
             duration: 2000,
             y: {start: 0, to: this.game.canvas.height/2 - this.text1.height},
+            ease: 'bounce.out',
+            
+        });
+
+        this.tweens.add({
+            targets: this.text2,
+            duration: 2000,
+            y: {start: this.game.canvas.height + 100, to: this.game.canvas.height/2 + 200},
             ease: 'bounce.out',
             
         });
@@ -87,19 +111,6 @@ export default class MainMenu extends Phaser.Scene
             x: {start: -20, to:this.game.canvas.width/4},
             ease: 'bounce.out',
         });
-        // let logo = this.add.image(400, -200, 'logo');
-
-        // if (!this.music)
-        // {
-        //     this.music = this.sound.play('music', { loop: true });
-        // }
-
-        // this.tweens.add({
-        //     targets: logo,
-        //     y: 300,
-        //     ease: 'bounce.out',
-        //     duration: 1200
-        // });
 
         this.input.once('pointerdown', () => {
             this.state = "intro";

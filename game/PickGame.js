@@ -71,16 +71,11 @@ export default class PickGame extends Phaser.Scene {
         this.winText.setAlpha(0);
         this.loseText = this.add.text(550, 620, 'Try Again', fontStyle);
         this.loseText.setColor('#FF0000');
-        //this.loseText.setVisible(false);
         this.loseText.setAlpha(0);
 
         // Create Buttons
 
         // submission button
-        /*this.rect = this.add.rectangle(745, 355, 100, 50,0x55ffff);
-        this.rect.setStrokeStyle(2,0x000000);
-        this.submitText = this.add.text(680, 325, 'Submit', fontStyle);
-        this.submitText.setInteractive({useHandCursor: true});*/
         this.submitButton = this.add.image(750, 650, 'check').setScale(1.2);
         this.submitButton.setInteractive({useHandCursor: true});
 
@@ -91,24 +86,13 @@ export default class PickGame extends Phaser.Scene {
         this.resetButton = this.add.image(450, 650, 'restart').setScale(0.8);
         this.resetButton.setInteractive({useHandCursor: true});
 
-        // this.helpButton = this.add.image(750,150, 'help').setScale(0.8);
-        // this.helpButton.setInteractive({useHandCursor: true});
-        //this.rect.depth = -1;
-        //this.submitText = -1;
-
         this.pauseButton = this.add.image(750, 50, 'pause').setScale(0.7);
         this.pauseButton.setInteractive({useHandCursor: true});
-        // this.pauseButton.depth = 3;
 
         // Back Button
-        // this.back_arrow = this.add.image(750, 650, 'back_arrow').setScale(0.8);
-        // this.back_arrow.setInteractive({useHandCursor: true});
-        // this.back_arrow.once('pointerdown', () => {
-        //     this.scene.start('LevelSelect');
-        // }, this);
+
 
         this.timetext = this.add.text(5, 650, "", fontStyle);
-        // this.timetext.setStyle(fontStyle);
         this.timetext.setPadding(10);
         
         // add Event Listeners
@@ -116,7 +100,6 @@ export default class PickGame extends Phaser.Scene {
         this.turnOnSubmitEvent();
         this.turnOnResetEvent();
         this.turnOnFlipEvent();
-        // this.turnOnHelpEvent();
         this.turnOnPauseEvent();
 
         // Score / Time
@@ -126,41 +109,24 @@ export default class PickGame extends Phaser.Scene {
             callbackScope: this,
             repeat: 1,
         })
-        // this.starttime = this.time.now;
-        // this.currentTime = 0;
         this.timePenalty = 0;
         this.score = 0;
-
-        // this.createButton(100, 100, this.emptyCallback, this);
         
         this.leveltext = this.add.text(0, 610, "", fontStyle).setDepth(2);
-        // this.currentRoundText = this.add.text(0, 570, "", fontStyle).setDepth(2);
         this.roundProgressBar = this.add.rectangle(0, 100, 0, 20, 0x0000FF, 0.4).setOrigin(0);
 
         this.newLevel();
     }
 
-    // createButton(x, y, callback, icon) {
-    //     let btn = this.add.image(x, y, 'button_up').setInteractive({useHandCursor: true}).setScale(1.4);
-    //     btn.on('pointerover', (ptr, x, y) => {btn.setTexture('button_hover')}); //on hover
-    //     btn.on('pointerout', (ptr) => {btn.setTexture('button_up')});
-    //     btn.on('pointerdown', (ptr) => {btn.setTexture('button_down')}); //on press
-    //     btn.on('pointerup', (ptr) => {callback(), btn.setTexture('button_hover')});
-
-    //     return btn;
-    // }
-
     // main game loop
     update(time) {
         // update time text
         this.score = Math.min(Math.floor((this.timeEvent.getElapsedSeconds()))+this.timePenalty, 999);
-        // this.time = Math.min(Math.floor((currenttime - this.starttime) / 1000), 999);
         this.timetext.setText("Time: " + this.score);
     }
 
     emptyCallback() {
         // do nothing
-        // console.log("hi");
     }
 
     turnOnSelectEvent() {
@@ -312,7 +278,6 @@ export default class PickGame extends Phaser.Scene {
                 this.proptext[0] = this.add.text(10, 120, 'Properties: ', fontStyle2);
                 for (let i=0; i<this.itemAttributes[index].length; i++) {
                     this.proptext[i+1] = this.add.text(10, 150 + 30*i, Object.keys(this.itemAttributes[index][i])[0] + " = " + Object.values(this.itemAttributes[index][i])[0], fontStyle2);
-                    //if (temp[i+1] = this.proptext[i+1]);
                 }
                 this.prevIndex = index;
             } else {
@@ -342,7 +307,6 @@ export default class PickGame extends Phaser.Scene {
             let item = [];
             let itemJSON = {};
             if (presolvedGrid.includes(i)) {
-                // console.log(presolved, presolvedGrid);
                 item = getItemFromBooleanArrayIndex(presolved[Math.floor(presolved.length * Math.random())], this.attributes);
                 for (let a=0; a<item.length; a++) {
                     itemJSON[Object.keys(item[a])[0]] = Object.values(item[a])[0];
@@ -356,15 +320,10 @@ export default class PickGame extends Phaser.Scene {
                     item.push(itemattr);
                     itemJSON[attr] = itemattr[attr];
                 }
-                // console.log(item);
             }
             this.itemAttributes.push(item);
             // if the generated item is part of solution, add its index to this.solution
             if (this.evaluations[this.currentRound][getBooleanArrayIndexOfItem(item, this.attributes)]) {
-                // for (let i = 0; i < this.attributes.length; i++) {
-
-                // }
-                // console.log(i, ": ", item);
                 this.solution.push(i);
             }
             let shape = 0;
@@ -383,15 +342,8 @@ export default class PickGame extends Phaser.Scene {
             if ("BORDER" in itemJSON) {
                 border = ATTR["BORDER"].indexOf(itemJSON["BORDER"]);
             }
-            // sprite x = 100 * color
-            // sprite y = 100 * (5 * pattern + shape)
-            // border x = 100 * border
-            // border y = 2500 + 100 * shape
-            
-            // console.log(color, pattern, shape);
             children[i].setFrame(ATTR["COLOR"][color].toLowerCase() + ATTR["PATTERN"][pattern].toLowerCase() + ATTR["SHAPE"][shape].toLowerCase() + '.png');
             childrenBorder[i].setFrame(ATTR["BORDER"][border].toLowerCase() + "border" + ATTR["SHAPE"][shape].toLowerCase() + ".png");
-            // children[i].setScale(2, 2);
         }
 
         //  Stagger tween them all in
@@ -457,14 +409,7 @@ export default class PickGame extends Phaser.Scene {
         for(let i = 0; i<this.expressions[this.currentRound].length; i++){
             if(this.expressions[this.currentRound][i] == "(" || this.expressions[this.currentRound][i] == ")" || this.expressions[this.currentRound][i] == "NOT"){
                 par.push(this.expressions[this.currentRound][i]);
-            } /*else if (this.expressions[this.currentRound][i] == "AND" || this.expressions[this.currentRound][i] == "OR"){
-                k++;
-                if (k == 2){
-                    this.parentheses[j] = par;
-                    j++;
-                    par = [];
-                }
-            }*/ else {
+            } else {
                 this.parentheses[j] = par;
                 j++;
                 par = [];
@@ -473,11 +418,6 @@ export default class PickGame extends Phaser.Scene {
                 this.parentheses[j] = par;
             }
         }
-        // console.log(this.expressions[this.currentRound]);
-        // console.log(this.parentheses);
-        // console.log(this.level);
-        // console.log(Object.keys(this.expressions[this.currentRound][0]));
-        // this.add.image(400, 300, 'background');
         this.selection = [];
         this.solution = [];
         this.goal1 = this.expCompact[0];
@@ -552,7 +492,7 @@ export default class PickGame extends Phaser.Scene {
         ex = ex + this.parentheses1.width;
         this.goal1sprite = this.add.sprite(ex + 20, expressionY + 20, "attributes", getSprite(this.goal1.value));
         this.goal1sprite.setScale(0.4);
-        ex = ex + this.goal1sprite.width * 0.4;//40;
+        ex = ex + this.goal1sprite.width * 0.4;
         this.parentheses2 = this.add.text(ex, expressionY, this.parentheses[1], fontStyle2);
         ex = ex + this.parentheses2.width;
         this.expressionText = this.add.text(ex, expressionY, this.expCompact[1], fontStyle2);
@@ -587,7 +527,6 @@ export default class PickGame extends Phaser.Scene {
             this.goal3sprite.depth = 1;
             this.expressionText2.depth = 1;
         }
-        //this.parentheses8 = this.add.text(620, 30, this.parentheses[5], fontStyle2);
     
         if(this.expCompact[5] != undefined){
             this.expressionText3 = this.add.text(ex, expressionY, this.expCompact[5], fontStyle2);
@@ -606,32 +545,20 @@ export default class PickGame extends Phaser.Scene {
     }
 
     newRound () {
-        // TODO: move all expression display code to a new function
         this.selection.forEach((e) => {
             this.circles[e].setVisible(false)
         })
         if (this.currentRound < this.numRounds - 1) {
             this.currentRound++;
         } else {
-            // end level
-            // this.newLevel();
             this.scene.start("LevelFinish", {level: this.level, score: this.score});
             return;
         }
         this.selection = [];
-        // console.log(this.expressions[this.currentRound]);
-        // console.log(this.strings[this.currentRound]);
-
-        // this.currentRoundText.setText("Round " + this.currentRound + "/" + this.numRounds, fontStyle);
 
         this.updateExpressionDisplay();
 
         this.win = false;
-
-        //this.input.on('gameobjectdown', this.selectItem, this);
-        // this.submitText.setInteractive({ useHandCursor: false});   
-
-        // this.submitText.setText('Submit');
 
         this.tweens.add({
             targets: this.roundProgressBar,
@@ -659,12 +586,6 @@ export default class PickGame extends Phaser.Scene {
                 this.turnOnResetEvent();
                 this.winText.setAlpha(0);
                 this.prevIndex = -1;
-                // let children = this.items.getChildren();
-                // console.log(children);
-                // children.forEach((child) => {
-                //     child.setInteractive();
-                    // child.on('gameobjectdown', this.selectItem, this);
-                // });
             }
         });
 
@@ -675,15 +596,9 @@ export default class PickGame extends Phaser.Scene {
             duration: 600,
             delay: this.tweens.stagger(100, { grid: [ 4, 4 ], from: 'center' }),
         });
-
-        // TODO: display new expression
     }
 
     newLevel() {
-        // if (this.level+1 in pickLevelParameters)
-        //     this.level++;
-        // else
-        //     this.scene.start('LevelSelect');
         if (!(this.level in pickLevelParameters))
             throw new Error("invalid level");
         this.currentRound = 0; // iterates every new round
@@ -719,16 +634,11 @@ export default class PickGame extends Phaser.Scene {
         // display level number
         this.leveltext.setText("Level " + this.level, fontStyle);
 
-        // this.currentRoundText.setText("Round " + this.currentRound + "/" + this.numRounds, fontStyle);
-
-        // this.leveltext.setStyle(fontStyle);
-
         this.updateExpressionDisplay();
         this.arrangeGrid();
     }
 
     checkSolution() {
-        // console.log(this.solution, this.selection);
         // if index arrays solution and selection are equal, return true
         for (let i = 0; i < this.selection.length; i++) {
             if (!this.solution.includes(this.selection[i])) {
@@ -746,8 +656,6 @@ export default class PickGame extends Phaser.Scene {
 
     submitSelection () {
         let win = (this.checkSolution());
-        
-        // this.input.off('gameobjectdown', this.selectItem, this); 
         this.turnOffSelectEvent();
         this.turnOffFlipEvent();
         this.turnOffResetEvent();
@@ -779,9 +687,6 @@ export default class PickGame extends Phaser.Scene {
                         duration: 300,
                     });
                     this.newRound();
-                    // use below for 'click to continue'
-                    // this.input.once('pointerdown', (pointer) => {
-                    // })
                 }
             });
         } else {
@@ -804,14 +709,6 @@ export default class PickGame extends Phaser.Scene {
             });
 
             this.turnOnSelectEvent();
-
-            // let b = this.input.on('pointerdown', (pointer) => {   
-            //     console.log('counter2',this.counter2)
-            //     if (this.counter2 > 0)
-            //         this.input.once('gameobjectdown', this.selectItem, this);
-            //     this.counter2++;
-            // })
-            // console.log(this.input);
             setTimeout( () => {
                 this.tweens.add({
                     targets: [this.submitButton],
@@ -825,7 +722,6 @@ export default class PickGame extends Phaser.Scene {
                     alpha: {start: 1, to: 0},
                     duration: 500,
                     onComplete: () => {
-                        // this.loseText.setVisible(false);
                         this.turnOnSubmitEvent();
                         this.turnOnFlipEvent();
                         this.turnOnResetEvent();
@@ -948,8 +844,6 @@ const pickLevelParameters = {
         attributes: [
             {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
             {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
-            //{"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
-            //{"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
         ],
         operators: ["AND"],
         numFeatures: 2,

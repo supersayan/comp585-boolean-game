@@ -245,7 +245,6 @@ export function getItemFromBooleanArrayIndex(index, availableAttributes) {
             attrIntervals[a] *= Object.values(availableAttributes[b])[0].length;
         }
     }
-    // console.log(attrIntervals);
     let item = [];
     for (let a=0; a<availableAttributes.length; a++) {
         let itemAttr = {};
@@ -254,7 +253,6 @@ export function getItemFromBooleanArrayIndex(index, availableAttributes) {
         itemAttr[Object.keys(availableAttributes[a])[0]] = Object.values(availableAttributes[a])[0][i];
         item.push(itemAttr);
     }
-    // console.log(item);
     return item;
 }
 
@@ -495,7 +493,7 @@ export function createUniqueExpressions(numExpressions, numFeatures, availableAt
  */
 function treeGenerator(leafNodes, availableAttributes, availableOperations, useNot, notsLeft = -1) {
     let rootNode;
-    let not = false; //(useNot && ((notsLeft === -1 && randomInt(2) === 0) || (notsLeft > 0 && randomInt(leafNodes.length * 2 - 1) < notsLeft)));
+    let not = false;
     let leftNots, rightNots;
     if (useNot) {
         if (notsLeft < 0) {
@@ -508,8 +506,6 @@ function treeGenerator(leafNodes, availableAttributes, availableOperations, useN
                 not = true;
                 notsLeft--;
             }
-            // leftNots = randomInt(notsLeft + 1); // need to use leftLeaves length, otherwise some nots may never be used
-            // rightNots = notsLeft - leftNots;
         }
     }
     if (leafNodes.length === 0) {
@@ -522,9 +518,6 @@ function treeGenerator(leafNodes, availableAttributes, availableOperations, useN
         let cut = 1 + randomInt(leafNodes.length - 1);
         let leftLeaves = leafNodes.slice(0, cut);
         let rightLeaves = leafNodes.slice(cut);
-        // let r = randomInt(notsLeft + 1);
-        // leftNots = (r > leftLeaves.length * 2 - 1) ? leftLeaves.length * 2 - 1 : r;
-        // rightNots = notsLeft - leftNots;
         if (notsLeft >= leafNodes.length * 2 - 2) {
             leftNots = leftLeaves.length * 2 - 1;
             rightNots = rightLeaves.length * 2 - 1;
@@ -564,32 +557,3 @@ function objectEqual(object1, object2) {
     }
     return true;
 }
-
-// // testing
-// let aa = [
-//     {"SHAPE": ["SQUARE", "TRIANGLE", "CIRCLE", "PENTAGON", "TRAPEZOID"]},
-//     {"COLOR": ["RED", "ORANGE", "GREEN", "BLUE", "PURPLE"]},
-//     {"PATTERN": ["PLAIN", "STRIPED", "SPOTTED", "NET", "SPIRAL"]},
-//     {"BORDER": ["BLACK", "BRONZE", "SILVER", "GOLD", "LIGHTBLUE"]},
-// ]
-// // // let f = new FeatureNode("COLOR", "GREEN");
-// // // console.log(f.evaluate(aa));
-// let e = createUniqueExpressions(10, 2, aa, ["AND", "OR", "NOT"], true, [1, 2], true);
-// let item = [
-//     {SHAPE: "TRIANGLE"},
-//     {COLOR: "BLUE"},
-//     {PATTERN: "SPOTTED"},
-//     {BORDER: "LIGHTBLUE"},
-// ]
-// // console.log(getBooleanArrayIndexOfItem(item, aa));
-// console.log(getItemFromBooleanArrayIndex(getBooleanArrayIndexOfItem(item, aa), aa));
-// for (let i=0; i<10; i++) {
-//     console.log(e.strings[i]);
-//     // console.log(e.evaluations[i]);
-//     // console.log(e.evaluations[i][getBooleanArrayIndexOfItem(item, aa)]); // returns if expression e accepts item
-// }
-// // console.log(e.repeat);
-// console.log(e.strings[e.repeat[0]]);
-// console.log(e.evaluations[e.repeat[0]]);
-// console.log(e.strings[e.repeat[1]]);
-// console.log(e.evaluations[e.repeat[1]]);

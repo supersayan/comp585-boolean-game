@@ -5,13 +5,6 @@ export default class PauseMenu extends Phaser.Scene {
 
     create() {
         this.add.image(this.game.config.width/2, this.game.config.height/2, 'background').setDepth(4).setScale(1.5);
-        // this.pausebg = this.add.rectangle(400, 300, 800, 600, 0x008eb0);
-        // this.pausebg.setDepth(5);
-
-        // this.input.once('pointerdown', () => {
-        //     this.scene.resume('PickGame');
-        //     this.scene.stop('PauseMenu');
-        // });
 
         this.resume = this.add.image(350, 400, 'resume').setScale(0.8).setDepth(5);
         this.resume.setInteractive({useHandCursor: true});
