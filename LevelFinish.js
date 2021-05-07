@@ -37,6 +37,9 @@ export default class LevelFinish extends Phaser.Scene {
             // if undefined
             this.add.text(400, 400, "New Best Score!", fontStyle).setOrigin(0.5).setDepth(1);
             this.registry.set('level' + this.level, this.score);
+            if (typeof(Storage) !== 'undefined') {
+                window.localStorage.setItem('level' + this.level, this.score);
+            }
         }
     }
 
