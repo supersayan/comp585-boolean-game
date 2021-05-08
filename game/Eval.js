@@ -540,21 +540,22 @@ function treeGenerator(leafNodes, availableAttributes, availableOperations, useN
 }
 
 /**
+ * not used
  * utility function; checks shallow equality
  * @param {Object} object1 
  * @param {Object} object2 
  * @returns {boolean}
  */
-function objectEqual(object1, object2) {
-    let keys1 = Object.keys(object1);
-    let keys2 = Object.keys(object2);
-    if (keys1.length !== keys2.length) {
-        return false;
-    }
-    for (let key of keys1) {
-        if (object1[key] !== object2[key]) {
-            return false;
-        }
-    }
-    return true;
-}
+// function objectEqual(object1, object2) {
+//     let keys1 = Object.keys(object1);
+//     let keys2 = Object.keys(object2);
+//     if (keys1.length !== keys2.length) {
+//         return false;
+//     }
+//     for (let key of keys1) {
+//         if (object1[key] !== object2[key]) {
+//             return false;
+//         }
+//     }
+//     return true;
+// }

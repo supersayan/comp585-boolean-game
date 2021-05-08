@@ -17,17 +17,15 @@ export default class LevelSelect extends Phaser.Scene {
         this.level = 0;
 
         // Colorblind Button
-        if (this.registry.get('colorblind') == undefined)
+        if (this.registry.get('colorblind') === undefined)
             this.registry.set('colorblind', false);
-        if (this.registry.get('colorblind') == false) {
+        if (this.registry.get('colorblind') === false) {
             this.colorblindButton = this.add.image(700, 600, 'colorblindOff').setScale(0.25);
         } else {
             this.colorblindButton = this.add.image(700, 600, 'colorblindOn').setScale(0.25);
         }
         this.colorblindButton.setInteractive({useHandCursor: true});
         this.turnOnColorblindEvent();
-        
-        // let levelGroup = this.add.group();
 
         this.add.text(100, 80, "Level Select", fontStyle);
         for (let l=0; l<NUMLEVELS; l++) {
@@ -36,16 +34,6 @@ export default class LevelSelect extends Phaser.Scene {
                 this.add.text(150+150*(l%LEVELROWSIZE), 320+150*Math.floor(l/LEVELROWSIZE), "Best: " + this.registry.get('level' + (l+1)), fontStyle2).setOrigin(0.5);
             }
         }
-
-
-        // this.input.on('gameobjectdown', (pointer, gameObject) => {
-        //     this.levelClick(pointer);
-        // });
-
-        // levelGroup.forEach((child, index) => {
-        //     this.level = index;
-
-        // })
     }
 
     createLevelButton(x, y, level) {
@@ -73,7 +61,7 @@ export default class LevelSelect extends Phaser.Scene {
 
     turnOnColorblindEvent() {
         this.colorblindButton.on('pointerdown', () => {
-            if (this.registry.get('colorblind') == false) {
+            if (this.registry.get('colorblind') === false) {
                 this.registry.set('colorblind', true);
                 this.colorblindButton = this.add.image(700, 600, 'colorblindOn').setScale(0.25);
             } else {

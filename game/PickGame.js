@@ -62,9 +62,11 @@ export default class PickGame extends Phaser.Scene {
         });
 
         // blue rectangle covering top of screen
-        this.bgrect = this.add.rectangle(0,0, 1600, 200, 0x0000FF, 0.4);
+        this.bgrect = this.add.rectangle(0, 0, 800, 120, 0x0000FF, 0.4).setOrigin(0, 0);
+        // this.bgrectborder1 = this.add.rectangle(0, 100, 800, 1, 0x000000, 1).setOrigin(0, 0);
+        // this.bgrectborder2 = this.add.rectangle(0, 120, 800, 1, 0x0000FF, 0.4).setOrigin(0, 0);
         // blue rectangle covering bottom of screen
-        this.bgrect1 = this.add.rectangle(0,700, 1600, 200, 0x0000FF, 0.4);
+        this.bgrect1 = this.add.rectangle(0, 600, 800, 100, 0x0000FF, 0.4).setOrigin(0, 0);
         // text that shows on submission
         this.winText = this.add.text(570, 620, 'Correct!', fontStyle);
         this.winText.setColor('#FFD700');
@@ -158,17 +160,17 @@ export default class PickGame extends Phaser.Scene {
     flip() {
         let a = [];
         for (let i = 0; i < 16; i++) {
-            let inside = false;
-            for (let j = 0; j < this.selection.length; j++) {
-                if (i == this.selection[j]) {
-                    inside = true; 
-                    break;
-                }
-            }
-            if (inside) {
+            // let inside = false;
+            // for (let j = 0; j < this.selection.length; j++) {
+            //     if (i == this.selection[j]) {
+            //         inside = true; 
+            //         break;
+            //     }
+            // }
+            if (this.selection.includes(i)) {
                 this.circles[i].setVisible(false);
             } else {
-                a.push(i)
+                a.push(i);
                 this.circles[i].setVisible(true);
             }
         }
@@ -177,6 +179,8 @@ export default class PickGame extends Phaser.Scene {
     }
 
     turnOnFlipEvent() {
+        // delete any listeners before adding, in case one already exists
+        this.turnOffFlipEvent();
         this.flipButton.once('pointerdown', this.flip, this)
     }
 
@@ -223,6 +227,7 @@ export default class PickGame extends Phaser.Scene {
     }
 
     turnOnResetEvent() {
+        this.turnOffResetEvent();
         this.resetButton.once('pointerdown', this.reset, this);
     }
 
@@ -239,7 +244,7 @@ export default class PickGame extends Phaser.Scene {
     turnOnPauseEvent() {
         this.pauseButton.on('pointerdown', () => {
             this.scene.pause();
-            // will run this scene in parallel while current scene is paused
+            // scene.launch will run this scene in parallel while current scene is paused
             this.scene.launch('PauseMenu');
         }, this);
     }
@@ -604,7 +609,9 @@ export default class PickGame extends Phaser.Scene {
         this.currentRound = 0; // iterates every new round
         let levelParams = pickLevelParameters[this.level];
         
-        this.attributes = levelParams.attributes;
+        // here, duplicate the attributes object with a deep copy so it can be modified without changing the original
+        // this.attributes = levelParams.attributes;
+        this.attributes = JSON.parse(JSON.stringify(levelParams.attributes));
 
         // modify attributes for colorblind
         let COLORBLINDCOLORS = ["RED", "PURPLE", "BLUE"];
