@@ -633,7 +633,7 @@ export default class PickGame extends Phaser.Scene {
         }
 
         this.numRounds = levelParams.numExpressions;
-        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, levelParams.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
+        let evalOutput = createUniqueExpressions(levelParams.numExpressions, levelParams.numFeatures, this.attributes, levelParams.operators, levelParams.allowNullSet, levelParams.numNots);
         this.expressions = evalOutput.expressions;
         this.evaluations = evalOutput.evaluations;
         this.strings = evalOutput.strings;
