@@ -1,12 +1,12 @@
-## A Boolean Logic Game
+# Shape Shop
 
-### [Play Game](./game/)
+## [Play Game](./game/)
 
-[video tutorial](https://youtu.be/OXrppbCJM0o)
+### [video tutorial](https://youtu.be/OXrppbCJM0o)
 
-[design document](https://docs.google.com/document/d/1SrISkYdD87iMD4DEaaL2fdshgJx2viY8uf-1RKO_HZk/edit?usp=sharing)
+### [design document](https://docs.google.com/document/d/1SrISkYdD87iMD4DEaaL2fdshgJx2viY8uf-1RKO_HZk/edit?usp=sharing)
 
-[software document](https://docs.google.com/document/d/1wbH5l-QnL50R97ZG-Bj8pSL3clOdio5Eucm9NV0pUYw/edit?usp=sharing)
+### [software document](https://docs.google.com/document/d/1wbH5l-QnL50R97ZG-Bj8pSL3clOdio5Eucm9NV0pUYw/edit?usp=sharing)
 
 A game designed to teach boolean logic to beginners at or above middle school.
 
